@@ -3,10 +3,10 @@ import daisyui from "daisyui";
 
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,tsx,tsx}",
     "node_modules/daisyui/dist/**/*.js",
     "node_modules/react-daisyui/dist/**/*.js",
+    "./index.html",
+    "./src/**/*.{js,ts,tsx,tsx}",
   ],
   theme: {
     extend: {},
