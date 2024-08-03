@@ -1,7 +1,15 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { Flipper, Flipped } from "react-flip-toolkit";
+import { answerState } from "./states";
+import { useRecoilState } from "recoil";
 
-const LocationNumber = ({ index }: { index: number }) => {
+const LocationNumber = ({
+  index,
+  onClick,
+}: {
+  index: string;
+  onClick: MouseEventHandler<HTMLDivElement>;
+}) => {
   return (
     //className="flex w-fit min-w-4 p-2 items-center justify-center aspect-square  border-solid border-2"
     <Flipped flipId={"answer" + index}>
@@ -17,6 +25,7 @@ const LocationNumber = ({ index }: { index: number }) => {
           border: "1px solid blue",
           borderRadius: "50%",
         }}
+        onClick={onClick}
       >
         {index}
       </div>
@@ -28,14 +37,16 @@ const Answer = ({
   answer,
   score,
   index,
+  onClick,
 }: {
   answer: string;
   score: number;
-  index: number;
+  index: string;
+  onClick: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
     <Flipped flipId={"answer" + index}>
-      <div>
+      <div onClick={onClick}>
         <div>{answer}</div>
         <div>{score}</div>
       </div>
@@ -43,25 +54,30 @@ const Answer = ({
   );
 };
 
-const AnswerPanel = ({
-  idx,
-  answer,
-  score,
-  flipped,
-}: {
-  idx: number;
-  answer: string;
-  score: number;
-  flipped: boolean;
-}) => {
+const AnswerPanel = ({ id }: { id: string }) => {
+  const [answerData, setAnswerData] = useRecoilState(answerState(id));
+  const { flipped, answer, score } = answerData;
+
+  const handlePanelClick = () => {
+    setAnswerData({ ...answerData, flipped: !flipped });
+  };
+
   return (
-    <Flipper className="answer-panel border m-2" flipKey={flipped}>
-      {flipped ? (
-        <Answer answer={answer} score={score} index={idx} />
-      ) : (
-        <LocationNumber index={idx} />
-      )}
-    </Flipper>
+    <div>Hello there</div>
+    // <Flipper className="answer-panel border m-2" flipKey={flipped}>
+    //   {flipped ? (
+    //     <Answer
+    //       onClick={handlePanelClick}
+    //       answer={answer}
+    //       score={score}
+    //       index={answerData.id}
+    //     />
+    //   ) : (
+    //     <LocationNumber onClick={handlePanelClickenecccbihrkhekvvkbcvnudlgikvucefhjlcvrnrihvg
+
+    //     } index={id} />
+    //   )}
+    // </Flipper>
   );
 };
 
