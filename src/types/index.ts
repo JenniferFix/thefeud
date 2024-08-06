@@ -5,3 +5,7 @@ export type Answer = {
   flipped: boolean;
   rank: number;
 };
+
+export interface IAnswers {
+  [key: string]: Answer;
+}
