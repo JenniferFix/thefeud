@@ -1,3 +1,4 @@
+"use client";
 import React, { MouseEventHandler } from "react";
 import { Flipper, Flipped } from "react-flip-toolkit";
 import { answerState } from "./states";

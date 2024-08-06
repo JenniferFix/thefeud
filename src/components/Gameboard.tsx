@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import AnswerPanel from "./AnswerPanel";
 import { useRecoilValue } from "recoil";
