@@ -7,7 +7,7 @@ import GameBg from "./GameBg";
 
 const Gameboard = (): React.ReactElement => {
   const answersList = useRecoilValue<string[]>(answersState);
-  console.log(answersList);
+  // console.log(answersList);
   // const createAnswer = useRecoilCallback(
   //   ({ set }) =>
   //     (answer: Answer) => {
