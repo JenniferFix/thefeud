@@ -100,51 +100,68 @@ export type Database = {
           created_at: string
           id: string
           question: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           question?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: string
           question?: string | null
-        }
-        Relationships: []
-      }
-      users_questions: {
-        Row: {
-          created_at: string
-          id: number
-          question_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          question_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          question_id?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "users_questions_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
-            referencedRelation: "questions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "users_questions_user_id_fkey"
+            foreignKeyName: "questions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      "round events": {
+        Row: {
+          answer: string | null
+          correct: boolean
+          created_at: string
+          id: number
+          round: string
+          team: number
+        }
+        Insert: {
+          answer?: string | null
+          correct?: boolean
+          created_at?: string
+          id?: number
+          round: string
+          team: number
+        }
+        Update: {
+          answer?: string | null
+          correct?: boolean
+          created_at?: string
+          id?: number
+          round?: string
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "round events_answer_fkey"
+            columns: ["answer"]
+            isOneToOne: false
+            referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "round events_round_fkey"
+            columns: ["round"]
+            isOneToOne: false
+            referencedRelation: "game_round"
             referencedColumns: ["id"]
           },
         ]
