@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Radio_Canada } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
 import ThemeProvider from "@/components/providers/ThemeProvider";
-const inter = Inter({ subsets: ["latin"] });
+const importedFont = Radio_Canada({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "The Feud",
@@ -18,10 +18,15 @@ export default function RootLayout({
   return (
     <Providers>
       <html lang="en">
-        <body className={inter.className}>
-          <main>
-            <ThemeProvider>{children}</ThemeProvider>
-          </main>
+        <body className={importedFont.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <main>{children}</main>
+          </ThemeProvider>
         </body>
       </html>
     </Providers>
