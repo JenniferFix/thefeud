@@ -2,6 +2,8 @@ import AuthButton from '@/components/demo/AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import Navbar from '@/components/Navbar';
 import ThemeToggle from '@/components/header/ThemeToggle';
+import LoginPanel from '@/components/LoginPanel';
+
 export default async function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -19,7 +21,11 @@ export default async function Index() {
             If you were invited to a game please enter the game code below.
           </div>
           <div>
-            Login or create an account to create surveys and host your own game.
+            <h3>
+              Login or create an account to create surveys and host your own
+              game.
+            </h3>
+            <LoginPanel />
           </div>
         </div>
       </div>

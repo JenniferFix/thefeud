@@ -1,6 +1,9 @@
 'use client';
 import React from 'react';
-import { useGetAnswersByQuestionId } from '@/hooks/useanswerqueries';
+import {
+  useDeleteAnswer,
+  useGetAnswersByQuestionId,
+} from '@/hooks/useanswerqueries';
 import {
   Table,
   TableBody,
@@ -45,6 +48,7 @@ const answerSchema = z.object({
 });
 
 const Answer = ({ answer }: { answer: AnswerRow }) => {
+  const deleteAnswer = useDeleteAnswer();
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
     defaultValues: {
@@ -52,7 +56,11 @@ const Answer = ({ answer }: { answer: AnswerRow }) => {
       score: answer.score,
     },
   });
-  console.log(answer);
+
+  const handleDelete = (id: string) => {
+    deleteAnswer.mutate(answer.id);
+  };
+
   return (
     <Form {...form}>
       <form>
@@ -69,7 +77,7 @@ const Answer = ({ answer }: { answer: AnswerRow }) => {
               <Input maxLength={3} className="w-14" {...field} />
             )}
           />
-          <Button variant="ghost">
+          <Button onClick={() => handleDelete(answer.id)} variant="ghost">
             <TrashIcon />
           </Button>
         </div>
@@ -87,7 +95,9 @@ const Answers = ({ questionid }: { questionid: string }) => {
   console.log(data);
   return (
     <div>
-      {data?.map((a: Tables<'answers'>) => <Answer key={a.id} answer={a} />)}
+      {data?.map((a: Tables<'answers'>) => (
+        <Answer key={a.id} answer={a} />
+      ))}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { TypedSupabaseClient } from '@/utils/supabase/client';
-import type { Database } from '@/types/supabase.types';
+import type { Database, Tables } from '@/types/supabase.types';
 
 export function getAnswersByQuestionId(
   client: TypedSupabaseClient,
@@ -22,4 +22,19 @@ export async function updateAnswer(
     .match({ id: params.id })
     .throwOnError()
     .single();
+}
+
+export async function deleteAnswer(client: TypedSupabaseClient, id: string) {
+  return client?.from('answers').delete().eq('id', id).throwOnError();
+}
+
+export async function insertAnswer(
+  client: TypedSupabaseClient,
+  // data: Tables<'answers'> & Required<Pick<Tables<'answers'>, 'question_id'>>,
+  data: Database['public']['Tables']['answers']['Insert'],
+) {
+  return client
+    ?.from('answers')
+    .insert({ ...data })
+    .throwOnError();
 }

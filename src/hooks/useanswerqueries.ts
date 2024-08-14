@@ -2,7 +2,13 @@
 import useSupabase from '@/hooks/useSupabase';
 import { getUsersQuestions, updateQuestion } from '@/queries/question_queries';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAnswersByQuestionId, updateAnswer } from '@/queries/answerqueries';
+import {
+  getAnswersByQuestionId,
+  updateAnswer,
+  insertAnswer,
+  deleteAnswer,
+} from '@/queries/answerqueries';
+import type { Database, Tables } from '@/types/supabase.types';
 
 export function useGetAnswersByQuestionId(questionid: string) {
   const client = useSupabase();
@@ -34,6 +40,36 @@ export function useUpdateAnswerMutation(
   const onSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['answers'] });
     queryClient.invalidateQueries({ queryKey: ['answer', answerid] });
+  };
+  return useMutation({ mutationFn, onSuccess });
+}
+
+export function useInsertAnswer(
+  data: Database['public']['Tables']['answers']['Insert'],
+) {
+  const client = useSupabase();
+  const queryClient = useQueryClient();
+
+  const mutationFn = async () => {
+    return insertAnswer(client, data).then((result) => result?.data);
+  };
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['answers'] });
+  };
+
+  return useMutation({ mutationFn, onSuccess });
+}
+
+export function useDeleteAnswer() {
+  const client = useSupabase();
+  const queryClient = useQueryClient();
+  const mutationFn = async (id: string) => {
+    return deleteAnswer(client, id).then((result) => result?.data);
+  };
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['answers'] });
+    queryClient.invalidateQueries({ queryKey: ['answers', id] });
   };
   return useMutation({ mutationFn, onSuccess });
 }
