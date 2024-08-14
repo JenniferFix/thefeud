@@ -86,7 +86,9 @@ const Answers = ({ questionid }: { questionid: string }) => {
 
   console.log(data);
   return (
-    <div>{data?.map((a: Tables<"answers">) => <Answer answer={a} />)}</div>
+    <div>
+      {data?.map((a: Tables<"answers">) => <Answer key={a.id} answer={a} />)}
+    </div>
   );
 };
 
