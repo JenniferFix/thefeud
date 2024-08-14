@@ -1,12 +1,12 @@
-"use client";
-import useSupabase from "@/hooks/useSupabase";
-import { getUsersQuestions, updateQuestion } from "@/queries/question_queries";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAnswersByQuestionId, updateAnswer } from "@/queries/answerqueries";
+'use client';
+import useSupabase from '@/hooks/useSupabase';
+import { getUsersQuestions, updateQuestion } from '@/queries/question_queries';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getAnswersByQuestionId, updateAnswer } from '@/queries/answerqueries';
 
 export function useGetAnswersByQuestionId(questionid: string) {
   const client = useSupabase();
-  const queryKey = ["answers", questionid];
+  const queryKey = ['answers', questionid];
 
   const queryFn = async () => {
     return getAnswersByQuestionId(client, questionid).then(
@@ -32,8 +32,8 @@ export function useUpdateAnswerMutation(
   };
 
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["answers"] });
-    queryClient.invalidateQueries({ queryKey: ["answer", answerid] });
+    queryClient.invalidateQueries({ queryKey: ['answers'] });
+    queryClient.invalidateQueries({ queryKey: ['answer', answerid] });
   };
   return useMutation({ mutationFn, onSuccess });
 }

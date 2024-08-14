@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import Answers from "./Answers";
+} from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
+import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import Answers from './Answers';
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 const Question = ({ id, text }: { id: string; text: string }) => {
   const [isOpen, setIsOpen] = React.useState(false);

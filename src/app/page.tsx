@@ -1,6 +1,6 @@
-import AuthButton from "@/components/demo/AuthButton";
-import { createClient } from "@/utils/supabase/server";
-import Navbar from "@/components/Navbar";
+import AuthButton from '@/components/demo/AuthButton';
+import { createClient } from '@/utils/supabase/server';
+import Navbar from '@/components/Navbar';
 
 export default async function Index() {
   return (

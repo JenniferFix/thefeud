@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { RecoilRoot } from "recoil";
-import ReactQueryClientProvider from "./ReactQueryProvider";
+'use client';
+import React from 'react';
+import { RecoilRoot } from 'recoil';
+import ReactQueryClientProvider from './ReactQueryProvider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import { useGetUsersQuestions } from "@/hooks/usequestionqueries";
+'use client';
+import React from 'react';
+import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
 
 const QueryTest = ({ userid }: { userid: string }) => {
   const { isError, data, error, isLoading } = useGetUsersQuestions();

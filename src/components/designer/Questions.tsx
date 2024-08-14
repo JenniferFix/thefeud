@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { useGetUsersQuestions } from "@/hooks/usequestionqueries";
-import Question from "./Question";
+'use client';
+import React from 'react';
+import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
+import Question from './Question';
 
 const Questions = () => {
   const { isError, data, error, isLoading } = useGetUsersQuestions();
@@ -10,7 +10,7 @@ const Questions = () => {
   console.log(data);
 
   return data?.map((q) => (
-    <Question key={q.id} id={q.id} text={q.question ?? ""} />
+    <Question key={q.id} id={q.id} text={q.question ?? ''} />
   ));
 };
 

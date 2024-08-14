@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import { useGetAnswersByQuestionId } from "@/hooks/useanswerqueries";
+'use client';
+import React from 'react';
+import { useGetAnswersByQuestionId } from '@/hooks/useanswerqueries';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Form,
   FormControl,
@@ -18,7 +18,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Card,
   CardContent,
@@ -26,20 +26,20 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Tables } from "@/types/supabase.types";
-import { TrashIcon } from "@radix-ui/react-icons";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Tables } from '@/types/supabase.types';
+import { TrashIcon } from '@radix-ui/react-icons';
 
-type AnswerRow = Tables<"answers">;
+type AnswerRow = Tables<'answers'>;
 
 const answerSchema = z.object({
   answer: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: 'Username must be at least 2 characters.',
   }),
   score: z.number().int().max(100),
 });
@@ -59,12 +59,12 @@ const Answer = ({ answer }: { answer: AnswerRow }) => {
         <div className="p-1 flex ">
           <FormField
             control={form.control}
-            name={"answer"}
+            name={'answer'}
             render={({ field }) => <Input {...field} />}
           />
           <FormField
             control={form.control}
-            name={"score"}
+            name={'score'}
             render={({ field }) => (
               <Input maxLength={3} className="w-14" {...field} />
             )}
@@ -87,7 +87,7 @@ const Answers = ({ questionid }: { questionid: string }) => {
   console.log(data);
   return (
     <div>
-      {data?.map((a: Tables<"answers">) => <Answer key={a.id} answer={a} />)}
+      {data?.map((a: Tables<'answers'>) => <Answer key={a.id} answer={a} />)}
     </div>
   );
 };

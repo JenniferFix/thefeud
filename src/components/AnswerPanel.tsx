@@ -1,10 +1,10 @@
-"use client";
-import React, { MouseEventHandler } from "react";
-import { Flipper, Flipped } from "react-flip-toolkit";
-import { answerState } from "./states";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { answerSelector } from "./states";
-import type { Answer } from "../types";
+'use client';
+import React, { MouseEventHandler } from 'react';
+import { Flipper, Flipped } from 'react-flip-toolkit';
+import { answerState } from './states';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { answerSelector } from './states';
+import type { Answer } from '../types';
 
 const RankNumber = ({
   id,
@@ -17,7 +17,7 @@ const RankNumber = ({
 }) => {
   return (
     //className="flex w-fit min-w-4 p-2 items-center justify-center aspect-square  border-solid border-2"
-    <Flipped flipId={"answer" + id}>
+    <Flipped flipId={'answer' + id}>
       <div
         onClick={onClick}
         className="w-full flex justify-center h-full items-center"
@@ -42,20 +42,20 @@ const AnswerPane = ({
   onClick: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
-    <Flipped flipId={"answer" + index}>
+    <Flipped flipId={'answer' + index}>
       <div
         onClick={onClick}
         className="flex justify-between h-full items-center"
       >
         <div
           className="text-5xl font-semibold text-white uppercase grow bg-black h-full flex items-center justify-center bg-gradient-to-b  from-blue-900 to-indigo-950"
-          style={{ textShadow: "6px 6px black" }}
+          style={{ textShadow: '6px 6px black' }}
         >
           {answer}
         </div>
         <div
           className="w-min text-5xl font-medium text-white p-2"
-          style={{ textShadow: "4px 4px black" }}
+          style={{ textShadow: '4px 4px black' }}
         >
           {score}
         </div>

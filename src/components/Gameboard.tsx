@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import AnswerPanel from "./AnswerPanel";
-import { useRecoilValue } from "recoil";
-import { answersState } from "./states";
-import GameBg from "./GameBg";
+'use client';
+import React from 'react';
+import AnswerPanel from './AnswerPanel';
+import { useRecoilValue } from 'recoil';
+import { answersState } from './states';
+import GameBg from './GameBg';
 
 const Gameboard = (): React.ReactElement => {
   const answersList = useRecoilValue<string[]>(answersState);
