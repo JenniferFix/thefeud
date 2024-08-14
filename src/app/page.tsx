@@ -1,7 +1,7 @@
 import AuthButton from '@/components/demo/AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import Navbar from '@/components/Navbar';
-
+import ThemeToggle from '@/components/header/ThemeToggle';
 export default async function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -9,6 +9,7 @@ export default async function Index() {
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           <Navbar />
           <AuthButton />
+          <ThemeToggle />
         </div>
       </nav>
       <div>

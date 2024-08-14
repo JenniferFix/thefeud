@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <Providers>
       <html lang="en">
-        <body className={importedFont.className}>
+        <body
+          className={importedFont.className + ' bg-background text-foreground'}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
