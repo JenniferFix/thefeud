@@ -11,25 +11,28 @@ export type Database = {
     Tables: {
       answers: {
         Row: {
-          answer: string | null
+          answer: string
           created_at: string
           id: string
           question_id: string
-          score: number | null
+          score: number
+          user_id: string | null
         }
         Insert: {
-          answer?: string | null
+          answer?: string
           created_at?: string
           id?: string
           question_id: string
-          score?: number | null
+          score?: number
+          user_id?: string | null
         }
         Update: {
-          answer?: string | null
+          answer?: string
           created_at?: string
           id?: string
           question_id?: string
-          score?: number | null
+          score?: number
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -37,6 +40,13 @@ export type Database = {
             columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "answers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -124,7 +134,7 @@ export type Database = {
           },
         ]
       }
-      "round events": {
+      round_events: {
         Row: {
           answer: string | null
           correct: boolean

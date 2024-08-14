@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/types/supabase.types";
 
-export type TypedSupabaseClient = SupabaseClient<Database> | undefined;
+export type TypedSupabaseClient = SupabaseClient<Database>;
 let client: TypedSupabaseClient;
 
 export function getSupabaseBrowserClient() {
