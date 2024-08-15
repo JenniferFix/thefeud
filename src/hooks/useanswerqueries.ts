@@ -44,13 +44,13 @@ export function useUpdateAnswerMutation(
   return useMutation({ mutationFn, onSuccess });
 }
 
-export function useInsertAnswer(
-  data: Database['public']['Tables']['answers']['Insert'],
-) {
+export function useInsertAnswer() {
   const client = useSupabase();
   const queryClient = useQueryClient();
 
-  const mutationFn = async () => {
+  const mutationFn = async (
+    data: Database['public']['Tables']['answers']['Insert'],
+  ) => {
     return insertAnswer(client, data).then((result) => result?.data);
   };
 
@@ -69,7 +69,6 @@ export function useDeleteAnswer() {
   };
   const onSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['answers'] });
-    queryClient.invalidateQueries({ queryKey: ['answers', id] });
   };
   return useMutation({ mutationFn, onSuccess });
 }
