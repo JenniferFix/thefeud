@@ -24,7 +24,9 @@ const Question = ({ id, text }: { id: string; text: string }) => {
         <CardContent className="flex justify-between items-center py-2">
           <div>{text}</div>
           <CollapsibleTrigger asChild>
-            <Button>{isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}</Button>
+            <Button size="icon" variant="ghost">
+              {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+            </Button>
           </CollapsibleTrigger>
         </CardContent>
       </Card>

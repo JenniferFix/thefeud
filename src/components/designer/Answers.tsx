@@ -45,17 +45,20 @@ const answerSchema = z.object({
   answer: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  score: z.number().int().max(100),
+  score: z.coerce.number().int().min(0).max(100),
 });
 
 const Answer = ({
   addAnswer,
   answer,
+  questionid,
 }: {
   addAnswer?: boolean;
   answer?: AnswerRow;
+  questionid: string;
 }) => {
   const deleteAnswer = useDeleteAnswer();
+  const insertAnswer = useInsertAnswer();
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
@@ -72,30 +75,42 @@ const Answer = ({
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     console.log(values);
+    insertAnswer.mutate({
+      answer: values.answer,
+      question_id: questionid,
+      score: values.score,
+    });
+    form.reset();
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)}>
-        <div className="p-1 flex ">
+        <div className="flex ">
           <FormField
             control={form.control}
             name={'answer'}
-            render={({ field }) => <Input placeholder="Answer..." {...field} />}
+            render={({ field }) => (
+              <Input className="m-1" placeholder="Answer..." {...field} />
+            )}
           />
           <FormField
             control={form.control}
             name={'score'}
             render={({ field }) => (
-              <Input maxLength={3} className="w-14" {...field} />
+              <Input maxLength={3} className="m-1 w-14" {...field} />
             )}
           />
           {answer ? (
-            <Button onClick={(e) => handleDelete(e, answer.id)} variant="ghost">
+            <Button
+              size="icon"
+              onClick={(e) => handleDelete(e, answer.id)}
+              variant="ghost"
+            >
               <TrashIcon />
             </Button>
           ) : (
-            <Button variant="ghost" type="submit">
+            <Button size="icon" variant="ghost" type="submit">
               <PlusIcon />
             </Button>
           )}
@@ -114,8 +129,10 @@ const Answers = ({ questionid }: { questionid: string }) => {
   console.log(data?.length);
   return (
     <div>
-      {data?.map((a: Tables<'answers'>) => <Answer key={a.id} answer={a} />)}
-      {data && data.length < 8 && <Answer addAnswer />}
+      {data?.map((a: Tables<'answers'>) => (
+        <Answer key={a.id} questionid={questionid} answer={a} />
+      ))}
+      {data && data.length < 8 && <Answer questionid={questionid} addAnswer />}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 'use client';
 import useSupabase from '@/hooks/useSupabase';
-import { getUsersQuestions, updateQuestion } from '@/queries/question_queries';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getAnswersByQuestionId,
