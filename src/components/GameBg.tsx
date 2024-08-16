@@ -1,5 +1,5 @@
-import React from "react";
-import TeamScore from "./TeamScore";
+import React from 'react';
+import TeamScore from './TeamScore';
 
 const GameBg = ({
   board,
@@ -393,7 +393,7 @@ const GameBg = ({
         opacity="1"
       ></path>
       <path
-        style={{ mixBlendMode: "normal" }}
+        style={{ mixBlendMode: 'normal' }}
         fill="url(#pattern98)"
         fillOpacity="1"
         stroke="none"

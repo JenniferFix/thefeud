@@ -1,6 +1,6 @@
-import React from "react";
-import GameBg from "./GameBg";
-import Gameboard from "./Gameboard";
+import React from 'react';
+import GameBg from './GameBg';
+import Gameboard from './Gameboard';
 
 const Game = () => {
   return (
