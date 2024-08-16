@@ -22,16 +22,15 @@ export function useGetAnswersByQuestionId(questionid: string) {
   return useQuery({ queryKey, queryFn });
 }
 
-export function useUpdateAnswerMutation(
-  answerid: string,
-  answer: string,
-  score: number,
-) {
+export function useUpdateAnswerMutation() {
   const client = useSupabase();
   const queryClient = useQueryClient();
 
-  const mutationFn = async () => {
-    return updateAnswer(client, { id: answerid, answer, score }).then(
+  const mutationFn = async (
+    id: string,
+    data: Database['public']['Tables']['answers']['Update']
+  ) => {
+    return updateAnswer(client, {id, data}).then(
       (result) => result?.data,
     );
   };
