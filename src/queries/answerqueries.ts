@@ -14,7 +14,7 @@ export function getAnswersByQuestionId(
 
 export async function updateAnswer(
   client: TypedSupabaseClient,
-  params: { id: string; answer: string; score: number },
+  params: { id: string; data: Database['public']['Tables']['answers']['Update'] },
 ) {
   return client
     ?.from('answers')

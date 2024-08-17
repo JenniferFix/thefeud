@@ -4,6 +4,7 @@ import {
   useDeleteAnswer,
   useGetAnswersByQuestionId,
   useInsertAnswer,
+  useUpdateAnswerMutation,
 } from '@/hooks/useanswerqueries';
 import {
   Table,
@@ -59,6 +60,7 @@ const Answer = ({
 }) => {
   const deleteAnswer = useDeleteAnswer();
   const insertAnswer = useInsertAnswer();
+  const updateAnswer = useUpdateAnswerMutation();
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
