@@ -70,6 +70,8 @@ const Answer = ({
     },
   });
 
+  const { register } = form;
+
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     deleteAnswer.mutate(id);
@@ -77,17 +79,33 @@ const Answer = ({
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     console.log(values);
-    insertAnswer.mutate({
-      answer: values.answer,
-      question_id: questionid,
-      score: values.score,
-    });
+    if (addAnswer) {
+      insertAnswer.mutate({
+        answer: values.answer,
+        question_id: questionid,
+        score: values.score,
+      });
+    } else {
+      updateAnswer.mutate({
+        id: answer?.id!,
+        data: {
+          answer: values.answer,
+          score: values.score,
+        },
+      });
+    }
     form.reset();
+  };
+  const AddForm = ({ children }: { children: React.ReactNode }) => {
+    <form>{children}</form>;
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleFormSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        onBlur={form.handleSubmit(handleFormSubmit)}
+      >
         <div className="flex ">
           <FormField
             control={form.control}
@@ -132,7 +150,12 @@ const Answers = ({ questionid }: { questionid: string }) => {
   return (
     <div>
       {data?.map((a: Tables<'answers'>) => (
-        <Answer key={a.id} questionid={questionid} answer={a} />
+        <Answer
+          key={a.id}
+          questionid={questionid}
+          answer={a}
+          addAnswer={false}
+        />
       ))}
       {data && data.length < 8 && <Answer questionid={questionid} addAnswer />}
     </div>

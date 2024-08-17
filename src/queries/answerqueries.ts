@@ -9,19 +9,23 @@ export function getAnswersByQuestionId(
     .from('answers')
     .select('*')
     .eq('question_id', questionid)
-    .throwOnError();
+    .throwOnError()
+    .order('score', { ascending: false })
+    .order('answer', { ascending: false });
 }
 
 export async function updateAnswer(
   client: TypedSupabaseClient,
-  params: { id: string; data: Database['public']['Tables']['answers']['Update'] },
+  params: {
+    id: string;
+    data: Database['public']['Tables']['answers']['Update'];
+  },
 ) {
   return client
     ?.from('answers')
-    .update({ answer: params.answer, score: params.score })
+    .update({ ...params.data })
     .match({ id: params.id })
-    .throwOnError()
-    .single();
+    .throwOnError();
 }
 
 export async function deleteAnswer(client: TypedSupabaseClient, id: string) {

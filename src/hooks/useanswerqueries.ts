@@ -26,18 +26,19 @@ export function useUpdateAnswerMutation() {
   const client = useSupabase();
   const queryClient = useQueryClient();
 
-  const mutationFn = async (
-    id: string,
-    data: Database['public']['Tables']['answers']['Update']
-  ) => {
-    return updateAnswer(client, {id, data}).then(
-      (result) => result?.data,
-    );
+  const mutationFn = async ({
+    id,
+    data,
+  }: {
+    id: string;
+    data: Database['public']['Tables']['answers']['Update'];
+  }) => {
+    return updateAnswer(client, { id, data }).then((result) => result?.data);
   };
 
   const onSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['answers'] });
-    queryClient.invalidateQueries({ queryKey: ['answer', answerid] });
+    // queryClient.invalidateQueries({ queryKey: ['answer', answerid] });
   };
   return useMutation({ mutationFn, onSuccess });
 }
