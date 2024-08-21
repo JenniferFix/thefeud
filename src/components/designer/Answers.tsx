@@ -43,9 +43,7 @@ import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
 type AnswerRow = Tables<'answers'>;
 
 const answerSchema = z.object({
-  answer: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
+  answer: z.string(),
   score: z.coerce.number().int().min(0).max(100),
 });
 
@@ -77,6 +75,10 @@ const Answer = ({
     deleteAnswer.mutate(id);
   };
 
+  const handleFormBlur = (values: z.infer<typeof answerSchema>) => {
+    handleFormSubmit(values);
+  };
+
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     console.log(values);
     if (addAnswer) {
@@ -104,7 +106,7 @@ const Answer = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        onBlur={form.handleSubmit(handleFormSubmit)}
+        onBlur={form.handleSubmit(handleFormBlur)}
       >
         <div className="flex ">
           <FormField
