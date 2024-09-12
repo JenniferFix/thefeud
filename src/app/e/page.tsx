@@ -1,7 +1,7 @@
 import React from 'react';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import Games from '@/components/designer/Games';
+import GamesPage from '@/components/GamesPage';
 
 async function Page({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -13,11 +13,7 @@ async function Page({ params }: { params: { id: string } }) {
   if (!user) {
     return redirect('/login');
   }
-  return (
-    <div>
-      <Games />
-    </div>
-  );
+  return <GamesPage />;
 }
 
 export default Page;

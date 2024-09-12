@@ -1,11 +1,11 @@
 import React from 'react';
-import { useGetUsersGames } from '@/hooks/usegamequeries';
-
+import { useGetGames } from '@/hooks/usegamequeries';
 const Games = () => {
-  const { data, error, isError, isLoading } = useGetUsersGames();
+  const { data, isError, isLoading, error } = useGetGames();
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return <div>{error.message}</div>;
   console.log(data);
+
   return <div>Games</div>;
 };
 

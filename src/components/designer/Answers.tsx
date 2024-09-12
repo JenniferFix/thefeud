@@ -78,7 +78,6 @@ const Answer = ({
   };
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
-    console.log(values);
     if (addAnswer) {
       insertAnswer.mutate({
         answer: values.answer,
@@ -146,7 +145,6 @@ const Answers = ({ questionid }: { questionid: string }) => {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
-  console.log(data?.length);
   return (
     <div>
       {data?.map((a: Tables<'answers'>) => (
