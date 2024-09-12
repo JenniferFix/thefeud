@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <Providers>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={importedFont.className + ' bg-background text-foreground'}
         >
