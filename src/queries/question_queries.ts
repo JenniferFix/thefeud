@@ -1,5 +1,5 @@
 import { TypedSupabaseClient } from '@/utils/supabase/client';
-import type { Database } from '@/types/supabase.types';
+// import type { Database } from '@/types/supabase.types';
 
 export function getUsersQuestions(client: TypedSupabaseClient) {
   return client.from('questions').select('*');
