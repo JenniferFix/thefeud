@@ -6,7 +6,14 @@ const Games = () => {
   if (isError) return <div>{error.message}</div>;
   console.log(data);
 
-  return <div>Games</div>;
+  return (
+    <div>
+      {data?.map((item) => (
+        <div key={item.id}>
+          <div>{item.name}</div>
+        </div>
+      ))}
+    </div>
+  );
 };
-
 export default Games;
