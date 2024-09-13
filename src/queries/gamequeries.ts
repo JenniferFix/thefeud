@@ -5,7 +5,10 @@ export function getGames(client: TypedSupabaseClient) {
   return client.from('games').select('*').throwOnError();
 }
 
-export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
+export async function getGameQuestions(
+  client: TypedSupabaseClient,
+  gameId: string,
+) {
   return client
     .from('games')
     .select(`id, questions(id, question)`)
