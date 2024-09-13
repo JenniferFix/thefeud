@@ -73,20 +73,14 @@ export type Database = {
       game_questions: {
         Row: {
           gameid: string
-          id: number
-          position: number | null
           questionid: string
         }
         Insert: {
           gameid: string
-          id?: number
-          position?: number | null
           questionid: string
         }
         Update: {
           gameid?: string
-          id?: number
-          position?: number | null
           questionid?: string
         }
         Relationships: [

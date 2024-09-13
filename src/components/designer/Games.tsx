@@ -2,6 +2,12 @@
 import React from 'react';
 import { useGetGames } from '@/hooks/usegamequeries';
 import { useFeudStore } from '@/store';
+import { Tables } from '@/types/supabase.types';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+
+const Game = ({ game }: { game: Tables<'games'> }) => {
+  return <div></div>;
+};
 
 const Games = () => {
   const { data, isError, isLoading, error } = useGetGames();
@@ -11,12 +17,19 @@ const Games = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{error.message}</div>;
-  console.log(data);
 
-  return data?.map((item) => (
-    <div key={item.id}>
-      <div>{item.name}</div>
-    </div>
-  ));
+  return (
+    <ToggleGroup
+      type="single"
+      className="flex flex-col items-start"
+      onValueChange={(value) => updateSelectedGame(value)}
+    >
+      {data?.map((item) => (
+        <ToggleGroupItem key={item.id} value={item.id}>
+          {item.name}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
+  );
 };
 export default Games;

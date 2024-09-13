@@ -1,6 +1,9 @@
+'use client';
 import React from 'react';
 import Games from './Games';
-import Questions from './Questions';
+import GameQuestions from '@/components/designer/GameQuestions';
+import { useFeudStore } from '@/store';
+
 import {
   ResizablePanel,
   ResizableHandle,
@@ -8,6 +11,7 @@ import {
 } from '@/components/ui/resizable';
 
 const Editor = () => {
+  const selectedItem = useFeudStore((state) => state.selectedGame);
   return (
     <div className="h-screen">
       <ResizablePanelGroup direction="horizontal">
@@ -15,7 +19,13 @@ const Editor = () => {
           <Games />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>One</ResizablePanel>
+        <ResizablePanel defaultSize={75}>
+          {selectedItem ? (
+            <GameQuestions gameId={selectedItem} />
+          ) : (
+            <div>Nothing Selected</div>
+          )}
+        </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
