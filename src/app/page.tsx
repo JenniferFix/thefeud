@@ -3,8 +3,18 @@ import { createClient } from '@/utils/supabase/server';
 import Navbar from '@/components/Navbar';
 import ThemeToggle from '@/components/header/ThemeToggle';
 import LoginPanel from '@/components/LoginPanel';
+// import { redirect } from 'next/navigation';
 
 export default async function Index() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // if (!user) {
+  //   return redirect('/login');
+  // }
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
@@ -25,7 +35,7 @@ export default async function Index() {
               Login or create an account to create surveys and host your own
               game.
             </h3>
-            <LoginPanel />
+            {!user && <LoginPanel />}
           </div>
         </div>
       </div>
