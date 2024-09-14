@@ -5,15 +5,15 @@ export function getGames(client: TypedSupabaseClient) {
   return client.from('games').select('*').throwOnError();
 }
 
-export async function getGameQuestions(
-  client: TypedSupabaseClient,
-  gameId: string,
-) {
-  return client
+export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
+  const returnQuery = client
     .from('games')
     .select(`id, questions(id, question)`)
     .match({ id: gameId })
     .throwOnError();
+  export type GameQuestions = QueryData<typeof returnQuery>;
+  return returnQuery;
 }
 
+// export type QueryData<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
 export type GameQuestionsType = QueryData<typeof getGameQuestions>;
