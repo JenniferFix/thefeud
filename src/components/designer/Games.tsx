@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useGetGames } from '@/hooks/usegamequeries';
-import { useFeudStore } from '@/store';
+import { useEditorStore } from '@/store';
 import { Tables } from '@/types/supabase.types';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
@@ -11,7 +11,9 @@ const Game = ({ game }: { game: Tables<'games'> }) => {
 
 const Games = () => {
   const { data, isError, isLoading, error } = useGetGames();
-  const updateSelectedGame = useFeudStore((state) => state.updateSelectedGame);
+  const updateSelectedGame = useEditorStore(
+    (state) => state.updateEditorSelectedGame,
+  );
 
   // just call it with the new state passed in
 
@@ -21,7 +23,7 @@ const Games = () => {
   return (
     <ToggleGroup
       type="single"
-      className="flex flex-col items-start"
+      className="flex flex-col items-start m-2"
       onValueChange={(value) => updateSelectedGame(value)}
     >
       {data?.map((item) => (
