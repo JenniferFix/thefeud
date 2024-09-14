@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Games from '@/components/designer/Games';
+import Games from '@/components/editor/Games';
 
 const GamesPage = () => {
   return (

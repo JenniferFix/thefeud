@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Games from './Games';
-import GameQuestions from '@/components/designer/GameQuestions';
+import GameQuestions from '@/components/editor/GameQuestions';
 import { useEditorStore } from '@/store';
 import { Button } from '@/components/ui/button';
 
