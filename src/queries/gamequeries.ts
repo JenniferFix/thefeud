@@ -11,9 +11,7 @@ export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
     .select(`id, questions(id, question)`)
     .match({ id: gameId })
     .throwOnError();
-  export type GameQuestions = QueryData<typeof returnQuery>;
   return returnQuery;
 }
-
 // export type QueryData<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
-export type GameQuestionsType = QueryData<typeof getGameQuestions>;
+export type TGameQuestions = QueryData<ReturnType<typeof getGameQuestions>>;
