@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import ThemeToggle from '@/components/header/ThemeToggle';
 import LoginPanel from '@/components/LoginPanel';
 // import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 export default async function Index() {
   const supabase = createClient();
@@ -27,16 +28,15 @@ export default async function Index() {
       <div>
         <h1 className="text-4xl">Welcome to The Feud</h1>
         <div className="flex gap-4">
-          <div>
-            If you were invited to a game please enter the game code below.
-          </div>
-          <div>
-            <h3>
-              Login or create an account to create surveys and host your own
-              game.
-            </h3>
-            {!user && <LoginPanel />}
-          </div>
+          {!user && <LoginPanel />}
+          {user && (
+            <div>
+              <div>
+                <Link href="/e">Go to your editor</Link>
+              </div>
+              <div>Start a game (coming soon!)</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
