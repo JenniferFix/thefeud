@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import Games from './Games';
-import GameQuestions from '@/components/editor/GameQuestions';
 import { useEditorStore } from '@/store';
 import { Button } from '@/components/ui/button';
 
@@ -10,7 +9,8 @@ import {
   ResizableHandle,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import Questions from './Questions';
+import QuestionsPanel from './QuestionsPanel';
+import GameQuestionsPanel from './GameQuestionsPanel';
 import { ThickArrowLeftIcon, ThickArrowRightIcon } from '@radix-ui/react-icons';
 
 const MovePanel = () => {
@@ -21,7 +21,7 @@ const MovePanel = () => {
     (state) => state.editorSelectedFromAllQuestions,
   );
   return (
-    <div className="flex flex-col h-full justify-center mx-6 gap-4">
+    <div className="flex flex-col h-full justify-center px-4 gap-4 border-r">
       <Button
         size="icon"
         variant="outline"
@@ -50,16 +50,12 @@ const Editor = () => {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={33}>
-          {selectedItem ? (
-            <GameQuestions gameId={selectedItem} />
-          ) : (
-            <div>Nothing Selected</div>
-          )}
+          <GameQuestionsPanel />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <MovePanel />
-        <ResizablePanel defaultSize={34}>
-          <Questions />
+        <ResizablePanel defaultSize={33}>
+          <QuestionsPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
