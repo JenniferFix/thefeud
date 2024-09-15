@@ -17,6 +17,7 @@ const MovePanel = () => {
   const selectedGameQuestion = useEditorStore(
     (state) => state.editorSelectedGameQuestion,
   );
+  const selectedGame = useEditorStore((state) => state.editorSelectedGame);
   const selectedFromAllGameQuestion = useEditorStore(
     (state) => state.editorSelectedFromAllQuestions,
   );
@@ -25,14 +26,20 @@ const MovePanel = () => {
       <Button
         size="icon"
         variant="outline"
-        disabled={selectedFromAllGameQuestion === '' ? true : false}
+        disabled={
+          selectedGame === '' || selectedFromAllGameQuestion === ''
+            ? true
+            : false
+        }
       >
         <ThickArrowLeftIcon />
       </Button>
       <Button
         size="icon"
         variant="outline"
-        disabled={selectedGameQuestion === '' ? true : false}
+        disabled={
+          selectedGame === '' || selectedGameQuestion === '' ? true : false
+        }
       >
         <ThickArrowRightIcon />
       </Button>

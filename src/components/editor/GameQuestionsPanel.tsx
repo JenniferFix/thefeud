@@ -49,20 +49,26 @@ const Questions = ({ itemId }: { itemId: string }) => {
   ));
 };
 
+const nothingSelected = <div>Nothing Selected</div>;
+
 const QuestionsPanel = () => {
   const selectedItem = useEditorStore((state) => state.editorSelectedGame);
-  const updateSelected = useEditorStore(
+  const updateSelectedGame = useEditorStore(
     (state) => state.updateEditorSelectedGameQuestion,
   );
   return (
     <div className="flex flex-col justify-apart h-full w-full p-1">
-      <ToggleGroup
-        type="single"
-        className="h-full items-start justify-start w-full"
-        onValueChange={(value) => updateSelected(value)}
-      >
-        <Questions itemId={selectedItem} />
-      </ToggleGroup>
+      {selectedItem !== '' ? (
+        <ToggleGroup
+          type="single"
+          className="h-full items-start justify-start w-full"
+          onValueChange={(value) => updateSelectedGame(value)}
+        >
+          <Questions itemId={selectedItem} />
+        </ToggleGroup>
+      ) : (
+        <div>Nothing Selected</div>
+      )}
     </div>
   );
 };

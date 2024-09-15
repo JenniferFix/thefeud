@@ -15,3 +15,24 @@ export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
 }
 // export type QueryData<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
 export type TGameQuestions = QueryData<ReturnType<typeof getGameQuestions>>;
+
+export function addQuestionToGame(
+  client: TypedSupabaseClient,
+  questionid: string,
+  gameid: string,
+) {
+  client.from('game_questions').insert({ gameid, questionid }).throwOnError();
+}
+
+export function removeQuestionFromGame(
+  client: TypedSupabaseClient,
+  questionid: string,
+  gameid: string,
+) {
+  client
+    .from('game_questions')
+    .delete()
+    .eq('gameid', gameid)
+    .eq('questionid', questionid)
+    .throwOnError();
+}
