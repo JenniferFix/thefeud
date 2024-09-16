@@ -21,7 +21,10 @@ export function addQuestionToGame(
   questionid: string,
   gameid: string,
 ) {
-  client.from('game_questions').insert({ gameid, questionid }).throwOnError();
+  return client
+    .from('game_questions')
+    .insert({ gameid, questionid })
+    .throwOnError();
 }
 
 export function removeQuestionFromGame(
@@ -29,7 +32,7 @@ export function removeQuestionFromGame(
   questionid: string,
   gameid: string,
 ) {
-  client
+  return client
     .from('game_questions')
     .delete()
     .eq('gameid', gameid)

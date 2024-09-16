@@ -9,9 +9,13 @@ import {
   ResizableHandle,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import QuestionsPanel from './QuestionsPanel';
+import AllQuestionsPanel from './AllQuestionsPanel';
 import GameQuestionsPanel from './GameQuestionsPanel';
 import { ThickArrowLeftIcon, ThickArrowRightIcon } from '@radix-ui/react-icons';
+import {
+  useAddQuestionToGame,
+  useRemoveQuestionFromGame,
+} from '@/hooks/usegamequeries';
 
 const MovePanel = () => {
   const selectedGameQuestion = useEditorStore(
@@ -21,6 +25,29 @@ const MovePanel = () => {
   const selectedFromAllGameQuestion = useEditorStore(
     (state) => state.editorSelectedFromAllQuestions,
   );
+  const addToGame = useAddQuestionToGame();
+  const removeFromGame = useRemoveQuestionFromGame();
+
+  const handleAddToGame = () => {
+    if (selectedGame === '' || selectedFromAllGameQuestion === '') return;
+    console.log('adding');
+    addToGame.mutate({
+      gameId: selectedGame,
+      questionId: selectedFromAllGameQuestion,
+    });
+  };
+
+  const handleRemoveFromGame = () => {
+    if (selectedGame === '' || selectedGameQuestion === '') return;
+    console.log('removing');
+    console.log('selectedGame:', selectedGame);
+    console.log('selectedFromAllGameQuestion: ', selectedGameQuestion);
+    removeFromGame.mutate({
+      gameId: selectedGame,
+      questionId: selectedGameQuestion,
+    });
+  };
+
   return (
     <div className="flex flex-col h-full justify-center px-4 gap-4 border-r">
       <Button
@@ -31,6 +58,7 @@ const MovePanel = () => {
             ? true
             : false
         }
+        onClick={handleAddToGame}
       >
         <ThickArrowLeftIcon />
       </Button>
@@ -40,6 +68,7 @@ const MovePanel = () => {
         disabled={
           selectedGame === '' || selectedGameQuestion === '' ? true : false
         }
+        onClick={handleRemoveFromGame}
       >
         <ThickArrowRightIcon />
       </Button>
@@ -62,7 +91,7 @@ const Editor = () => {
         <ResizableHandle withHandle />
         <MovePanel />
         <ResizablePanel defaultSize={33}>
-          <QuestionsPanel />
+          <AllQuestionsPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
