@@ -1,41 +1,8 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
-import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
+import { ToggleGroup } from '../ui/toggle-group';
 import { useGetGameQuestions } from '@/hooks/usegamequeries';
 import { type TGameQuestions } from '@/queries/gamequeries';
 import { useEditorStore } from '@/store';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import Answers from './Answers';
-const Question = ({ id, text }: { id: string; text: string }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      className="w-full px-3 p-1"
-    >
-      <ToggleGroupItem value={id} className="w-full">
-        <div className="flex justify-between items-center w-full py-2">
-          <div>{text}</div>
-          <CollapsibleTrigger asChild>
-            <Button size="icon" variant="ghost">
-              {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            </Button>
-          </CollapsibleTrigger>
-        </div>
-      </ToggleGroupItem>
-      <CollapsibleContent className="pl-6 pr-3 mt-3">
-        <Answers questionid={id} />
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
 
 const Questions = ({ itemId }: { itemId: string }) => {
   const { isError, data, error, isLoading } = useGetGameQuestions(itemId);
@@ -48,8 +15,6 @@ const Questions = ({ itemId }: { itemId: string }) => {
     <Question key={q.id} id={q.id} text={q.question ?? ''} />
   ));
 };
-
-const nothingSelected = <div>Nothing Selected</div>;
 
 const QuestionsPanel = () => {
   const selectedGameQuestion = useEditorStore(
