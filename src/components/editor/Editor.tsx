@@ -87,16 +87,16 @@ const Editor = () => {
   return (
     <div className="h-screen">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={33}>
+        <ResizablePanel defaultSize={30}>
           <Games />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={33}>
+        <ResizablePanel defaultSize={30}>
           <GameQuestionsPanel />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <MovePanel />
-        <ResizablePanel defaultSize={33}>
+        <ResizablePanel defaultSize={40}>
           <AllQuestionsPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
