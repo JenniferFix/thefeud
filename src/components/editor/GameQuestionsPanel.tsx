@@ -3,6 +3,7 @@ import { ToggleGroup } from '../ui/toggle-group';
 import { useGetGameQuestions } from '@/hooks/usegamequeries';
 import { type TGameQuestions } from '@/queries/gamequeries';
 import { useEditorStore } from '@/store';
+import Question from './Question';
 
 const Questions = ({ itemId }: { itemId: string }) => {
   const { isError, data, error, isLoading } = useGetGameQuestions(itemId);
@@ -17,21 +18,23 @@ const Questions = ({ itemId }: { itemId: string }) => {
 };
 
 const QuestionsPanel = () => {
+  const selectedGame = useEditorStore((state) => state.editorSelectedGame);
   const selectedGameQuestion = useEditorStore(
-    (state) => state.editorSelectedGame,
+    (state) => state.editorSelectedGameQuestion,
   );
   const updateSelectedGameQuestion = useEditorStore(
     (state) => state.updateEditorSelectedGameQuestion,
   );
   return (
     <div className="flex flex-col justify-apart h-full w-full p-1">
-      {selectedGameQuestion !== '' ? (
+      {selectedGame !== '' ? (
         <ToggleGroup
           type="single"
-          className="h-full items-start justify-start w-full"
+          className="h-full items-start justify-start w-full flex flex-col"
+          value={selectedGameQuestion}
           onValueChange={(value) => updateSelectedGameQuestion(value)}
         >
-          <Questions itemId={selectedGameQuestion} />
+          <Questions itemId={selectedGame} />
         </ToggleGroup>
       ) : (
         <div>Nothing Selected</div>

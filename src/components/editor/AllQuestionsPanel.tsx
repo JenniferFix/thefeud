@@ -16,15 +16,19 @@ const Questions = () => {
 };
 
 const QuestionsPanel = () => {
-  const updateSelected = useEditorStore(
+  const updateSelectedGame = useEditorStore(
     (state) => state.updateEditorSelectedFromAllQuestions,
+  );
+  const selectedGame = useEditorStore(
+    (state) => state.editorSelectedFromAllQuestions,
   );
   return (
     <div className="flex flex-col justify-apart h-full w-full p-1">
       <ToggleGroup
         type="single"
-        className="h-full items-start justify-start w-full"
-        onValueChange={(value) => updateSelected(value)}
+        className="h-full items-start justify-start w-full flex flex-col"
+        value={selectedGame}
+        onValueChange={(value) => updateSelectedGame(value)}
       >
         <Questions />
       </ToggleGroup>
