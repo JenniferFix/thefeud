@@ -12,12 +12,8 @@ import Answers from './Answers';
 const Question = ({ id, text }: { id: string; text: string }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      className="w-full px-3 p-1"
-    >
-      <div className="flex justify-between items-center w-full py-2">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full px-3">
+      <div className="flex justify-between items-center w-full py-1">
         <ToggleGroupItem
           value={id}
           className="w-full justify-start rounded-none rounded-l-md"

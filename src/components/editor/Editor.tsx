@@ -25,27 +25,33 @@ const MovePanel = () => {
   const selectedFromAllGameQuestion = useEditorStore(
     (state) => state.editorSelectedFromAllQuestions,
   );
+  const updateSelectedGameQuestion = useEditorStore(
+    (state) => state.updateEditorSelectedGameQuestion,
+  );
+  const updateFromAllGameQuestion = useEditorStore(
+    (state) => state.updateEditorSelectedFromAllQuestions,
+  );
   const addToGame = useAddQuestionToGame();
   const removeFromGame = useRemoveQuestionFromGame();
 
   const handleAddToGame = () => {
     if (selectedGame === '' || selectedFromAllGameQuestion === '') return;
-    console.log('adding');
     addToGame.mutate({
       gameId: selectedGame,
       questionId: selectedFromAllGameQuestion,
     });
+    updateSelectedGameQuestion(selectedFromAllGameQuestion);
+    updateFromAllGameQuestion('');
   };
 
   const handleRemoveFromGame = () => {
     if (selectedGame === '' || selectedGameQuestion === '') return;
-    console.log('removing');
-    console.log('selectedGame:', selectedGame);
-    console.log('selectedFromAllGameQuestion: ', selectedGameQuestion);
     removeFromGame.mutate({
       gameId: selectedGame,
       questionId: selectedGameQuestion,
     });
+    updateFromAllGameQuestion(selectedGameQuestion);
+    updateSelectedGameQuestion('');
   };
 
   return (
