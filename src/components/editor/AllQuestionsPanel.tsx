@@ -31,10 +31,8 @@ const QuestionsPanel = () => {
         onValueChange={(value) => updateSelectedGame(value)}
       >
         <Questions />
+        <Question addQuestion />
       </ToggleGroup>
-      <Button size="lg" variant="default" className="w-full">
-        Add
-      </Button>
     </div>
   );
 };

@@ -19,7 +19,7 @@ export function useGetGames() {
 
 export function useGetGameQuestions(gameId: string) {
   const client = useSupabase();
-  const queryKey = ['gameQuestions', gameId];
+  const queryKey = ['questions', gameId];
   const queryFn = async () => {
     return getGameQuestions(client, gameId).then((result) => result?.data);
   };
@@ -40,7 +40,7 @@ export function useAddQuestionToGame() {
     return addQuestionToGame(client, questionId, gameId);
   };
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['gameQuestions'] });
+    queryClient.invalidateQueries({ queryKey: ['questions'] });
   };
   return useMutation({ mutationFn, onSuccess });
 }
@@ -59,7 +59,7 @@ export function useRemoveQuestionFromGame() {
     return removeQuestionFromGame(client, questionId, gameId);
   };
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['gameQuestions'] });
+    queryClient.invalidateQueries({ queryKey: ['questions'] });
   };
   return useMutation({ onSuccess, mutationFn });
 }
