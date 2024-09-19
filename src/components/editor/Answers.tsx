@@ -26,9 +26,7 @@ import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
 type AnswerRow = Tables<'answers'>;
 
 const answerSchema = z.object({
-  answer: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
+  answer: z.string(),
   score: z.coerce.number().int().min(0).max(100),
 });
 
@@ -61,6 +59,7 @@ const Answer = ({
   };
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
+    if (!form.formState.isDirty) return;
     if (addAnswer) {
       insertAnswer.mutate({
         answer: values.answer,

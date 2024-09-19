@@ -39,9 +39,7 @@ import {
 type TQuestionRow = Tables<'questions'>;
 
 const questionSchema = z.object({
-  question: z.string().min(2, {
-    message: 'Question length must be at least 2 characters.',
-  }),
+  question: z.string(),
 });
 
 const Question = ({

@@ -6,6 +6,9 @@ import {
   getGameQuestions,
   addQuestionToGame,
   removeQuestionFromGame,
+  insertGame,
+  updateGame,
+  deleteGame,
 } from '@/queries/gamequeries';
 
 export function useGetGames() {
@@ -62,4 +65,55 @@ export function useRemoveQuestionFromGame() {
     queryClient.invalidateQueries({ queryKey: ['questions'] });
   };
   return useMutation({ onSuccess, mutationFn });
+}
+
+export function useInsertGame() {
+  const client = useSupabase();
+  const queryClient = useQueryClient();
+
+  const mutationFn = async ({ name }: { name: string }) => {
+    return insertGame(client, name);
+  };
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['games'] });
+  };
+
+  return useMutation({ mutationFn, onSuccess });
+}
+
+export function useUpdateGame() {
+  const client = useSupabase();
+  const queryClient = useQueryClient();
+
+  const mutationFn = async ({
+    gameId,
+    name,
+  }: {
+    gameId: string;
+    name: string;
+  }) => {
+    return updateGame(client, gameId, name);
+  };
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['games'] });
+  };
+
+  return useMutation({ mutationFn, onSuccess });
+}
+
+export function useDeleteGame() {
+  const client = useSupabase();
+  const queryClient = useQueryClient();
+  //
+  const mutationFn = async ({ gameId }: { gameId: string }) => {
+    return deleteGame(client, gameId);
+  };
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['games'] });
+  };
+
+  return useMutation({ mutationFn, onSuccess });
 }

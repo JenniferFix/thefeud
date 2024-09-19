@@ -39,3 +39,23 @@ export function removeQuestionFromGame(
     .eq('questionid', questionid)
     .throwOnError();
 }
+
+export function insertGame(client: TypedSupabaseClient, name: string) {
+  return client.from('games').insert({ name }).throwOnError();
+}
+
+export function updateGame(
+  client: TypedSupabaseClient,
+  gameId: string,
+  gameName: string,
+) {
+  return client
+    .from('games')
+    .update({ name: gameName })
+    .eq('id', gameId)
+    .throwOnError();
+}
+
+export function deleteGame(client: TypedSupabaseClient, gameId: string) {
+  return client.from('games').delete().eq('id', gameId).throwOnError();
+}
