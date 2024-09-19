@@ -5,6 +5,7 @@ import ThemeToggle from '@/components/header/ThemeToggle';
 import LoginPanel from '@/components/LoginPanel';
 // import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import StartGame from '@/components/gamecontrol/SelectAndStart';
 
 export default async function Index() {
   const supabase = createClient();
@@ -35,6 +36,7 @@ export default async function Index() {
                 <Link href="/e">Go to your editor</Link>
               </div>
               <div>Start a game (coming soon!)</div>
+              <StartGame />
             </div>
           )}
         </div>

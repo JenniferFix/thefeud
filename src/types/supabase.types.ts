@@ -52,23 +52,57 @@ export type Database = {
           },
         ]
       }
-      game_instance: {
+      game_events: {
         Row: {
           created_at: string
-          id: string
-          question: string | null
+          id: number
+          instanceid: string | null
         }
         Insert: {
           created_at?: string
-          id?: string
-          question?: string | null
+          id?: number
+          instanceid?: string | null
         }
         Update: {
           created_at?: string
-          id?: string
-          question?: string | null
+          id?: number
+          instanceid?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "game_events_instanceid_fkey"
+            columns: ["instanceid"]
+            isOneToOne: false
+            referencedRelation: "game_instance"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_instance: {
+        Row: {
+          created_at: string
+          game: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          game?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          game?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_instance_game_fkey"
+            columns: ["game"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       game_questions: {
         Row: {
@@ -106,42 +140,6 @@ export type Database = {
             columns: ["userid"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      game_round: {
-        Row: {
-          created_at: string
-          game_instance_id: string | null
-          id: string
-          question_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          game_instance_id?: string | null
-          id?: string
-          question_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          game_instance_id?: string | null
-          id?: string
-          question_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "game_round_game_instance_id_fkey"
-            columns: ["game_instance_id"]
-            isOneToOne: false
-            referencedRelation: "game_instance"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "game_round_question_id_fkey"
-            columns: ["question_id"]
-            isOneToOne: false
-            referencedRelation: "questions"
             referencedColumns: ["id"]
           },
         ]
@@ -200,48 +198,6 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      round_events: {
-        Row: {
-          answer: string | null
-          correct: boolean
-          created_at: string
-          id: number
-          round: string
-          team: number
-        }
-        Insert: {
-          answer?: string | null
-          correct?: boolean
-          created_at?: string
-          id?: number
-          round: string
-          team: number
-        }
-        Update: {
-          answer?: string | null
-          correct?: boolean
-          created_at?: string
-          id?: number
-          round?: string
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "round events_answer_fkey"
-            columns: ["answer"]
-            isOneToOne: false
-            referencedRelation: "answers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "round events_round_fkey"
-            columns: ["round"]
-            isOneToOne: false
-            referencedRelation: "game_round"
             referencedColumns: ["id"]
           },
         ]
