@@ -5,7 +5,12 @@ export function createGameInstance(
   client: TypedSupabaseClient,
   gameId: string,
 ) {
-  return client.from('game_instance').insert({ game: gameId }).throwOnError();
+  return client
+    .from('game_instance')
+    .insert({ game: gameId })
+    .throwOnError()
+    .select()
+    .throwOnError();
 }
 
 export function getGameInstance(
@@ -29,3 +34,16 @@ export function deleteGameInstance(
     .eq('id', instanceId)
     .throwOnError();
 }
+
+export function getInstanceGame(
+  client: TypedSupabaseClient,
+  instanceId: string,
+) {
+  return client
+    .from('game_instance')
+    .select('id, games(id,name)')
+    .eq('id', instanceId)
+    .throwOnError();
+}
+
+export type TInstanceGame = QueryData<ReturnType<typeof getInstanceGame>>;

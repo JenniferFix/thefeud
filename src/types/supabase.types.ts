@@ -81,18 +81,21 @@ export type Database = {
       game_instance: {
         Row: {
           created_at: string
-          game: string | null
+          game: string
           id: string
+          userid: string
         }
         Insert: {
           created_at?: string
-          game?: string | null
+          game: string
           id?: string
+          userid?: string
         }
         Update: {
           created_at?: string
-          game?: string | null
+          game?: string
           id?: string
+          userid?: string
         }
         Relationships: [
           {
@@ -100,6 +103,13 @@ export type Database = {
             columns: ["game"]
             isOneToOne: false
             referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_instance_userid_fkey"
+            columns: ["userid"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
