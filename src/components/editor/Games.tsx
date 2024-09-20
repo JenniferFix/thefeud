@@ -45,7 +45,6 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
 
   const handleSubmit = (values: z.infer<typeof gameSchema>) => {
     if (!addGame) return;
-    console.log('handleSubmit');
     insertGame.mutate({ name: values.name });
     form.reset();
   };

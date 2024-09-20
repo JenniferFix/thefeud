@@ -39,11 +39,17 @@ export function getInstanceGame(
   client: TypedSupabaseClient,
   instanceId: string,
 ) {
-  return client
-    .from('game_instance')
-    .select('id, games(id,name)')
-    .eq('id', instanceId)
-    .throwOnError();
+  return (
+    client
+      .from('game_instance')
+      // .select('*')
+      .select(
+        'id, games(id, name, questions(id, question, answers(id, answer, score)))',
+      )
+      .eq('id', instanceId)
+      .throwOnError()
+      .single()
+  );
 }
 
 export type TInstanceGame = QueryData<ReturnType<typeof getInstanceGame>>;

@@ -24,7 +24,7 @@ export function useGetGameInstance(instanceId: string) {
   const client = useSupabase();
   const queryKey = ['gameInstance', instanceId];
   const queryFn = async () => {
-    return getGameInstance(client, instanceId);
+    return getGameInstance(client, instanceId).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }
@@ -47,7 +47,7 @@ export function useGetInstanceGame(instanceId: string) {
   const client = useSupabase();
   const queryKey = ['gameInstanceGame', instanceId];
   const queryFn = async () => {
-    return getInstanceGame(client, instanceId);
+    return getInstanceGame(client, instanceId).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }

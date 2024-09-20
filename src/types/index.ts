@@ -9,3 +9,9 @@ export type Answer = {
 export interface IAnswers {
   [key: string]: Answer;
 }
+
+export enum GameActions {
+  StartGame = 1, // game id
+  CorrectQuestion, // question field, team field
+  IncorrectGuess, // Team
+}

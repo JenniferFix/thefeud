@@ -54,26 +54,52 @@ export type Database = {
       }
       game_events: {
         Row: {
+          answerid: string | null
           created_at: string
+          event: number
           id: number
-          instanceid: string | null
+          instanceid: string
+          questionid: string | null
+          team: number | null
         }
         Insert: {
+          answerid?: string | null
           created_at?: string
+          event: number
           id?: number
-          instanceid?: string | null
+          instanceid: string
+          questionid?: string | null
+          team?: number | null
         }
         Update: {
+          answerid?: string | null
           created_at?: string
+          event?: number
           id?: number
-          instanceid?: string | null
+          instanceid?: string
+          questionid?: string | null
+          team?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "game_events_answerid_fkey"
+            columns: ["answerid"]
+            isOneToOne: false
+            referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "game_events_instanceid_fkey"
             columns: ["instanceid"]
             isOneToOne: false
             referencedRelation: "game_instance"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_events_questionid_fkey"
+            columns: ["questionid"]
+            isOneToOne: false
+            referencedRelation: "questions"
             referencedColumns: ["id"]
           },
         ]
