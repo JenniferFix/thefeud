@@ -15,10 +15,15 @@ import { TInstanceGame } from '@/queries/instancequeries';
 
 const GameController = ({ instanceId }: { instanceId: string }) => {
   const [activeTeam, setActiveTeam] = React.useState<number | null>(null);
-  const [currentQuestion, setCurrentQuestion] = React.useState<string | null>(
-    null,
-  );
+  const [currentQuestion, setCurrentQuestion] = React.useState<
+    string | undefined
+  >();
   const { data, isLoading, isError, error } = useGetInstanceGame(instanceId);
+
+  React.useEffect(() => {
+    //
+  }, [currentQuestion]);
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{error.message}</div>;
   if (!data) return <div>no data yet</div>;
@@ -29,7 +34,7 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
   /*
    * Game Events
    * Start Game
-   * Question Guess
+   * Question Guess/
    *
    */
 
@@ -47,9 +52,12 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
         </ToggleGroup>
       </div>
       <div>
-        <Select>
+        <Select
+          value={currentQuestion}
+          onValueChange={(value) => setCurrentQuestion(value)}
+        >
           <SelectTrigger>
-            <SelectValue placeholder="Select Game" />
+            <SelectValue placeholder="Select Question" />
           </SelectTrigger>
           <SelectContent>
             {typedData?.games?.questions?.map((question) => (
