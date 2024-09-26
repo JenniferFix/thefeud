@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
+import { useInsertEvent } from '@/hooks/useeventqueries';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
@@ -10,18 +11,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
+import { GameActions } from '@/types';
 import { TInstanceGame } from '@/queries/instancequeries';
 
+const AnswersButtons = ({ questionId }: { questionId: string }) => {
+  return (
+    <div>
+      <div>buttons</div>
+    </div>
+  );
+};
+
 const GameController = ({ instanceId }: { instanceId: string }) => {
+  const insertEvent = useInsertEvent(instanceId);
   const [activeTeam, setActiveTeam] = React.useState<number | null>(null);
   const [currentQuestion, setCurrentQuestion] = React.useState<
     string | undefined
   >();
   const { data, isLoading, isError, error } = useGetInstanceGame(instanceId);
+  const d = data?.games?.questions?.filter((q) => q.id === currentQuestion);
+  const [answers, setAnswers] = React.useState(null);
 
   React.useEffect(() => {
-    //
+    if (!currentQuestion) return;
   }, [currentQuestion]);
 
   if (isLoading) return <div>Loading...</div>;
@@ -42,6 +54,15 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
     setActiveTeam(parseInt(value));
   };
 
+  const handleQuestionChange = (value: string) => {
+    setCurrentQuestion(value);
+    insertEvent.mutate({
+      eventid: GameActions.StartQuestion,
+      instanceid: instanceId,
+      questionid: value,
+    });
+  };
+
   return (
     <div>
       <div>GameController</div>
@@ -52,10 +73,7 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
         </ToggleGroup>
       </div>
       <div>
-        <Select
-          value={currentQuestion}
-          onValueChange={(value) => setCurrentQuestion(value)}
-        >
+        <Select value={currentQuestion} onValueChange={handleQuestionChange}>
           <SelectTrigger>
             <SelectValue placeholder="Select Question" />
           </SelectTrigger>
@@ -68,7 +86,11 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
           </SelectContent>
         </Select>
       </div>
-      <div>Answers</div>
+      {currentQuestion ? (
+        <AnswersButtons questionId={currentQuestion} />
+      ) : (
+        <div>Select questions first</div>
+      )}
       <div>
         <Button>Strike</Button>
       </div>

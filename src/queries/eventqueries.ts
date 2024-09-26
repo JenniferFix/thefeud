@@ -1,5 +1,5 @@
 import { TypedSupabaseClient } from '@/utils/supabase/client';
-import { QueryData } from '@supabase/supabase-js';
+// import { QueryData } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase.types';
 
 export const insertEvent = (
@@ -12,7 +12,7 @@ export const insertEvent = (
     .throwOnError();
 };
 
-export const getEventsForGame = (
+export const getEventsForGameInstance = (
   client: TypedSupabaseClient,
   instanceId: string,
 ) => {

@@ -56,7 +56,7 @@ export type Database = {
         Row: {
           answerid: string | null
           created_at: string
-          event: number
+          eventid: number
           id: number
           instanceid: string
           questionid: string | null
@@ -65,7 +65,7 @@ export type Database = {
         Insert: {
           answerid?: string | null
           created_at?: string
-          event: number
+          eventid: number
           id?: number
           instanceid: string
           questionid?: string | null
@@ -74,7 +74,7 @@ export type Database = {
         Update: {
           answerid?: string | null
           created_at?: string
-          event?: number
+          eventid?: number
           id?: number
           instanceid?: string
           questionid?: string | null
