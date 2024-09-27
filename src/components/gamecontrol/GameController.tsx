@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { MergeDeep } from 'type-fest';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
 import { useInsertEvent } from '@/hooks/useeventqueries';
 import { Button } from '@/components/ui/button';
@@ -12,13 +13,47 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { GameActions } from '@/types';
-import { TInstanceGame } from '@/queries/instancequeries';
+import { type TInstance } from '@/queries/instancequeries';
+import { Database } from '@/types/supabase.types';
 
-const AnswersButtons = ({ questionId }: { questionId: string }) => {
+type TempType = MergeDeep<
+  TInstance,
+  {
+    games: {
+      questions: TInstance['games'][];
+    };
+  }
+>;
+
+type Temp2 = MergeDeep<
+  TempType,
+  {
+    games: {
+      questions: TempType['games']['questions'][];
+    };
+  }
+>;
+
+type GoodType = MergeDeep<
+  Temp2,
+  {
+    games: {
+      questions: {
+        answers: Database['public']['Tables']['answers']['Update'][];
+      };
+    };
+  }
+>;
+
+type TQuestions = TempType['games']['questions'];
+
+const AnswersButtons = ({
+  answers,
+}: {
+  answers: GoodType['games']['questions']['answers'];
+}) => {
   return (
-    <div>
-      <div>buttons</div>
-    </div>
+    <div>{answers?.map((answer) => <Button>{answer.answer}</Button>)}</div>
   );
 };
 
@@ -29,26 +64,20 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
     string | undefined
   >();
   const { data, isLoading, isError, error } = useGetInstanceGame(instanceId);
-  const d = data?.games?.questions?.filter((q) => q.id === currentQuestion);
-  const [answers, setAnswers] = React.useState(null);
-
   React.useEffect(() => {
-    if (!currentQuestion) return;
-  }, [currentQuestion]);
+    //
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{error.message}</div>;
   if (!data) return <div>no data yet</div>;
 
-  const typedData: TInstanceGame = data;
+  const typedData: TInstance = data;
   console.log(typedData);
 
-  /*
-   * Game Events
-   * Start Game
-   * Question Guess/
-   *
-   */
+  const question = typedData?.games?.questions?.filter(
+    (i) => i.id === currentQuestion,
+  );
 
   const handleTeamToggle = (value: string) => {
     setActiveTeam(parseInt(value));
@@ -87,7 +116,7 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
         </Select>
       </div>
       {currentQuestion ? (
-        <AnswersButtons questionId={currentQuestion} />
+        <AnswersButtons answers={question?.answers!} />
       ) : (
         <div>Select questions first</div>
       )}

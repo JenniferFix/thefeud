@@ -1,3 +1,4 @@
+import { MergeDeep } from 'type-fest';
 export type Answer = {
   id: string;
   answer: string;
@@ -13,5 +14,5 @@ export interface IAnswers {
 export enum GameActions {
   StartQuestion = 1, // game id
   CorrectQuestion, // question field, team field
-  IncorrectGuess3, // Team
+  IncorrectGuess, // Team
 }

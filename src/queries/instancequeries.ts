@@ -52,4 +52,4 @@ export function getInstanceGame(
   );
 }
 
-export type TInstanceGame = QueryData<ReturnType<typeof getInstanceGame>>;
+export type TInstance = QueryData<ReturnType<typeof getInstanceGame>>;

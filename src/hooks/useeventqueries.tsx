@@ -7,8 +7,10 @@ import { Database } from '@/types/supabase.types';
 export const useGetEventsForGameInstance = (instanceId: string) => {
   const client = useSupabase();
   const queryKey = ['GameInstanceEvents', instanceId];
-  const queryFn = () => {
-    return getEventsForGameInstance(client, instanceId);
+  const queryFn = async () => {
+    return getEventsForGameInstance(client, instanceId).then(
+      (result) => result?.data,
+    );
   };
   return useQuery({ queryKey, queryFn });
 };
