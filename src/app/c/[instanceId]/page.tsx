@@ -1,8 +1,8 @@
 import React from 'react';
-import GameController from '@/components/gamecontrol/GameController';
+import GameInstanceControl from '@/components/gamecontrol/GameInstanceControl';
 
 const Page = ({ params }: { params: { instanceId: string } }) => {
-  return <GameController instanceId={params.instanceId} />;
+  return <GameInstanceControl instanceId={params.instanceId} />;
 };
 
 export default Page;

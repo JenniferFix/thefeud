@@ -43,9 +43,7 @@ export function getInstanceGame(
     client
       .from('game_instance')
       // .select('*')
-      .select(
-        'id, games(id, name, questions(id, question, answers(id, answer, score)))',
-      )
+      .select('id, games(id, name)')
       .eq('id', instanceId)
       .throwOnError()
       .single()

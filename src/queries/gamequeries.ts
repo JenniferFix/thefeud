@@ -10,7 +10,8 @@ export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
     .from('games')
     .select(`id, questions(id, question)`)
     .match({ id: gameId })
-    .throwOnError();
+    .throwOnError()
+    .single();
   return returnQuery;
 }
 // export type QueryData<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
