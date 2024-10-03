@@ -42,6 +42,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "type-fest": "^4.26.1",
+    "use-sound": "^4.0.3",
     "zod": "^3.23.8",
     "zustand": "5.0.0-rc.2"
   },

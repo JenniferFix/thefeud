@@ -13,6 +13,7 @@ export interface IAnswers {
 
 export enum GameActions {
   StartQuestion = 1, // game id
-  CorrectQuestion, // question field, team field
-  IncorrectGuess, // Team
+  CorrectAnswer, // question field, team field
+  Strike, // Team
+  TeamWin,
 }
