@@ -1,5 +1,5 @@
 import React from 'react';
-import Game from './Game';
+import Game from '@/components/show/Game';
 import { createClient } from '@/utils/supabase/server';
 
 import { Tables } from '@/types/supabase.types';

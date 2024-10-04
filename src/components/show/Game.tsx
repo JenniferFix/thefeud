@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import GameBg from './GameBg';
-import Gameboard from './Gameboard';
+import GameBg from '@/components/show/GameBg';
+// import Gameboard from './Gameboard';
 import { useGetEventsForGameInstance } from '@/hooks/useeventqueries';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
 import { GameActions } from '@/types';
@@ -63,7 +63,11 @@ const Game = ({
     return () => {
       supabaseClient.removeChannel(channel);
     };
-  }, [supabaseClient]);
+  }, [supabaseClient, events]);
+
+  React.useEffect(() => {
+    parseGameData();
+  }, [events]);
 
   if (isGameLoading) return <div>Loading...</div>;
   if (!gameData) return <div>No Data</div>;
@@ -100,7 +104,7 @@ const Game = ({
 
   return (
     <GameBg
-      board={<Gameboard />}
+      board={<div>Board</div>}
       leftTeam={leftTeamScore}
       rightTeam={rightTeamScore}
       overheadScore={roundScore}

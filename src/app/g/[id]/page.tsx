@@ -1,4 +1,4 @@
-import Game from '@/components/Game';
+import GameLoader from '@/components/show/GameLoader';
 export default function Home({ params }: { params: { id: string } }) {
-  return <Game instanceId={params.id} />;
+  return <GameLoader instanceId={params.id} />;
 }

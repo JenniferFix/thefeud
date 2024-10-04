@@ -1,10 +1,10 @@
 'use client';
 import React, { MouseEventHandler } from 'react';
 import { Flipper, Flipped } from 'react-flip-toolkit';
-import { answerState } from './states';
+import { answerState } from '../states';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { answerSelector } from './states';
-import type { Answer } from '../types';
+import { answerSelector } from '../states';
+import type { Answer } from '../../types';
 
 const RankNumber = ({
   id,

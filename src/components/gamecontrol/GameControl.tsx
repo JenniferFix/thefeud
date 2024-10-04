@@ -34,13 +34,14 @@ const Buttons = ({
     <div>
       {data?.map((item) => (
         <Button
+          key={'actionbutton' + item.id}
           disabled={!Boolean(activeTeam)}
           onClick={() =>
             insertEvent.mutate({
               instanceid: instanceId,
               team: activeTeam,
               answerid: item.id,
-              eventid: GameActions.CorrectQuestion,
+              eventid: GameActions.CorrectAnswer,
             })
           }
         >
@@ -124,7 +125,7 @@ const GameControl = ({
             insertEvent.mutate({
               team: activeTeam,
               instanceid: instanceId,
-              eventid: GameActions.IncorrectGuess,
+              eventid: GameActions.Strike,
             })
           }
         >
