@@ -21,7 +21,8 @@ export function getGameInstance(
     .from('game_instance')
     .select('*')
     .eq('id', instanceId)
-    .throwOnError();
+    .throwOnError()
+    .single();
 }
 
 export function deleteGameInstance(

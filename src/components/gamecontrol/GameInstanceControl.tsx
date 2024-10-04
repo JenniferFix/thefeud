@@ -15,11 +15,7 @@ const GameController = ({ instanceId }: { instanceId: string }) => {
 
   const gameId = typedData?.games?.id!;
 
-  return (
-    <div>
-      <GameControl instanceId={instanceId} gameId={gameId} />
-    </div>
-  );
+  return <GameControl instanceId={instanceId} gameId={gameId} />;
 };
 
 export default GameController;

@@ -7,29 +7,24 @@ import { useGetInstanceGame } from '@/hooks/useinstancequeries';
 import { GameActions } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 import { Tables } from '@/types/supabase.types';
-import { argv0 } from 'process';
+import { type TGameQuestions } from '@/queries/gamequeries';
+import useSound from 'use-sound';
 type TEvents = Tables<'game_events'>;
 
 const Game = ({
-  instanceId,
+  instanceData,
   initialData,
 }: {
-  instanceId: string;
+  instanceData: Tables<'game_instance'>;
   initialData: TEvents[];
 }) => {
   const supabaseClient = useSupabase();
-  // const {
-  //   data: eventData,
-  //   isLoading: isEventsLoading,
-  //   isError: isEventsError,
-  //   error: eventsError,
-  // } = useGetEventsForGameInstance(instanceId);
   const {
     data: gameData,
     isLoading: isGameLoading,
     isError: isGameError,
     error: gameError,
-  } = useGetInstanceGame(instanceId);
+  } = useGetInstanceGame(instanceData.id);
 
   const [events, setEvents] = React.useState(initialData);
 
@@ -37,11 +32,52 @@ const Game = ({
     string | null | undefined
   >(null);
   const [answers, setAnswers] = React.useState([]);
-  const [flippedAnswers, setFlippedAnswers] = React.useState([]);
   const [leftTeamScore, setLeftTeamScore] = React.useState(0);
   const [rightTeamScore, setRightTeamScore] = React.useState(0);
   const [roundScore, setRoundScore] = React.useState(0);
   const [strikes, setStrikes] = React.useState(0);
+
+  const [dingSound] = useSound('/sounds/ding.mp3');
+  const [strikeSound] = useSound('/sounds/strike.mp3');
+  const [faceOffMusic] = useSound('/sounds/face-off.mp3');
+  const [faceOffBuzzer] = useSound('/sounds/face-off-buzzer.mp3');
+  const [themeMusic] = useSound('/sounds/theme.mp3');
+
+  const broadcastChannel = supabaseClient.channel(instanceData.id);
+
+  const handleSoundPlay = (sound: string) => {
+    switch (sound) {
+      case 'ding':
+        dingSound();
+        break;
+      case 'strike':
+        strikeSound();
+        break;
+      case 'faceOffMusic':
+        faceOffMusic();
+        break;
+      case 'faceOffBuzzer':
+        faceOffBuzzer();
+        break;
+      case 'themeMusic':
+        themeMusic();
+        break;
+      default:
+      //
+    }
+  };
+  React.useEffect(() => {
+    const channel = supabaseClient
+      .channel(instanceData.id)
+      .on('broadcast', { event: 'sound' }, (retData) => {
+        const { event, payload } = retData;
+        handleSoundPlay(payload.sound);
+      })
+      .subscribe();
+    return () => {
+      supabaseClient.removeChannel(channel);
+    };
+  }, [broadcastChannel, handleSoundPlay]);
 
   React.useEffect(() => {
     const channel = supabaseClient
@@ -66,13 +102,6 @@ const Game = ({
   }, [supabaseClient, events]);
 
   React.useEffect(() => {
-    parseGameData();
-  }, [events]);
-
-  if (isGameLoading) return <div>Loading...</div>;
-  if (!gameData) return <div>No Data</div>;
-
-  const parseGameData = () => {
     let lastQuestion;
     let roundPoints = 0;
     let teamAPoints = 0;
@@ -100,7 +129,17 @@ const Game = ({
     if (teamAPoints !== leftTeamScore) setLeftTeamScore(teamAPoints);
     if (teamBPoints !== rightTeamScore) setRightTeamScore(teamBPoints);
     if (parseStrikes !== strikes) setStrikes(parseStrikes);
-  };
+  }, [
+    events,
+    leftTeamScore,
+    rightTeamScore,
+    roundScore,
+    currentQuestion,
+    strikes,
+  ]);
+
+  if (isGameLoading) return <div>Loading...</div>;
+  if (!gameData) return <div>No Data</div>;
 
   return (
     <GameBg
