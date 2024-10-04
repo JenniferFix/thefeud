@@ -91,8 +91,6 @@ const Game = ({
         },
         (payload) => {
           setEvents([...events!]);
-          console.log(events);
-          console.log(payload);
         },
       )
       .subscribe();

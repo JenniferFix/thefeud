@@ -51,7 +51,6 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
 
   const handleBlur = (values: z.infer<typeof gameSchema>) => {
     if (addGame) return;
-    console.log('handleBlur');
     if (!form.formState.isDirty) return;
     updateGame.mutate({ gameId: game?.id!, name: values.name });
   };

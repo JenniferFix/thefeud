@@ -100,7 +100,6 @@ const GameControl = ({
   };
 
   const handleSendSound = (sound: string) => {
-    console.log(sound);
     thisGameActions.send({
       type: 'broadcast',
       event: 'sound',
