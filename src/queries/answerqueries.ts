@@ -7,7 +7,7 @@ export function getAnswersByQuestionId(
 ) {
   return client
     .from('answers')
-    .select('*')
+    .select('id, answer, score')
     .eq('question_id', questionid)
     .throwOnError()
     .order('score', { ascending: false })

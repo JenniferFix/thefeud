@@ -1,11 +1,13 @@
 'use client';
 import React from 'react';
 import AnswerPanel from './AnswerPanel';
-import { useRecoilValue } from 'recoil';
-import { answersState } from '../states';
+import { Tables } from '@/types/supabase.types';
 
-const Gameboard = (): React.ReactElement => {
-  const answersList = useRecoilValue<string[]>(answersState);
+const Gameboard = ({
+  answers,
+}: {
+  answers?: Tables<'answers'>[];
+}): React.ReactElement => {
   // console.log(answersList);
   // const createAnswer = useRecoilCallback(
   //   ({ set }) =>
@@ -22,14 +24,13 @@ const Gameboard = (): React.ReactElement => {
   //   createAnswer(d);
   // });
 
+  console.log(answers);
+  if (!answers) {
+    // answers = [{ id: '1', answer: 'Answer1', score: 0 }];
+  }
   return (
     <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full">
-      {(answersList &&
-        answersList.map((d) => (
-          <div key={d}>
-            <AnswerPanel id={d} />
-          </div>
-        ))) || <div>Something</div>}
+      <AnswerPanel />
     </div>
   );
 };

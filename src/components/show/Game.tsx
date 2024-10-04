@@ -1,9 +1,10 @@
 'use client';
 import React from 'react';
 import GameBg from '@/components/show/GameBg';
-// import Gameboard from './Gameboard';
+import Gameboard from './Gameboard';
 import { useGetEventsForGameInstance } from '@/hooks/useeventqueries';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
+import { getAnswersByQuestionId } from '@/queries/answerqueries';
 import { GameActions } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 import { Tables } from '@/types/supabase.types';
@@ -31,7 +32,7 @@ const Game = ({
   const [currentQuestion, setCurrentQuestion] = React.useState<
     string | null | undefined
   >(null);
-  const [answers, setAnswers] = React.useState([]);
+  const [answers, setAnswers] = React.useState<Tables<'answers'>[]>();
   const [leftTeamScore, setLeftTeamScore] = React.useState(0);
   const [rightTeamScore, setRightTeamScore] = React.useState(0);
   const [roundScore, setRoundScore] = React.useState(0);
@@ -80,6 +81,21 @@ const Game = ({
   }, [broadcastChannel, handleSoundPlay]);
 
   React.useEffect(() => {
+    if (!currentQuestion) return;
+    const getData = async () => {
+      const { data, error } = await getAnswersByQuestionId(
+        supabaseClient,
+        currentQuestion,
+      );
+      return data;
+    };
+
+    getData().then((value) => {
+      setAnswers(value as Tables<'answers'>[]);
+    });
+  }, [currentQuestion]);
+
+  React.useEffect(() => {
     const channel = supabaseClient
       .channel('gameEvents')
       .on(
@@ -90,7 +106,7 @@ const Game = ({
           table: 'game_events',
         },
         (payload) => {
-          setEvents([...events!]);
+          setEvents([...events!, payload.new as TEvents]);
         },
       )
       .subscribe();
@@ -100,6 +116,7 @@ const Game = ({
   }, [supabaseClient, events]);
 
   React.useEffect(() => {
+    console.log('recalculating');
     let lastQuestion;
     let roundPoints = 0;
     let teamAPoints = 0;
@@ -109,7 +126,6 @@ const Game = ({
     events.forEach((i) => {
       switch (i.eventid) {
         case GameActions.StartQuestion:
-          // setCurrentQuestion(i.questionid);
           lastQuestion = i.questionid;
           break;
         case GameActions.CorrectAnswer:
@@ -141,7 +157,7 @@ const Game = ({
 
   return (
     <GameBg
-      board={<div>Board</div>}
+      board={<Gameboard answers={answers} />}
       leftTeam={leftTeamScore}
       rightTeam={rightTeamScore}
       overheadScore={roundScore}

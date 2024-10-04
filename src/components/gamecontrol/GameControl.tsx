@@ -6,7 +6,7 @@ import { useGetAnswersByQuestionId } from '@/hooks/useanswerqueries';
 import { useInsertEvent } from '@/hooks/useeventqueries';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import SoundEffectsPanel from './SoundEffectsPanel';
+
 import {
   Select,
   SelectContent,
@@ -18,6 +18,7 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -45,7 +46,6 @@ const Buttons = ({
       {data?.map((item) => (
         <Button
           key={'actionbutton' + item.id}
-          disabled={!Boolean(activeTeam)}
           onClick={() =>
             insertEvent.mutate({
               instanceid: instanceId,
@@ -110,12 +110,12 @@ const GameControl = ({
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <div>
-        <div className="flex">
-          <ToggleGroup type="single" onValueChange={handleTeamToggle}>
-            <ToggleGroupItem value="1">A</ToggleGroupItem>
-            <ToggleGroupItem value="2">B</ToggleGroupItem>
-          </ToggleGroup>
-        </div>
+        {/* <div className="flex"> */}
+        {/*   <ToggleGroup type="single" onValueChange={handleTeamToggle}> */}
+        {/*     <ToggleGroupItem value="1">A</ToggleGroupItem> */}
+        {/*     <ToggleGroupItem value="2">B</ToggleGroupItem> */}
+        {/*   </ToggleGroup> */}
+        {/* </div> */}
         <div>
           <Select value={currentQuestion} onValueChange={handleQuestionChange}>
             <SelectTrigger>
@@ -141,7 +141,6 @@ const GameControl = ({
         )}
         <div>
           <Button
-            disabled={!Boolean(activeTeam)}
             onClick={() =>
               insertEvent.mutate({
                 team: activeTeam,
@@ -164,6 +163,9 @@ const GameControl = ({
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle>Play Sound Effects</DrawerTitle>
+              <DrawerDescription hidden>
+                Play sound effects using buttons from here
+              </DrawerDescription>
             </DrawerHeader>
             <div className="flex flex-col mx-4 gap-2">
               <Button onClick={() => handleSendSound('ding')}>Ding</Button>
