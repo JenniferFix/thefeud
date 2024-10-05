@@ -59,6 +59,7 @@ export type Database = {
           eventid: number
           id: number
           instanceid: string
+          points: number | null
           questionid: string | null
           team: number | null
         }
@@ -68,6 +69,7 @@ export type Database = {
           eventid: number
           id?: number
           instanceid: string
+          points?: number | null
           questionid?: string | null
           team?: number | null
         }
@@ -77,6 +79,7 @@ export type Database = {
           eventid?: number
           id?: number
           instanceid?: string
+          points?: number | null
           questionid?: string | null
           team?: number | null
         }

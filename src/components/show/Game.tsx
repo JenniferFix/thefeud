@@ -5,7 +5,7 @@ import Gameboard from './Gameboard';
 import { useGetEventsForGameInstance } from '@/hooks/useeventqueries';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
 import { getAnswersByQuestionId } from '@/queries/answerqueries';
-import { GameActions } from '@/types';
+import { GameActions, IAnswered } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 import { Tables } from '@/types/supabase.types';
 import { type TGameQuestions } from '@/queries/gamequeries';
@@ -32,7 +32,8 @@ const Game = ({
   const [currentQuestion, setCurrentQuestion] = React.useState<
     string | null | undefined
   >(null);
-  const [answers, setAnswers] = React.useState<Tables<'answers'>[]>();
+  const [answers, setAnswers] = React.useState<Tables<'answers'>[]>([]);
+  const [answered, setAnswered] = React.useState<IAnswered>({});
   const [leftTeamScore, setLeftTeamScore] = React.useState(0);
   const [rightTeamScore, setRightTeamScore] = React.useState(0);
   const [roundScore, setRoundScore] = React.useState(0);
@@ -67,6 +68,7 @@ const Game = ({
       //
     }
   };
+
   React.useEffect(() => {
     const channel = supabaseClient
       .channel(instanceData.id)
@@ -121,16 +123,23 @@ const Game = ({
     let roundPoints = 0;
     let teamAPoints = 0;
     let teamBPoints = 0;
-    let parseStrikes = 0;
+    let strikeCounter = 0;
+    let lastEventType: undefined | GameActions = undefined;
+
     if (!events) return;
+    let tempAnswered: IAnswered = {};
     events.forEach((i) => {
+      lastEventType = i.eventid;
       switch (i.eventid) {
         case GameActions.StartQuestion:
           lastQuestion = i.questionid;
           break;
         case GameActions.CorrectAnswer:
+          tempAnswered[i.answerid!] = true;
+          roundPoints += i.points ?? 0;
           break;
         case GameActions.Strike:
+          strikeCounter++;
           break;
         case GameActions.TeamWin:
           break;
@@ -138,11 +147,31 @@ const Game = ({
         //
       }
     });
+
+    if (tempAnswered) setAnswered(tempAnswered);
     if (lastQuestion !== currentQuestion) setCurrentQuestion(lastQuestion);
     if (roundPoints !== roundScore) setRoundScore(roundPoints);
     if (teamAPoints !== leftTeamScore) setLeftTeamScore(teamAPoints);
     if (teamBPoints !== rightTeamScore) setRightTeamScore(teamBPoints);
-    if (parseStrikes !== strikes) setStrikes(parseStrikes);
+    if (strikeCounter !== strikes) setStrikes(strikeCounter);
+
+    if (lastEventType) {
+      switch (lastEventType) {
+        case GameActions.StartQuestion:
+          themeMusic();
+          break;
+        case GameActions.CorrectAnswer:
+          dingSound();
+          break;
+        case GameActions.Strike:
+          strikeSound();
+          break;
+        case GameActions.TeamWin:
+          // TODO: Add
+          break;
+        default:
+      }
+    }
   }, [
     events,
     leftTeamScore,
@@ -157,7 +186,7 @@ const Game = ({
 
   return (
     <GameBg
-      board={<Gameboard answers={answers} />}
+      board={<Gameboard answers={answers} answered={answered} />}
       leftTeam={leftTeamScore}
       rightTeam={rightTeamScore}
       overheadScore={roundScore}

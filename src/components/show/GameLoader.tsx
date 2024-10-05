@@ -10,13 +10,14 @@ import { TGameQuestions } from '@/queries/gamequeries';
 type TEvent = Tables<'game_events'>;
 const GameLoader = async ({ instanceId }: { instanceId: string }) => {
   const client = createClient();
+
   const _instanceEvents = getEventsForGameInstance(client, instanceId);
   const _instanceData = getGameInstance(client, instanceId);
-
   const [instanceEvents, instanceDataRaw] = await Promise.all([
     _instanceEvents,
     _instanceData,
   ]);
+
   const { data: instanceData } = instanceDataRaw;
 
   const { data: gameQuestions } = await getGameQuestions(

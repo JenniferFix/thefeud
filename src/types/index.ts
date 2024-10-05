@@ -7,6 +7,10 @@ export type Answer = {
   rank: number;
 };
 
+export interface IAnswered {
+  [key: string]: boolean;
+}
+
 export interface IAnswers {
   [key: string]: Answer;
 }

@@ -52,6 +52,7 @@ const Buttons = ({
               team: activeTeam,
               answerid: item.id,
               eventid: GameActions.CorrectAnswer,
+              points: item.score,
             })
           }
         >
