@@ -5,14 +5,14 @@ import { type TGameQuestions } from '@/queries/gamequeries';
 import { useEditorStore } from '@/store';
 import Question from './Question';
 
-const Questions = ({ itemId }: { itemId: string }) => {
-  const { isError, data, error, isLoading } = useGetGameQuestions(itemId);
+const Questions = ({ gameId }: { gameId: string }) => {
+  const { isError, data, error, isLoading } = useGetGameQuestions(gameId);
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
   if (!data) return <div>No Data</div>;
   const typedData: TGameQuestions = data;
 
-  return typedData[0].questions.map((q) => (
+  return typedData.questions.map((q) => (
     <Question key={q.id} id={q.id} text={q.question ?? ''} />
   ));
 };
@@ -34,7 +34,7 @@ const QuestionsPanel = () => {
           value={selectedGameQuestion}
           onValueChange={(value) => updateSelectedGameQuestion(value)}
         >
-          <Questions itemId={selectedGame} />
+          <Questions gameId={selectedGame} />
         </ToggleGroup>
       ) : (
         <div>Nothing Selected</div>

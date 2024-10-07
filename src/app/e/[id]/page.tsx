@@ -1,6 +1,7 @@
 import React from 'react';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import Editor from '@/components/editor/Editor';
 
 async function Page({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -12,7 +13,7 @@ async function Page({ params }: { params: { id: string } }) {
   if (!user) {
     return redirect('/login');
   }
-  return Page;
+  return <Editor />;
 }
 
 export default Page;

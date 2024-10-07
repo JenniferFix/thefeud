@@ -45,7 +45,7 @@ const Answer = ({
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
-    defaultValues: {
+    values: {
       answer: answer?.answer ?? '',
       score: answer?.score ?? 0,
     },
@@ -77,47 +77,56 @@ const Answer = ({
     }
     form.reset();
   };
+
   const AddForm = ({ children }: { children: React.ReactNode }) => {
     <form>{children}</form>;
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-        onBlur={form.handleSubmit(handleFormSubmit)}
-      >
-        <div className="flex ">
-          <FormField
-            control={form.control}
-            name={'answer'}
-            render={({ field }) => (
-              <Input className="m-1" placeholder="Answer..." {...field} />
+    <div className="flex w-full">
+      <Form {...form}>
+        <form
+          className="w-full"
+          onSubmit={form.handleSubmit(handleFormSubmit)}
+          onBlur={form.handleSubmit(handleFormSubmit)}
+        >
+          <div className="flex w-full">
+            <FormField
+              control={form.control}
+              name={'answer'}
+              render={({ field }) => (
+                <Input
+                  className="m-1 w-full"
+                  placeholder="Answer..."
+                  {...field}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={'score'}
+              render={({ field }) => (
+                <Input maxLength={3} className="m-1 w-14" {...field} />
+              )}
+            />
+            {!answer && (
+              <Button size="icon" variant="ghost" type="submit">
+                <PlusIcon />
+              </Button>
             )}
-          />
-          <FormField
-            control={form.control}
-            name={'score'}
-            render={({ field }) => (
-              <Input maxLength={3} className="m-1 w-14" {...field} />
-            )}
-          />
-          {answer ? (
-            <Button
-              size="icon"
-              onClick={(e) => handleDelete(e, answer.id)}
-              variant="ghost"
-            >
-              <TrashIcon />
-            </Button>
-          ) : (
-            <Button size="icon" variant="ghost" type="submit">
-              <PlusIcon />
-            </Button>
-          )}
-        </div>
-      </form>
-    </Form>
+          </div>
+        </form>
+      </Form>
+      {answer && (
+        <Button
+          size="icon"
+          onClick={(e) => handleDelete(e, answer.id)}
+          variant="ghost"
+        >
+          <TrashIcon />
+        </Button>
+      )}
+    </div>
   );
 };
 
@@ -129,7 +138,7 @@ const Answers = ({ questionid }: { questionid: string }) => {
 
   return (
     <div>
-      {data?.map((a: Tables<'answers'>) => (
+      {data?.map((a) => (
         <Answer
           key={a.id}
           questionid={questionid}

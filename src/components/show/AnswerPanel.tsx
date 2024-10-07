@@ -2,14 +2,16 @@
 import React, { MouseEventHandler } from 'react';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 
-const RankNumber = ({ id, rank }: { id: string; rank: number }) => {
+const RankNumber = ({ id, rank }: { id: string; rank?: number }) => {
   return (
     //className="flex w-fit min-w-4 p-2 items-center justify-center aspect-square  border-solid border-2"
     <Flipped flipId={'answer' + id}>
       <div className="w-full flex justify-center h-full items-center">
-        <div className="border-2 rounded-full aspect-square flex justify-center items-center h-12 text-3xl">
-          {rank}
-        </div>
+        {rank && (
+          <div className="border-2 rounded-full aspect-square flex justify-center items-center h-12 text-3xl">
+            {rank}
+          </div>
+        )}
       </div>
     </Flipped>
   );
@@ -53,7 +55,7 @@ const AnswerPanel = ({
   answer: string;
   points: number;
   flipped: boolean;
-  order: number;
+  order?: number;
 }) => {
   return (
     <div className="border m-2 h-20 bg-gradient-to-b from-[#1182f6] to-[#594cc3]">

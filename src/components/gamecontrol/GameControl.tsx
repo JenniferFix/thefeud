@@ -27,7 +27,7 @@ import {
 import { GameActions } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 
-const Buttons = ({
+const AnswerButtons = ({
   instanceId,
   activeTeam,
   questionId,
@@ -100,6 +100,15 @@ const GameControl = ({
     });
   };
 
+  const handleTeamWin = () => {
+    if (!activeTeam) return;
+    insertEvent.mutate({
+      eventid: GameActions.TeamWin,
+      instanceid: instanceId,
+      team: activeTeam,
+    });
+  };
+
   const handleSendSound = (sound: string) => {
     thisGameActions.send({
       type: 'broadcast',
@@ -111,12 +120,6 @@ const GameControl = ({
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <div>
-        {/* <div className="flex"> */}
-        {/*   <ToggleGroup type="single" onValueChange={handleTeamToggle}> */}
-        {/*     <ToggleGroupItem value="1">A</ToggleGroupItem> */}
-        {/*     <ToggleGroupItem value="2">B</ToggleGroupItem> */}
-        {/*   </ToggleGroup> */}
-        {/* </div> */}
         <div>
           <Select value={currentQuestion} onValueChange={handleQuestionChange}>
             <SelectTrigger>
@@ -132,7 +135,7 @@ const GameControl = ({
           </Select>
         </div>
         {currentQuestion ? (
-          <Buttons
+          <AnswerButtons
             questionId={currentQuestion}
             activeTeam={activeTeam}
             instanceId={instanceId}
@@ -152,6 +155,22 @@ const GameControl = ({
           >
             Strike
           </Button>
+        </div>
+
+        <div>
+          <div className="flex">
+            <ToggleGroup type="single" onValueChange={handleTeamToggle}>
+              <ToggleGroupItem value="1">A</ToggleGroupItem>
+              <ToggleGroupItem value="2">B</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <div>
+            <Button onClick={handleTeamWin} disabled={!Boolean(activeTeam)}>
+              {activeTeam
+                ? 'Team ' + activeTeam + ' wins'
+                : 'Select winning team'}
+            </Button>
+          </div>
         </div>
       </div>
       <div>
@@ -180,6 +199,7 @@ const GameControl = ({
               <Button onClick={() => handleSendSound('themeMusic')}>
                 Theme Music
               </Button>
+              <Button onClick={() => handleSendSound('clap')}>Clap</Button>
             </div>
             <DrawerFooter>
               <DrawerClose asChild>
