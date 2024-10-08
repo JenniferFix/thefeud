@@ -11,7 +11,6 @@ import useSupabase from '@/hooks/useSupabase';
 import { Tables } from '@/types/supabase.types';
 import { type TGameQuestions } from '@/queries/gamequeries';
 import useSound from 'use-sound';
-import { argv0 } from 'process';
 
 type TEvents = Tables<'game_events'>;
 
@@ -48,7 +47,7 @@ const Game = ({
     { format: 'mp3' },
   );
   const [strikeSound] = useSound(
-    'https://utfs.io/f/H6iSz68ZupCo4zydNCE9ulnKd6JjxQ1WkrV4qp5YX3oHg0wh',
+    'https://utfs.io/f/H6iSz68ZupCoMbf0C2NhZrC7uiAx6FkNYzDa84bnsqyKpdQB',
     { format: 'mp3' },
   );
   const [faceOffMusic] = useSound(
