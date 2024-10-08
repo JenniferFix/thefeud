@@ -51,4 +51,17 @@ export function getInstanceGame(
   );
 }
 
+export function getActiveInstances(client: TypedSupabaseClient) {
+  // Select events within last 10 min
+  // get the instance id's of those
+  // dedupe and get the actual instances
+  const prevTime = new Date();
+  prevTime.setHours(prevTime.getHours() - 2);
+  return client
+    .from('game_events')
+    .select('instanceid')
+    .gt('created_at', prevTime.toISOString())
+    .throwOnError();
+}
+
 export type TInstance = QueryData<ReturnType<typeof getInstanceGame>>;

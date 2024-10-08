@@ -1,3 +1,4 @@
+import React from 'react';
 import AuthButton from '@/components/demo/AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import Navbar from '@/components/Navbar';
@@ -6,6 +7,7 @@ import LoginPanel from '@/components/LoginPanel';
 // import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import StartGame from '@/components/gamecontrol/SelectAndStart';
+import ActiveGames from '@/components/home/ActiveGames';
 
 export default async function Index() {
   const supabase = createClient();
@@ -35,11 +37,14 @@ export default async function Index() {
               <div>
                 <Link href="/e">Go to your editor</Link>
               </div>
-              <div>Start a game (coming soon!)</div>
+              <div>Start a game</div>
               <StartGame />
             </div>
           )}
         </div>
+      </div>
+      <div>
+        <ActiveGames userid={user?.id} />
       </div>
     </div>
   );

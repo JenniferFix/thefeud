@@ -20,5 +20,7 @@ export const getEventsForGameInstance = (
     .from('game_events')
     .select('*')
     .eq('instanceid', instanceId)
+    .throwOnError()
+    .order('id', { ascending: true })
     .throwOnError();
 };

@@ -118,6 +118,7 @@ const Game = ({
   ]);
 
   React.useEffect(() => {
+    console.log('questions changed, restting answers');
     if (!currentQuestion) return;
     const getData = async () => {
       const { data, error } = await getAnswersByQuestionId(
@@ -153,6 +154,7 @@ const Game = ({
   }, [supabaseClient, events]);
 
   React.useEffect(() => {
+    console.log('recalculating');
     if (!events) return;
     let lastQuestion;
     let roundPoints = 0;

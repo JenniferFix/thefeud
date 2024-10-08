@@ -62,6 +62,7 @@ export type Database = {
           points: number | null
           questionid: string | null
           team: number | null
+          userid: string | null
         }
         Insert: {
           answerid?: string | null
@@ -72,6 +73,7 @@ export type Database = {
           points?: number | null
           questionid?: string | null
           team?: number | null
+          userid?: string | null
         }
         Update: {
           answerid?: string | null
@@ -82,6 +84,7 @@ export type Database = {
           points?: number | null
           questionid?: string | null
           team?: number | null
+          userid?: string | null
         }
         Relationships: [
           {
@@ -89,6 +92,13 @@ export type Database = {
             columns: ["answerid"]
             isOneToOne: false
             referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_events_instanceid_fkey"
+            columns: ["instanceid"]
+            isOneToOne: false
+            referencedRelation: "active_games"
             referencedColumns: ["id"]
           },
           {
@@ -243,7 +253,23 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      active_games: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          name: string | null
+          userid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_instance_userid_fkey"
+            columns: ["userid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

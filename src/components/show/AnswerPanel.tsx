@@ -27,9 +27,9 @@ const AnswerPane = ({
   index: string;
 }) => {
   return (
-    <div className="flex justify-between h-full items-center">
+    <div className="flex justify-between h-full w-full items-center">
       <div
-        className="text-5xl font-semibold text-white uppercase grow bg-black h-full flex items-center justify-center bg-gradient-to-b  from-blue-900 to-indigo-950"
+        className="text-3xl font-semibold text-white uppercase grow bg-black h-full w-full flex items-center justify-center bg-gradient-to-b  from-blue-900 to-indigo-950"
         style={{ textShadow: '6px 6px black' }}
       >
         {answer}

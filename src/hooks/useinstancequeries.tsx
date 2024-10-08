@@ -6,6 +6,7 @@ import {
   getGameInstance,
   createGameInstance,
   getInstanceGame,
+  getActiveInstances,
 } from '@/queries/instancequeries';
 
 export function useCreateGameInstance() {
@@ -48,6 +49,15 @@ export function useGetInstanceGame(instanceId: string) {
   const queryKey = ['gameInstanceGame', instanceId];
   const queryFn = async () => {
     return getInstanceGame(client, instanceId).then((result) => result?.data);
+  };
+  return useQuery({ queryKey, queryFn });
+}
+
+export function useGetActiveInstances() {
+  const client = useSupabase();
+  const queryKey = ['activeInstances'];
+  const queryFn = async () => {
+    return getActiveInstances(client).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }
