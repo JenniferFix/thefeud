@@ -55,7 +55,7 @@ export function useGetInstanceGame(instanceId: string) {
 
 export function useGetActiveInstances() {
   const client = useSupabase();
-  const queryKey = ['activeInstances'];
+  const queryKey = ['gameInstances'];
   const queryFn = async () => {
     return getActiveInstances(client).then((result) => result?.data);
   };

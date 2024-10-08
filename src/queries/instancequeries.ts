@@ -58,8 +58,8 @@ export function getActiveInstances(client: TypedSupabaseClient) {
   const prevTime = new Date();
   prevTime.setHours(prevTime.getHours() - 2);
   return client
-    .from('game_events')
-    .select('instanceid')
+    .from('game_instance')
+    .select('id, created_at, userid, games(id,name)')
     .gt('created_at', prevTime.toISOString())
     .throwOnError();
 }
