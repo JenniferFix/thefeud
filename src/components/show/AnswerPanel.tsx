@@ -34,7 +34,7 @@ const AnswerPane = ({
       >
         {answer}
       </div>
-      <div
+      <div //TODO: Make sure this stays the same width, it currently follows text width and single digit scores look bad
         className="w-min text-5xl font-medium text-white p-2"
         style={{ textShadow: '4px 4px black' }}
       >
