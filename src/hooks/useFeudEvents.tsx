@@ -36,11 +36,14 @@ export default function useGameEvents(props: Props) {
   const [playSounds, setPlaySounds] = React.useState<boolean>(
     props?.sound ?? true,
   );
+
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [events, setEvents] = React.useState(initialData);
   const [currentQuestion, setCurrentQuestion] = React.useState<
-    string | null | undefined
-  >(null);
+    string | undefined
+  >();
+  const [ncurrentQuestion, nsetCurrentQuestion] =
+    React.useState<Tables<'game_questions'>>();
   const [answers, setAnswers] = React.useState<Tables<'answers'>[]>([]);
   const [answered, setAnswered] = React.useState<IAnswered>({});
   const [leftTeamScore, setLeftTeamScore] = React.useState(0);
@@ -241,7 +244,7 @@ export default function useGameEvents(props: Props) {
     if (lastEventType) {
       switch (lastEventType) {
         case GameActions.StartQuestion:
-          setCurrentQuestion(events.at(-1)?.questionid);
+          setCurrentQuestion(events.at(-1)?.questionid!);
           if (playSounds) themeMusic();
           break;
         case GameActions.CorrectAnswer:
@@ -281,5 +284,6 @@ export default function useGameEvents(props: Props) {
     strikes,
     answers,
     answered,
+    currentQuestion,
   };
 }
