@@ -46,7 +46,7 @@ const AnswerButtons = ({
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
+    <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full">
       {data?.map((item) => (
         <Button
           key={'actionbutton' + item.id}
@@ -63,6 +63,11 @@ const AnswerButtons = ({
           {item.answer}
         </Button>
       ))}
+
+      {data &&
+        Array.from({ length: 8 - data?.length }, (_e, i) => (
+          <Button disabled={true}></Button>
+        ))}
     </div>
   );
 };
@@ -76,33 +81,36 @@ const QuestionSelector = ({
   gameId: string;
   currentQuestion?: string;
 }) => {
+  const [open, setOpen] = React.useState(false);
   const { data, isLoading, isError, error } = useGetGameQuestions(gameId);
   const insertEvent = useInsertEvent(instanceId);
   const [selected, setSelected] = React.useState<string>();
-  const [selectedText, setSelectedText] = React.useState();
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
-  let currentText;
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  if (currentQuestion && data) {
-    const temp = data?.questions?.find((val) => val.id === currentQuestion);
-    // setSelectedText(temp?.question ? temp.question : 'Select Question');
-  }
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-  const handleQuestionChange = (value: string) => {
+  const handleQuestionChange = () => {
     // setCurrentQuestion(value);
+    if (!selected) return;
     insertEvent.mutate({
       eventid: GameActions.StartQuestion,
       instanceid: instanceId,
-      questionid: value,
+      questionid: selected,
     });
+    handleClose();
   };
   return (
-    <Drawer direction="top">
+    <Drawer direction="top" open={open} onClose={handleClose}>
       <DrawerTrigger asChild>
         <div className="p-4">
-          <Button className="w-full">
+          <Button className="w-full" onClick={handleOpen}>
             {data?.questions?.find((q) => q.id === currentQuestion)?.question ??
               'Select Question'}
           </Button>
@@ -110,12 +118,13 @@ const QuestionSelector = ({
       </DrawerTrigger>
       <DrawerContent className="left-0 top-0 right-0 fixed">
         <DrawerHeader>
-          <DrawerTitle>Select Question</DrawerTitle>
+          <DrawerTitle hidden>Select Question</DrawerTitle>
           <DrawerDescription hidden>Select question</DrawerDescription>
         </DrawerHeader>
-        <div className="p-2">
-          <div className="w-[300px] border rounded-sm my-2 h-full">
-            <ScrollArea className="h-[200px]">
+        <div className="p-2 w-full h-full">
+          <div className="w-[300px] border rounded-sm my-2 w-full h-full">
+            {/* h-[200px]   */}
+            <ScrollArea className="h-full">
               <div
                 role="listbox"
                 aria-label="Scrollable listbox of games"
@@ -141,9 +150,9 @@ const QuestionSelector = ({
               </div>
             </ScrollArea>
           </div>
-          <Button>Start round</Button>
         </div>
         <DrawerFooter>
+          <Button onClick={handleQuestionChange}>Start round</Button>
           <DrawerClose asChild>
             <Button className="w-full">Close Drawer</Button>
           </DrawerClose>
@@ -164,9 +173,6 @@ const GameControl = ({
   const [activeTeam, setActiveTeam] = React.useState<number | null | undefined>(
     null,
   );
-  // const [currentQuestion, setCurrentQuestion] = React.useState<
-  //   string | undefined
-  // >();
   const { data, isLoading, isError, error } = useGetGameQuestions(gameId);
   const supabaseClient = useSupabase();
   const thisGameActions = supabaseClient.channel(instanceId);
@@ -184,15 +190,6 @@ const GameControl = ({
 
   const handleTeamToggle = (value: string) => {
     setActiveTeam(parseInt(value));
-  };
-
-  const handleQuestionChange = (value: string) => {
-    // setCurrentQuestion(value);
-    insertEvent.mutate({
-      eventid: GameActions.StartQuestion,
-      instanceid: instanceId,
-      questionid: value,
-    });
   };
 
   const handleTeamWin = () => {
@@ -214,12 +211,12 @@ const GameControl = ({
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
+      <QuestionSelector
+        currentQuestion={currentQuestion}
+        instanceId={instanceId}
+        gameId={gameId}
+      />
       <div>
-        <QuestionSelector
-          currentQuestion={currentQuestion}
-          instanceId={instanceId}
-          gameId={gameId}
-        />
         {/* <div> */}
         {/*   <Select value={currentQuestion} onValueChange={handleQuestionChange}> */}
         {/*     <SelectTrigger> */}

@@ -1,16 +1,19 @@
 import React from 'react';
 import TeamScore from './TeamScore';
+import QuestionPanel from './QuestionPanel';
 
 const GameBg = ({
   board,
   leftTeam,
   rightTeam,
   overheadScore,
+  question,
 }: {
   board: React.ReactNode;
   leftTeam: number;
   rightTeam: number;
   overheadScore: number;
+  question?: string;
 }) => {
   return (
     <svg
@@ -551,6 +554,25 @@ const GameBg = ({
         strokeOpacity="1"
         d="M1154.5 57.01c-131.112 0-262.226 0-393.338.027-11.147.38-21.362 8.765-24.236 19.486-1.192 4.37-.805 8.942-.92 13.416 0 68.701.004 137.403.039 206.104.487 11.449 9.41 21.859 20.57 24.299 4.048.876 8.218.525 12.326.644 76.567.032 153.133-.002 229.7 0 53.436-.008 106.872-.016 160.308-.035 11.424-.428 21.834-9.28 24.354-20.387.937-4.117.56-8.367.683-12.552.021-61.505.028-123.01-.025-184.516-.026-7.392 0-14.787-.057-22.178-.782-11.874-10.663-22.417-22.449-24.011-2.301-.338-4.635-.306-6.955-.297zm1.426 19.998c.638-.012 1.278-.055 1.914.013 3.26.101 6.002 3.026 6.129 6.24.02 68.487.019 136.974.031 205.46-.051 2.067.068 4.136-.035 6.2-.143 3.273-3.12 5.969-6.342 6.061-131.664.004-263.329.017-394.992.014-3.383.111-6.456-2.816-6.596-6.18-.034-70.354-.043-140.71-.027-211.064-.187-3.503 2.914-6.698 6.396-6.74 131.174 0 262.348-.024 393.522-.004z"
       ></path>
+      <rect
+        width={768.481}
+        height={175.481}
+        x={576.76}
+        y={769.76}
+        ry={25.588}
+        style={{
+          fill: '#090087',
+          fillOpacity: 0.866667,
+          stroke: '#8e8e8e',
+          strokeWidth: 18.5194,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+          strokeMiterlimit: 4.1,
+          strokeDasharray: 'none',
+          paintOrder: 'markers stroke fill',
+        }}
+        visibility={Boolean(question) ? 'visible' : 'hidden'}
+      />
       <foreignObject x="584" y="345" width="752" height="390">
         {board}
       </foreignObject>
@@ -563,6 +585,11 @@ const GameBg = ({
       <foreignObject x="760" y="80" width="400" height="218">
         <TeamScore score={overheadScore} />
       </foreignObject>
+      {question && (
+        <foreignObject x="591" y="779" width="740" height="154">
+          <QuestionPanel question={question} />
+        </foreignObject>
+      )}
     </svg>
   );
 };

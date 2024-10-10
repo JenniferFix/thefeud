@@ -20,6 +20,8 @@ const Game = ({ instanceId }: { instanceId: string }) => {
     roundScore,
     showStrike,
     strikes,
+    currentQuestion,
+    currentQuestionText,
   } = useFeudEvents({ instanceId, sound: true });
 
   if (isLoading) return <div>Loading...</div>;
@@ -32,6 +34,7 @@ const Game = ({ instanceId }: { instanceId: string }) => {
           leftTeam={leftTeamScore}
           rightTeam={rightTeamScore}
           overheadScore={roundScore}
+          question={currentQuestionText}
         />
       </div>
       {showStrike && <Strike count={strikes} />}

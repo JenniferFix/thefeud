@@ -3,8 +3,9 @@ import useSupabase from '@/hooks/useSupabase';
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
 import { useGetEventsForGameInstance } from '@/hooks/useeventqueries';
 import { getAnswersByQuestionId } from '@/queries/answerqueries';
+import { getQuestionFromId } from '@/queries/questionqueries';
 import { Tables } from '@/types/supabase.types';
-import { type TGameQuestions } from '@/queries/gamequeries';
+// import { type TGameQuestions } from '@/queries/gamequeries';
 import { GameActions, IAnswered } from '@/types';
 import useSound from 'use-sound';
 import { useTimer } from 'react-timer-hook';
@@ -23,7 +24,7 @@ export default function useGameEvents(props: Props) {
     data: initialData,
     isLoading: isInitialLoading,
     isError: isInitialError,
-    error: initialError,
+    // error: initialError,
   } = useGetEventsForGameInstance(props.instanceId);
 
   const {
@@ -39,7 +40,10 @@ export default function useGameEvents(props: Props) {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [events, setEvents] = React.useState(initialData);
-  const [currentQuestion, setCurrentQuestion] = React.useState<
+  const [currentQuestionId, setCurrentQuestionId] = React.useState<
+    string | undefined
+  >();
+  const [currentQuestionText, setCurrentQuestionText] = React.useState<
     string | undefined
   >();
   const [ncurrentQuestion, nsetCurrentQuestion] =
@@ -158,11 +162,11 @@ export default function useGameEvents(props: Props) {
   ]);
 
   React.useEffect(() => {
-    if (!currentQuestion) return;
+    if (!currentQuestionId) return;
     const getData = async () => {
       const { data, error } = await getAnswersByQuestionId(
         supabaseClient,
-        currentQuestion,
+        currentQuestionId,
       );
       return data;
     };
@@ -170,7 +174,21 @@ export default function useGameEvents(props: Props) {
     getData().then((value) => {
       setAnswers(value as Tables<'answers'>[]);
     });
-  }, [currentQuestion, supabaseClient]);
+  }, [currentQuestionId, supabaseClient]);
+
+  React.useEffect(() => {
+    if (!currentQuestionId) return;
+    const getQuestion = async () => {
+      const { data } = await getQuestionFromId(
+        supabaseClient,
+        currentQuestionId,
+      );
+      return data;
+    };
+    getQuestion().then((value) => {
+      setCurrentQuestionText(value?.question as string);
+    });
+  }, [currentQuestionId, supabaseClient]);
 
   React.useEffect(() => {
     if (!events) return;
@@ -235,7 +253,7 @@ export default function useGameEvents(props: Props) {
     });
 
     if (tempAnswered) setAnswered(tempAnswered);
-    if (lastQuestion !== currentQuestion) setCurrentQuestion(lastQuestion);
+    if (lastQuestion !== currentQuestionId) setCurrentQuestionId(lastQuestion);
     if (roundPoints !== roundScore) setRoundScore(roundPoints);
     if (teamAPoints !== leftTeamScore) setLeftTeamScore(teamAPoints);
     if (teamBPoints !== rightTeamScore) setRightTeamScore(teamBPoints);
@@ -244,7 +262,7 @@ export default function useGameEvents(props: Props) {
     if (lastEventType) {
       switch (lastEventType) {
         case GameActions.StartQuestion:
-          setCurrentQuestion(events.at(-1)?.questionid!);
+          setCurrentQuestionId(events.at(-1)?.questionid!);
           if (playSounds) themeMusic();
           break;
         case GameActions.CorrectAnswer:
@@ -266,7 +284,7 @@ export default function useGameEvents(props: Props) {
     leftTeamScore,
     rightTeamScore,
     roundScore,
-    currentQuestion,
+    currentQuestionId,
     strikes,
     playSounds,
     strikeSound,
@@ -284,6 +302,7 @@ export default function useGameEvents(props: Props) {
     strikes,
     answers,
     answered,
-    currentQuestion,
+    currentQuestion: currentQuestionId,
+    currentQuestionText,
   };
 }

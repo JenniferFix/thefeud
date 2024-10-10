@@ -5,6 +5,18 @@ export function getUsersQuestions(client: TypedSupabaseClient) {
   return client.from('questions').select('*');
 }
 
+export function getQuestionFromId(
+  client: TypedSupabaseClient,
+  questionId: string,
+) {
+  return client
+    .from('questions')
+    .select('question')
+    .eq('id', questionId)
+    .throwOnError()
+    .single();
+}
+
 export async function insertQuestion(
   client: TypedSupabaseClient,
   question: string,
