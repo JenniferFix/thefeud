@@ -66,7 +66,7 @@ const AnswerButtons = ({
 
       {data &&
         Array.from({ length: 8 - data?.length }, (_e, i) => (
-          <Button disabled={true}></Button>
+          <Button key={'extrabtn' + i} disabled={true}></Button>
         ))}
     </div>
   );
