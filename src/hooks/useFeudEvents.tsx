@@ -67,12 +67,6 @@ export default function useGameEvents(props: Props) {
     autoStart: false,
   });
 
-  const handleShowStrike = () => {
-    const time = new Date();
-    time.setMilliseconds(time.getMilliseconds() + 1500);
-    restart(time);
-  };
-
   React.useEffect(() => {
     setIsLoading(isInitialLoading && isGameLoading && Boolean(events));
   }, [isInitialLoading, isGameLoading, events]);
@@ -221,6 +215,12 @@ export default function useGameEvents(props: Props) {
     let lastEventType: undefined | GameActions = undefined;
     let tempAnswered: IAnswered = {};
 
+    const handleShowStrike = () => {
+      const time = new Date();
+      time.setMilliseconds(time.getMilliseconds() + 1500);
+      restart(time);
+    };
+
     events.forEach((i) => {
       lastEventType = i.eventid;
       switch (i.eventid) {
@@ -287,6 +287,7 @@ export default function useGameEvents(props: Props) {
     currentQuestionId,
     strikes,
     playSounds,
+    restart,
     strikeSound,
     dingSound,
     themeMusic,
