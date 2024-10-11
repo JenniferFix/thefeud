@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['react-daisyui'],
+  transpilePackages: ['three'],
 };
 
 export default nextConfig;
