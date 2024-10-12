@@ -58,6 +58,10 @@ const Answer = ({
     deleteAnswer.mutate(id);
   };
 
+  const handleFormBlur = (values: z.infer<typeof answerSchema>) => {
+    handleFormSubmit(values);
+  };
+
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     if (!form.formState.isDirty) return;
     if (addAnswer) {
@@ -83,6 +87,7 @@ const Answer = ({
   };
 
   return (
+<<<<<<< HEAD:src/components/editor/Answers.tsx
     <div className="flex w-full">
       <Form {...form}>
         <form
@@ -113,6 +118,19 @@ const Answer = ({
               <Button size="icon" variant="ghost" type="submit">
                 <PlusIcon />
               </Button>
+=======
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        onBlur={form.handleSubmit(handleFormBlur)}
+      >
+        <div className="flex ">
+          <FormField
+            control={form.control}
+            name={'answer'}
+            render={({ field }) => (
+              <Input className="m-1" placeholder="Answer..." {...field} />
+>>>>>>> main:src/components/designer/Answers.tsx
             )}
           </div>
         </form>
