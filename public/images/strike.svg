@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="750"
+   height="1000"
+   viewBox="0 0 750 1000"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="strike2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     showguides="true"
+     inkscape:zoom="1.2221959"
+     inkscape:cx="447.55511"
+     inkscape:cy="442.64591"
+     inkscape:window-width="3840"
+     inkscape:window-height="2128"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient4526"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ee0000;stop-opacity:1;"
+         offset="0"
+         id="stop4524" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4526"
+       id="linearGradient4528"
+       x1="14.471559"
+       y1="499.95783"
+       x2="743.38799"
+       y2="499.95783"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       aria-label="X"
+       transform="scale(1.0002934,0.99970669)"
+       id="text1732"
+       style="font-size:1243.8px;fill:#ee0000;stroke:#000000;stroke-width:10">
+      <path
+         d="M 738.38799,943.99445 H 611.52038 L 376.44217,558.41643 137.63256,943.99445 H 19.471559 L 314.25217,481.30083 38.12856,55.921211 h 124.38 L 380.17357,404.18522 599.08238,55.921211 H 717.24339 L 442.36358,478.81323 Z"
+         id="path911" />
+    </g>
+    <path
+       style="color:#000000;fill:#ef0000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-linejoin:bevel"
+       d="M 0,0 V 37.037109 1000 H 750 V 0 Z M 74.072266,74.072266 H 675.92773 V 925.92773 H 74.072266 Z"
+       id="rect1740" />
+  </g>
+</svg>

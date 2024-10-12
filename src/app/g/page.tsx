@@ -1,7 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-// import QuestionPanel from "@/components/designer/QuestionPanel";
-import Questions from '@/components/designer/Questions';
+// import QuestionPanel from "@/components/editor/QuestionPanel";
 
 export default async function GameCreatorPage() {
   const supabase = createClient();
@@ -15,11 +14,9 @@ export default async function GameCreatorPage() {
   }
   return (
     <div>
-      <h1>Game Creator Page</h1>
+      <h1>Game Creator Page not anymore</h1>
       <div>You must be logged in, welcome {user.email}</div>
-      <div>
-        <Questions />
-      </div>
+      <div></div>
     </div>
   );
 }

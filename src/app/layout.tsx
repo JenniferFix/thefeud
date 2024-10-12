@@ -17,15 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <Providers>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={importedFont.className + ' bg-background text-foreground'}
         >
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
-            disableTransitionOnChange
+            // disableTransitionOnChange
           >
             <main>{children}</main>
           </ThemeProvider>
