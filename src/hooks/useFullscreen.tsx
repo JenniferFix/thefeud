@@ -2,6 +2,8 @@ import React from 'react';
 
 interface Fullscreen {
   isFullscreen: boolean;
+  enterFullscreen: () => Promise<void>;
+  exitFullscreen: () => Promise<void>;
 }
 
 type FullscreenProps = {
@@ -10,9 +12,16 @@ type FullscreenProps = {
 
 const useFullscreen = ({ ref }: FullscreenProps): Fullscreen => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
-  const [component, setComponent] = React.useState(null);
+  // const [component, setComponent] = React.useState(null);
 
-  const enterFullscreen = () => {};
+  const enterFullscreen = () => {
+    if (!ref) return new Promise<void>();
+    return ref.current.requestFullscreen();
+  };
 
-  return { isFullscreen };
+  const exitFullscreen = () => {
+    return document.exitFullscreen();
+  };
+
+  return { isFullscreen, enterFullscreen, exitFullscreen };
 };

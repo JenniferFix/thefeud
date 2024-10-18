@@ -2,7 +2,7 @@ import React from 'react';
 import { ExpandIcon, ShrinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const FullscreenButton = () => {
+const FullscreenButton = ({ ref }) => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
   const handleButton = () => {
