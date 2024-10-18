@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { redirect } from 'next/navigation';
+import { redirect } from '@tanstack/react-router';
 import { useGetGames } from '@/hooks/usegamequeries';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ const SelectAndStart = () => {
   // if the component renders and we have the id of the new game,
   // we redirect to the game controller page
   if (!isInstanceError && isInstanceSuccess && instanceData) {
-    if (instanceData) redirect(`/c/${instanceData[0].id}`);
+    if (instanceData) redirect({ to: `/c/${instanceData[0].id}` });
   }
 
   const handleStartGame = (e: React.MouseEvent<HTMLElement>) => {

@@ -1,19 +1,15 @@
-'use client';
-import React, { MouseEventHandler } from 'react';
-import { Flipper, Flipped } from 'react-flip-toolkit';
+import React from 'react';
 
 const RankNumber = ({ id, rank }: { id: string; rank?: number }) => {
   return (
     //className="flex w-fit min-w-4 p-2 items-center justify-center aspect-square  border-solid border-2"
-    <Flipped flipId={'answer' + id}>
-      <div className="w-full flex justify-center h-full items-center">
-        {rank && (
-          <div className="border-2 rounded-full aspect-square flex justify-center items-center h-12 text-3xl">
-            {rank}
-          </div>
-        )}
-      </div>
-    </Flipped>
+    <div className="w-full flex justify-center h-full items-center">
+      {rank && (
+        <div className="border-2 rounded-full aspect-square flex justify-center items-center h-12 text-3xl">
+          {rank}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -35,7 +31,7 @@ const AnswerPane = ({
         {answer}
       </div>
       <div //TODO: Make sure this stays the same width, it currently follows text width and single digit scores look bad
-        className="w-min text-5xl font-medium text-white p-2"
+        className="flex text-5xl font-medium text-white p-2 w-20 justify-center"
         style={{ textShadow: '4px 4px black' }}
       >
         {points}

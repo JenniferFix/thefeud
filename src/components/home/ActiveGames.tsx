@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { PlayIcon } from '@radix-ui/react-icons';
 import { useGetActiveInstances } from '@/hooks/useinstancequeries';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 const ActiveGames = ({ userid }: { userid?: string }) => {
   const { data, error, isError, isLoading } = useGetActiveInstances();

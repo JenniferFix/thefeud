@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { useTimer } from 'react-timer-hook';
 
 const Strike = ({ count }: { count: number }) => {
@@ -8,7 +7,7 @@ const Strike = ({ count }: { count: number }) => {
     <div className="fixed  left-0 right-0 top-0 bottom-0 flex items-center justify-center">
       <div className="flex gap-2 h-3/5">
         {Array.from({ length: count }, (e, k) => (
-          <Image
+          <img
             key={'im' + k}
             src="/images/strike.svg"
             width={750}

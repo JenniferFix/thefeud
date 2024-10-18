@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import GameBg from '@/components/show/GameBg';
-import Gameboard from './Gameboard3D';
+import Gameboard from './Gameboard';
 import Strike from './Strike';
 import { Tables } from '@/types/supabase.types';
 
