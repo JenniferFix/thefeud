@@ -14,11 +14,11 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as NavbarImport } from './routes/_navbar'
-import { Route as NavbarIndexImport } from './routes/_navbar.index'
+import { Route as NavbarLayoutImport } from './routes/_navbar-layout'
+import { Route as NavbarLayoutIndexImport } from './routes/_navbar-layout/index'
 import { Route as GGameInstanceIdImport } from './routes/g.$gameInstanceId'
 import { Route as CGameInstanceIdImport } from './routes/c.$gameInstanceId'
-import { Route as NavbarEImport } from './routes/_navbar.e'
+import { Route as NavbarLayoutEImport } from './routes/_navbar-layout/e'
 
 // Create Virtual Routes
 
@@ -36,14 +36,14 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const NavbarRoute = NavbarImport.update({
-  id: '/_navbar',
+const NavbarLayoutRoute = NavbarLayoutImport.update({
+  id: '/_navbar-layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const NavbarIndexRoute = NavbarIndexImport.update({
+const NavbarLayoutIndexRoute = NavbarLayoutIndexImport.update({
   path: '/',
-  getParentRoute: () => NavbarRoute,
+  getParentRoute: () => NavbarLayoutRoute,
 } as any)
 
 const GGameInstanceIdRoute = GGameInstanceIdImport.update({
@@ -56,20 +56,20 @@ const CGameInstanceIdRoute = CGameInstanceIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const NavbarERoute = NavbarEImport.update({
+const NavbarLayoutERoute = NavbarLayoutEImport.update({
   path: '/e',
-  getParentRoute: () => NavbarRoute,
+  getParentRoute: () => NavbarLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_navbar': {
-      id: '/_navbar'
+    '/_navbar-layout': {
+      id: '/_navbar-layout'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof NavbarImport
+      preLoaderRoute: typeof NavbarLayoutImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -86,12 +86,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_navbar/e': {
-      id: '/_navbar/e'
+    '/_navbar-layout/e': {
+      id: '/_navbar-layout/e'
       path: '/e'
       fullPath: '/e'
-      preLoaderRoute: typeof NavbarEImport
-      parentRoute: typeof NavbarImport
+      preLoaderRoute: typeof NavbarLayoutEImport
+      parentRoute: typeof NavbarLayoutImport
     }
     '/c/$gameInstanceId': {
       id: '/c/$gameInstanceId'
@@ -107,59 +107,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GGameInstanceIdImport
       parentRoute: typeof rootRoute
     }
-    '/_navbar/': {
-      id: '/_navbar/'
+    '/_navbar-layout/': {
+      id: '/_navbar-layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof NavbarIndexImport
-      parentRoute: typeof NavbarImport
+      preLoaderRoute: typeof NavbarLayoutIndexImport
+      parentRoute: typeof NavbarLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface NavbarRouteChildren {
-  NavbarERoute: typeof NavbarERoute
-  NavbarIndexRoute: typeof NavbarIndexRoute
+interface NavbarLayoutRouteChildren {
+  NavbarLayoutERoute: typeof NavbarLayoutERoute
+  NavbarLayoutIndexRoute: typeof NavbarLayoutIndexRoute
 }
 
-const NavbarRouteChildren: NavbarRouteChildren = {
-  NavbarERoute: NavbarERoute,
-  NavbarIndexRoute: NavbarIndexRoute,
+const NavbarLayoutRouteChildren: NavbarLayoutRouteChildren = {
+  NavbarLayoutERoute: NavbarLayoutERoute,
+  NavbarLayoutIndexRoute: NavbarLayoutIndexRoute,
 }
 
-const NavbarRouteWithChildren =
-  NavbarRoute._addFileChildren(NavbarRouteChildren)
+const NavbarLayoutRouteWithChildren = NavbarLayoutRoute._addFileChildren(
+  NavbarLayoutRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
-  '': typeof NavbarRouteWithChildren
+  '': typeof NavbarLayoutRouteWithChildren
   '/login': typeof LoginRoute
   '/about': typeof AboutLazyRoute
-  '/e': typeof NavbarERoute
+  '/e': typeof NavbarLayoutERoute
   '/c/$gameInstanceId': typeof CGameInstanceIdRoute
   '/g/$gameInstanceId': typeof GGameInstanceIdRoute
-  '/': typeof NavbarIndexRoute
+  '/': typeof NavbarLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AboutLazyRoute
-  '/e': typeof NavbarERoute
+  '/e': typeof NavbarLayoutERoute
   '/c/$gameInstanceId': typeof CGameInstanceIdRoute
   '/g/$gameInstanceId': typeof GGameInstanceIdRoute
-  '/': typeof NavbarIndexRoute
+  '/': typeof NavbarLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_navbar': typeof NavbarRouteWithChildren
+  '/_navbar-layout': typeof NavbarLayoutRouteWithChildren
   '/login': typeof LoginRoute
   '/about': typeof AboutLazyRoute
-  '/_navbar/e': typeof NavbarERoute
+  '/_navbar-layout/e': typeof NavbarLayoutERoute
   '/c/$gameInstanceId': typeof CGameInstanceIdRoute
   '/g/$gameInstanceId': typeof GGameInstanceIdRoute
-  '/_navbar/': typeof NavbarIndexRoute
+  '/_navbar-layout/': typeof NavbarLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -182,18 +183,18 @@ export interface FileRouteTypes {
     | '/'
   id:
     | '__root__'
-    | '/_navbar'
+    | '/_navbar-layout'
     | '/login'
     | '/about'
-    | '/_navbar/e'
+    | '/_navbar-layout/e'
     | '/c/$gameInstanceId'
     | '/g/$gameInstanceId'
-    | '/_navbar/'
+    | '/_navbar-layout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  NavbarRoute: typeof NavbarRouteWithChildren
+  NavbarLayoutRoute: typeof NavbarLayoutRouteWithChildren
   LoginRoute: typeof LoginRoute
   AboutLazyRoute: typeof AboutLazyRoute
   CGameInstanceIdRoute: typeof CGameInstanceIdRoute
@@ -201,7 +202,7 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  NavbarRoute: NavbarRouteWithChildren,
+  NavbarLayoutRoute: NavbarLayoutRouteWithChildren,
   LoginRoute: LoginRoute,
   AboutLazyRoute: AboutLazyRoute,
   CGameInstanceIdRoute: CGameInstanceIdRoute,
@@ -220,18 +221,18 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_navbar",
+        "/_navbar-layout",
         "/login",
         "/about",
         "/c/$gameInstanceId",
         "/g/$gameInstanceId"
       ]
     },
-    "/_navbar": {
-      "filePath": "_navbar.tsx",
+    "/_navbar-layout": {
+      "filePath": "_navbar-layout.tsx",
       "children": [
-        "/_navbar/e",
-        "/_navbar/"
+        "/_navbar-layout/e",
+        "/_navbar-layout/"
       ]
     },
     "/login": {
@@ -240,9 +241,9 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.lazy.tsx"
     },
-    "/_navbar/e": {
-      "filePath": "_navbar.e.tsx",
-      "parent": "/_navbar"
+    "/_navbar-layout/e": {
+      "filePath": "_navbar-layout/e.tsx",
+      "parent": "/_navbar-layout"
     },
     "/c/$gameInstanceId": {
       "filePath": "c.$gameInstanceId.tsx"
@@ -250,9 +251,9 @@ export const routeTree = rootRoute
     "/g/$gameInstanceId": {
       "filePath": "g.$gameInstanceId.tsx"
     },
-    "/_navbar/": {
-      "filePath": "_navbar.index.tsx",
-      "parent": "/_navbar"
+    "/_navbar-layout/": {
+      "filePath": "_navbar-layout/index.tsx",
+      "parent": "/_navbar-layout"
     }
   }
 }

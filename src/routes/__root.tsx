@@ -1,8 +1,6 @@
 import * as React from 'react';
 import '@/components/globals.css';
-import { Link, Outlet, createRootRoute } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import Layout from '@/components/Layout';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { useAuthStore } from '@/store';
 import useSupabase from '@/hooks/useSupabase';
 import Providers from '@/components/providers/Providers';
