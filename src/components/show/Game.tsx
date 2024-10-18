@@ -4,7 +4,7 @@ import GameBg from '@/components/show/GameBg';
 import Gameboard from './Gameboard';
 import Strike from './Strike';
 import { Tables } from '@/types/supabase.types';
-
+import FullscreenButton from '@/components/show/FullscreenButton';
 type TEvents = Tables<'game_events'>;
 
 import useFeudEvents from '@/hooks/useFeudEvents';
@@ -38,6 +38,7 @@ const Game = ({ instanceId }: { instanceId: string }) => {
         />
       </div>
       {showStrike && <Strike count={strikes} />}
+      <FullscreenButton />
     </React.Fragment>
   );
 };
