@@ -7,7 +7,7 @@ import { Tables } from '@/types/supabase.types';
 import { Button } from '@/components/ui/button';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { ExpandIcon, ShrinkIcon } from 'lucide-react';
-
+import { cn } from '@/utils/utils';
 type TEvents = Tables<'game_events'>;
 
 import useFeudEvents from '@/hooks/useFeudEvents';
@@ -49,7 +49,12 @@ const Game = ({ instanceId }: { instanceId: string }) => {
           question={currentQuestionText}
         />
         {showStrike && <Strike count={strikes} />}
-        <div className="absolute top-2 right-2">
+        <div
+          className={cn(
+            'absolute top-2 right-2',
+            fullscreen.active ? 'text-muted' : '',
+          )}
+        >
           <Button variant="ghost" size="icon" onClick={handleFullscreenClick}>
             {fullscreen.active ? <ShrinkIcon /> : <ExpandIcon />}
           </Button>
