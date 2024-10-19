@@ -4,6 +4,9 @@ import GameBg from '@/components/show/GameBg';
 import Gameboard from './Gameboard';
 import Strike from './Strike';
 import { Tables } from '@/types/supabase.types';
+import { Button } from '@/components/ui/button';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { ExpandIcon, ShrinkIcon } from 'lucide-react';
 
 type TEvents = Tables<'game_events'>;
 
@@ -23,12 +26,21 @@ const Game = ({ instanceId }: { instanceId: string }) => {
     currentQuestion,
     currentQuestionText,
   } = useFeudEvents({ instanceId, sound: true });
+  const fullscreen = useFullScreenHandle();
 
   if (isLoading) return <div>Loading...</div>;
 
+  const handleFullscreenClick = () => {
+    if (fullscreen.active) {
+      fullscreen.exit();
+    } else {
+      fullscreen.enter();
+    }
+  };
+
   return (
     <React.Fragment>
-      <div>
+      <FullScreen handle={fullscreen}>
         <GameBg
           board={<Gameboard answers={answers} answered={answered} />}
           leftTeam={leftTeamScore}
@@ -36,8 +48,13 @@ const Game = ({ instanceId }: { instanceId: string }) => {
           overheadScore={roundScore}
           question={currentQuestionText}
         />
-      </div>
-      {showStrike && <Strike count={strikes} />}
+        {showStrike && <Strike count={strikes} />}
+        <div className="absolute top-2 right-2">
+          <Button variant="ghost" size="icon" onClick={handleFullscreenClick}>
+            {fullscreen.active ? <ShrinkIcon /> : <ExpandIcon />}
+          </Button>
+        </div>
+      </FullScreen>
     </React.Fragment>
   );
 };
