@@ -58,10 +58,6 @@ const Answer = ({
     deleteAnswer.mutate(id);
   };
 
-  const handleFormBlur = (values: z.infer<typeof answerSchema>) => {
-    handleFormSubmit(values);
-  };
-
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     if (!form.formState.isDirty) return;
     if (addAnswer) {

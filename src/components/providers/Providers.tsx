@@ -1,9 +1,13 @@
 'use client';
 import React from 'react';
-import ReactQueryClientProvider from './ReactQueryProvider';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <ReactQueryClientProvider>{children}</ReactQueryClientProvider>;
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="FeudTheme">
+      {children}
+    </ThemeProvider>
+  );
 };
 
 export default Providers;
