@@ -2,13 +2,13 @@ import React from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const TanStackRouterDevtools =
-  import.meta.env.PROD === true
-    ? React.lazy(() =>
+  process.env.NODE_ENV === 'production'
+    ? () => null
+    : React.lazy(() =>
         import('@tanstack/router-devtools').then((res) => ({
           default: res.TanStackRouterDevtools,
         })),
-      )
-    : () => null;
+      );
 
 const Devtools = () => {
   return (
