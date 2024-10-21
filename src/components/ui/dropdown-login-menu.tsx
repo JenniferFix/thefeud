@@ -107,110 +107,110 @@ export default function DropdownLoginMenu() {
       >
         Login
       </Button>
-      {isDropdownOpen && (
-        <div
-          ref={dropdownRef}
-          className="bg-popover text-popover-foreground absolute right-0 mt-2 w-80 p-4 border rounded-md shadow-md"
-        >
-          <Form {...loginForm}>
-            <form
-              onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-              className="space-y-4"
-            >
-              <FormField
-                control={loginForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="you@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={loginForm.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex space-x-2">
-                <Button type="submit" className="flex-1" disabled={isLoggingIn}>
-                  <Loader2
-                    className={cn(
-                      isLoggingIn ? '' : 'invisible',
-                      'mr-2 h-4 w-4 animate-spin',
-                    )}
-                  />
-                  Login
-                </Button>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-1">
-                      Create Account
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Create Account</DialogTitle>
-                    </DialogHeader>
-                    <Form {...createAccountForm}>
-                      <form
-                        onSubmit={createAccountForm.handleSubmit(
-                          onCreateAccountSubmit,
+      {/* {isDropdownOpen && ( */}
+      <div
+        ref={dropdownRef}
+        className={cn(
+          'bg-popover text-popover-foreground absolute right-0 mt-2 w-80 p-4 border rounded-md shadow-md',
+          isDropdownOpen ? '' : 'hidden',
+        )}
+      >
+        <Form {...loginForm}>
+          <form
+            onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={loginForm.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="you@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={loginForm.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex space-x-2">
+              <Button type="submit" className="flex-1" disabled={isLoggingIn}>
+                <Loader2
+                  className={cn(
+                    isLoggingIn ? '' : 'invisible',
+                    'mr-2 h-4 w-4 animate-spin',
+                  )}
+                />
+                Login
+              </Button>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="flex-1">
+                    Create Account
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Create Account</DialogTitle>
+                  </DialogHeader>
+                  <Form {...createAccountForm}>
+                    <form
+                      onSubmit={createAccountForm.handleSubmit(
+                        onCreateAccountSubmit,
+                      )}
+                      className="space-y-4"
+                    >
+                      <FormField
+                        control={createAccountForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="you@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
                         )}
-                        className="space-y-4"
-                      >
-                        <FormField
-                          control={createAccountForm.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="you@example.com"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={createAccountForm.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Password</FormLabel>
-                              <FormControl>
-                                <Input type="password" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button type="submit" className="w-full">
-                          Create Account
-                        </Button>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </form>
-          </Form>
-        </div>
-      )}
+                      />
+                      <FormField
+                        control={createAccountForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                              <Input type="password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button type="submit" className="w-full">
+                        Create Account
+                      </Button>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </form>
+        </Form>
+      </div>
+      {/* )} */}
     </div>
   );
 }
