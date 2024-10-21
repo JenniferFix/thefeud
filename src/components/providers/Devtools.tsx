@@ -2,7 +2,7 @@ import React from 'react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const TanStackRouterDevtools =
-  process.env.VITE_VERCEL_ENV === 'production'
+  process.env.VERCEL_ENV === 'production'
     ? () => null
     : React.lazy(() =>
         import('@tanstack/router-devtools').then((res) => ({
