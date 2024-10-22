@@ -25,6 +25,7 @@ import useSupabase from '@/hooks/useSupabase';
 import { useAuthStore } from '@/store';
 import { cn } from '@/utils/utils';
 import { useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -67,6 +68,11 @@ const LoginForm = () => {
           setSession(data.session);
           setIsLoggingIn(false);
           navigate({ to: '/' });
+        } else {
+          setIsLoggingIn(false);
+          if (error.code === 'invalid_credentials') {
+            toast('Invalid Credentials');
+          }
         }
       });
   };
@@ -109,13 +115,11 @@ const LoginForm = () => {
         />
         <div className="flex space-x-2">
           <Button type="submit" className="flex-1" disabled={isLoggingIn}>
-            <Loader2
-              className={cn(
-                isLoggingIn ? '' : 'invisible',
-                'mr-2 h-4 w-4 animate-spin',
-              )}
-            />
-            Login
+            {isLoggingIn ? (
+              <Loader2 className={cn('mr-2 h-4 w-4 animate-spin')} />
+            ) : (
+              'Login'
+            )}
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>

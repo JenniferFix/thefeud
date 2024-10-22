@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store';
 import useSupabase from '@/hooks/useSupabase';
 import Providers from '@/components/providers/Providers';
 import Devtools from '@/components/providers/Devtools';
+import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -37,6 +38,7 @@ function RootComponent() {
     <Providers>
       <Outlet />
       <Devtools />
+      <Toaster />
     </Providers>
   );
 }
