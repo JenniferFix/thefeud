@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/header/ThemeToggle';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import LoginHeader from '@/components/header/LoginHeader';
 import {
   Sheet,
@@ -17,11 +17,56 @@ import {
   NavigationMenuLink,
 } from '@/components/ui/navigation-menu';
 import { MenuIcon } from 'lucide-react';
+import useSupabase from '@/hooks/useSupabase';
+import { useAuthStore } from '@/store';
+
+const LoginButton = ({ closeCallback }: { closeCallback: Function }) => {
+  const supabase = useSupabase();
+  const session = useAuthStore((state) => state.session);
+  // const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    supabase.auth.signOut().then(() => {
+      closeCallback();
+      navigate({ to: '/' });
+    });
+  };
+
+  if (session) {
+    return (
+      <Button
+        variant="link"
+        className="text-lg pl-0 justify-start"
+        onClick={handleLogoutClick}
+      >
+        Logout
+      </Button>
+    );
+  } else {
+    return (
+      <Button
+        variant="link"
+        className="text-lg pl-0 justify-start"
+        onClick={() => closeCallback()}
+        asChild
+      >
+        <Link href="/login">Login</Link>
+      </Button>
+    );
+  }
+};
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
+
   return (
     <header className="w-full p-1 flex justify-between">
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <SheetTrigger asChild>
           <Button size="icon" variant="ghost" className="lg:hidden">
             <MenuIcon />
@@ -33,22 +78,32 @@ const Navbar = () => {
             <SheetDescription hidden>Application Menu</SheetDescription>
             <nav>
               <ul className="flex flex-col justify-start">
-                <li>
+                <Button
+                  variant="link"
+                  className="text-lg pl-0 justify-start"
+                  onClick={() => setIsOpen(false)}
+                >
                   <Link href="/">Home</Link>
-                </li>
-                <li>
+                </Button>
+                <Button
+                  variant="link"
+                  className="text-lg pl-0 justify-start"
+                  onClick={() => setIsOpen(false)}
+                >
                   <Link href="/e" className="">
                     Editor
                   </Link>
-                </li>
-                <li>
+                </Button>
+                <Button
+                  variant="link"
+                  className="text-lg pl-0 justify-start"
+                  onClick={closeSidebar}
+                >
                   <Link href="/active" className="">
                     Active Games
                   </Link>
-                </li>
-                <li>
-                  <Link href="/login">Login</Link>
-                </li>
+                </Button>
+                <LoginButton closeCallback={closeSidebar} />
               </ul>
             </nav>
           </SheetHeader>
