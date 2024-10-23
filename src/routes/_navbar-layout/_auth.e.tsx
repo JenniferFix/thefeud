@@ -5,14 +5,8 @@ import Editor from '@/components/editor/Editor';
 import { useSupabaseAuth } from '@/supabaseauth';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e')({
-  component: EditComponent,
+  component: () => <EditorLayout />,
 });
-
-function EditComponent() {
-  const auth = useSupabaseAuth();
-  if (auth.isAuthenticated) return <EditorLayout />;
-  else return redirect({ to: '/login' });
-}
 
 const EditorLayout = () => {
   return (

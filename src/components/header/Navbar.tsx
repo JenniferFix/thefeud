@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/header/ThemeToggle';
 import { Link, useNavigate } from '@tanstack/react-router';
-import LoginHeader from '@/components/header/LoginHeader';
 import {
   Sheet,
   SheetTrigger,
@@ -17,8 +16,6 @@ import {
   NavigationMenuLink,
 } from '@/components/ui/navigation-menu';
 import { MenuIcon } from 'lucide-react';
-import useSupabase from '@/hooks/useSupabase';
-import { useAuthStore } from '@/store';
 import { useSupabaseAuth } from '@/supabaseauth';
 
 const LoginButton = ({ closeCallback }: { closeCallback?: Function }) => {

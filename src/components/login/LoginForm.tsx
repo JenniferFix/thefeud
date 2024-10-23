@@ -1,5 +1,5 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -22,9 +22,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { cn } from '@/utils/utils';
-import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/supabaseauth';
+import { useRouter, useRouterState, useNavigate } from '@tanstack/react-router';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -35,7 +35,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const LoginForm = () => {
+const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const navigate = useNavigate();
   const auth = useSupabaseAuth();
@@ -68,7 +68,11 @@ const LoginForm = () => {
 
   const onLoginSubmit = (data: FormValues) => {
     const { email, password } = data;
-    auth.login({ email, password });
+    auth.login({ email, password }).then(() => {
+      if (redirect) {
+        navigate({ to: redirect });
+      }
+    });
 
     // supabase.auth
     //   .signInWithPassword({ email: data.email, password: data.password })
