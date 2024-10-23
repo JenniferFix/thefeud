@@ -1,19 +1,16 @@
 import React from 'react';
-import useSupabase from '@/hooks/useSupabase';
-import { useAuthStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
+import { useSupabaseAuth } from '@/supabaseauth';
 
 const Login = ({ onClick }: { onClick: Function }) => {
-  const supabase = useSupabase();
-  const session = useAuthStore((state) => state.session);
-  const user = useAuthStore((state) => state.user);
+  const auth = useSupabaseAuth();
 
   const handleLogoutClick = () => {
-    supabase.auth.signOut();
+    auth.logout();
   };
 
-  if (session) {
+  if (auth.isAuthenticated) {
     return (
       <div className="flex items-center">
         {/* {user && <div>Welcome {user.email}</div>} */}

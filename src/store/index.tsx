@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { Session, User } from '@supabase/supabase-js';
 
 type State = {
   editorSelectedGame: string;
@@ -27,21 +26,4 @@ export const useEditorStore = create<State & Action>((set) => ({
     set(() => ({ editorSelectedGameQuestion: selected })),
   updateEditorSelectedFromAllQuestions: (selected: string) =>
     set(() => ({ editorSelectedFromAllQuestions: selected })),
-}));
-
-type AuthState = {
-  session: Session | null;
-  user: User | null;
-};
-
-type AuthAction = {
-  updateSession: (session: AuthState['session']) => void;
-  updateUser: (user: AuthState['user']) => void;
-};
-
-export const useAuthStore = create<AuthState & AuthAction>((set) => ({
-  session: null,
-  user: null,
-  updateSession: (s: AuthState['session']) => set(() => ({ session: s })),
-  updateUser: (u: AuthState['user']) => set(() => ({ user: u })),
 }));

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SupabaseAuthProvider, useSupabaseAuth } from './supabaseauth';
 
 const queryClient = new QueryClient();
 
@@ -22,14 +23,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+const InnerApp = () => {
+  const auth = useSupabaseAuth();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} context={{ auth }} />
+    </QueryClientProvider>
+  );
+};
+
+function App() {
+  return (
+    <SupabaseAuthProvider>
+      <InnerApp />
+    </SupabaseAuthProvider>
+  );
+}
+
 const rootElement = document.getElementById('app')!;
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <QueryClientProvider
-      client={queryClient}
-      children={<RouterProvider router={router} />}
-    />,
-  );
+  root.render(<App />);
 }

@@ -19,21 +19,21 @@ import {
 import { MenuIcon } from 'lucide-react';
 import useSupabase from '@/hooks/useSupabase';
 import { useAuthStore } from '@/store';
+import { useSupabaseAuth } from '@/supabaseauth';
 
-const LoginButton = ({ closeCallback }: { closeCallback: Function }) => {
-  const supabase = useSupabase();
-  const session = useAuthStore((state) => state.session);
-  // const user = useAuthStore((state) => state.user);
+const LoginButton = ({ closeCallback }: { closeCallback?: Function }) => {
+  const auth = useSupabaseAuth();
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
-    supabase.auth.signOut().then(() => {
-      closeCallback();
-      navigate({ to: '/' });
-    });
+    auth.logout();
+    // supabase.auth.signOut().then(() => {
+    //   closeCallback();
+    //   navigate({ to: '/' });
+    // });
   };
 
-  if (session) {
+  if (auth.isAuthenticated) {
     return (
       <Button
         variant="link"
@@ -48,7 +48,7 @@ const LoginButton = ({ closeCallback }: { closeCallback: Function }) => {
       <Button
         variant="link"
         className="text-lg pl-0 justify-start"
-        onClick={() => closeCallback()}
+        onClick={() => closeCallback && closeCallback()}
         asChild
       >
         <Link href="/login">Login</Link>
@@ -125,7 +125,7 @@ const Navbar = () => {
       </NavigationMenu>
       <div className="flex gap-4">
         <div className="hidden lg:block">
-          <LoginHeader />
+          <LoginButton />
         </div>
         <ThemeToggle />
       </div>

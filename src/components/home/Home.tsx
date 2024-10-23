@@ -2,12 +2,11 @@ import React from 'react';
 import { Link } from '@tanstack/react-router';
 import StartGame from '@/components/gamecontrol/SelectAndStart';
 import ActiveGames from '@/components/home/ActiveGames';
-import { useAuthStore } from '@/store';
 import { animated, useSpring } from '@react-spring/web';
+import { useSupabaseAuth } from '@/supabaseauth';
 
 export default function Index() {
-  const user = useAuthStore((state) => state.user);
-
+  const auth = useSupabaseAuth();
   const springProps = useSpring({
     from: { opacity: 0 },
     opacity: 1,
@@ -23,7 +22,7 @@ export default function Index() {
           Welcome to The Feud
         </animated.h1>
         <div className="flex gap-4">
-          {user && (
+          {auth.isAuthenticated && (
             <div>
               <div>
                 <Link href="/e">Go to your editor</Link>
@@ -35,7 +34,7 @@ export default function Index() {
         </div>
       </div>
       <div>
-        <ActiveGames userid={user?.id} />
+        <ActiveGames userid={auth.user?.id} />
       </div>
     </div>
   );
