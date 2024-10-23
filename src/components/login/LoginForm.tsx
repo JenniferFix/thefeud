@@ -98,7 +98,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
     <Form {...loginForm}>
       <form
         onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-        className="space-y-4 z-60 max-w-screen-sm"
+        className="space-y-4 z-60 max-w-screen-sm m-auto"
       >
         <FormField
           control={loginForm.control}
