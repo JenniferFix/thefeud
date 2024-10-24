@@ -6,7 +6,7 @@ export default function RootLayout() {
   return (
     <React.Fragment>
       <Navbar />
-      <main>
+      <main className="h-full">
         <Outlet />
       </main>
     </React.Fragment>

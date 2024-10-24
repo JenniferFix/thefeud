@@ -77,3 +77,9 @@
   font-style: normal;
   font-variation-settings: 'wdth' 100;
 }
+
+html,
+body,
+#app {
+  height: 100%;
+}

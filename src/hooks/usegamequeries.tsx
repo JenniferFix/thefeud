@@ -1,6 +1,11 @@
 'use client';
 import useSupabase from '@/hooks/useSupabase';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from '@tanstack/react-query';
 import {
   getGames,
   getGameQuestions,
@@ -10,6 +15,9 @@ import {
   updateGame,
   deleteGame,
 } from '@/queries/gamequeries';
+import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+const supabase = getSupabaseBrowserClient();
 
 export function useGetGames() {
   const client = useSupabase();
@@ -19,6 +27,12 @@ export function useGetGames() {
   };
   return useQuery({ queryKey, queryFn });
 }
+// const client = useSupabase();
+//
+export const gamesQueryOptions = queryOptions({
+  queryKey: ['games'],
+  queryFn: async () => getGames(supabase).then((result) => result?.data),
+});
 
 export function useGetGameQuestions(gameId: string) {
   const client = useSupabase();
