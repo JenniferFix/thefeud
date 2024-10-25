@@ -88,11 +88,6 @@ const Question = ({
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full px-3">
       <div className="flex justify-between items-center w-full py-1">
-        {!addQuestion && (
-          <ToggleGroupItem value={id!} className="rounded-none rounded-l-md">
-            {selected ? <CheckIcon className="text-4xl" /> : <DashIcon />}
-          </ToggleGroupItem>
-        )}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}

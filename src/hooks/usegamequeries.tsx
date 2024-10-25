@@ -36,12 +36,19 @@ export const gamesQueryOptions = queryOptions({
 
 export function useGetGameQuestions(gameId: string) {
   const client = useSupabase();
-  const queryKey = ['questions', gameId];
+  const queryKey = ['gamequestions', gameId];
   const queryFn = async () => {
     return getGameQuestions(client, gameId).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }
+
+export const gameQuestionsQueryOptions = (gameid: string) =>
+  queryOptions({
+    queryKey: ['gamnequestions', gameid],
+    queryFn: async () =>
+      getGameQuestions(supabase, gameid).then((result) => result.data),
+  });
 
 export function useAddQuestionToGame() {
   const client = useSupabase();

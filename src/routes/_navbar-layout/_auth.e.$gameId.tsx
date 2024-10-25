@@ -1,5 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { gameQuestionsQueryOptions } from '@/hooks/usegamequeries';
+import GameQuestionsPanel from '@/components/editor/GameQuestionsPanel';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/$gameId')({
-  component: () => <div>Hello /_navbar-layout/_auth/e/$gameId!</div>,
-})
+  loader: ({ context: { queryClient }, params: { gameId } }) =>
+    queryClient.ensureQueryData(gameQuestionsQueryOptions(gameId)),
+  component: () => <GameQuestionsPanel />,
+});
