@@ -10,17 +10,18 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuLink,
-} from '@/components/ui/navigation-menu';
 import { MenuIcon } from 'lucide-react';
 import { useSupabaseAuth } from '@/supabaseauth';
+import { cn } from '@/utils/utils';
 
-const LoginButton = ({ closeCallback }: { closeCallback?: Function }) => {
+const LoginButton = ({
+  closeCallback,
+  mobile = false,
+}: {
+  closeCallback?: Function;
+  mobile?: boolean;
+}) => {
   const auth = useSupabaseAuth();
-  const navigate = useNavigate();
 
   const handleLogoutClick = () => {
     auth.logout();
@@ -32,24 +33,28 @@ const LoginButton = ({ closeCallback }: { closeCallback?: Function }) => {
 
   if (auth.isAuthenticated) {
     return (
-      <Button
-        variant="link"
-        className="text-lg pl-0 justify-start"
-        onClick={handleLogoutClick}
+      <div
+        className={cn(
+          'flex items-center hover:bg-accent/50 py-2',
+          mobile ? 'border-b pl-2' : 'py-4 px-4 border-x',
+        )}
+        onClick={() => {
+          handleLogoutClick();
+          closeCallback && closeCallback();
+        }}
       >
         Logout
-      </Button>
+      </div>
     );
   } else {
     return (
-      <Button
-        variant="link"
-        className="text-lg pl-0 justify-start"
+      <Link
+        href="/login"
+        className="flex items-center hover:underline hover:bg-accent/50 p-4 border-x"
         onClick={() => closeCallback && closeCallback()}
-        asChild
       >
-        <Link href="/login">Login</Link>
-      </Button>
+        Login
+      </Link>
     );
   }
 };
@@ -62,7 +67,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="w-full p-1 flex justify-between">
+    <header className="w-full flex justify-between border-b border-b-foreground/10">
       <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <SheetTrigger asChild>
           <Button size="icon" variant="ghost" className="lg:hidden">
@@ -75,53 +80,54 @@ const Navbar = () => {
             <SheetDescription hidden>Application Menu</SheetDescription>
             <nav>
               <ul className="flex flex-col justify-start">
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link href="/">Home</Link>
-                </Button>
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link href="/e" className="">
-                    Editor
-                  </Link>
-                </Button>
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
+                <Link
+                  to="/"
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
+                  activeProps={{ className: 'bg-accent/75' }}
                   onClick={closeSidebar}
                 >
-                  <Link href="/active" className="">
-                    Active Games
-                  </Link>
-                </Button>
-                <LoginButton closeCallback={closeSidebar} />
+                  Home
+                </Link>
+                <Link
+                  to="/e"
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
+                  activeProps={{ className: 'bg-accent/75' }}
+                  onClick={closeSidebar}
+                >
+                  Editor
+                </Link>
+                <Link
+                  to="/active"
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
+                  activeProps={{ className: 'bg-accent/75' }}
+                  onClick={closeSidebar}
+                >
+                  Active Games
+                </Link>
+                <LoginButton closeCallback={closeSidebar} mobile />
               </ul>
             </nav>
           </SheetHeader>
         </SheetContent>
       </Sheet>
-      <NavigationMenu className="hidden lg:flex">
-        <NavigationMenuList>
-          <NavigationMenuLink asChild>
-            <Button variant="link" size="lg" asChild>
-              <Link href="/">Home</Link>
-            </Button>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
-            <Button variant="link" size="default" asChild>
-              <Link href="/e">Editor</Link>
-            </Button>
-          </NavigationMenuLink>
-        </NavigationMenuList>
-      </NavigationMenu>
-      <div className="flex gap-4">
-        <div className="hidden lg:block">
+      <div className="hidden lg:flex">
+        <Link
+          to="/"
+          className="flex items-center border-e p-4 hover:bg-accent/50"
+          activeProps={{ className: 'bg-accent/75' }}
+        >
+          Home
+        </Link>
+        <Link
+          to="/e"
+          className="flex items-center border-e p-4 hover:bg-accent/50"
+          activeProps={{ className: 'bg-accent/75' }}
+        >
+          Editor
+        </Link>
+      </div>
+      <div className="flex">
+        <div className="hidden lg:flex align-middle">
           <LoginButton />
         </div>
         <ThemeToggle />

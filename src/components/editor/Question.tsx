@@ -86,7 +86,7 @@ const Question = ({
   const selected = id === currentSelection;
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full px-3">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
       <div className="flex justify-between items-center w-full py-1">
         <Form {...form}>
           <form

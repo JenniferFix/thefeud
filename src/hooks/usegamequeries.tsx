@@ -45,26 +45,20 @@ export function useGetGameQuestions(gameId: string) {
 
 export const gameQuestionsQueryOptions = (gameid: string) =>
   queryOptions({
-    queryKey: ['gamnequestions', gameid],
+    queryKey: ['gamequestions', gameid],
     queryFn: async () =>
       getGameQuestions(supabase, gameid).then((result) => result.data),
   });
 
-export function useAddQuestionToGame() {
+export function useAddQuestionToGame(gameId: string) {
   const client = useSupabase();
   const queryClient = useQueryClient();
   // const queryKey = ['gameQustions', gameId];
-  const mutationFn = async ({
-    questionId,
-    gameId,
-  }: {
-    questionId: string;
-    gameId: string;
-  }) => {
+  const mutationFn = async ({ questionId }: { questionId: string }) => {
     return addQuestionToGame(client, questionId, gameId);
   };
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['questions'] });
+    queryClient.invalidateQueries({ queryKey: ['gamequestions', gameId] });
   };
   return useMutation({ mutationFn, onSuccess });
 }

@@ -16,7 +16,6 @@ export default function Index() {
   });
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16"></nav>
       <div>
         <animated.h1 style={springProps} className="text-4xl">
           Welcome to The Feud

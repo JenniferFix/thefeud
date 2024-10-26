@@ -6,8 +6,16 @@ import {
   updateQuestion,
   deleteQuestion,
 } from '@/queries/questionqueries';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from '@tanstack/react-query';
 import { Tables } from '@/types/supabase.types';
+import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+const supabase = getSupabaseBrowserClient();
 
 export function useGetUsersQuestions() {
   const client = useSupabase();
@@ -19,6 +27,11 @@ export function useGetUsersQuestions() {
 
   return useQuery({ queryKey, queryFn });
 }
+export const questionsQueryOptions = queryOptions({
+  queryKey: ['questions'],
+  queryFn: async () =>
+    getUsersQuestions(supabase).then((result) => result.data),
+});
 
 export function useInsertQuestion() {
   const client = useSupabase();

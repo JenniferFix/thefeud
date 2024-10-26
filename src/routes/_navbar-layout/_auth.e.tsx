@@ -1,30 +1,30 @@
-import * as React from 'react';
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { gamesQueryOptions } from '@/hooks/usegamequeries';
-import Games from '@/components/editor/Games';
-import {
-  ResizablePanel,
-  ResizableHandle,
-  ResizablePanelGroup,
-} from '@/components/ui/resizable';
-import { gameQuestionsQueryOptions } from '@/hooks/usegamequeries';
+import React from 'react';
+import { createFileRoute, Outlet, Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e')({
-  loader: ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(gamesQueryOptions),
   component: () => <EditorLayout />,
 });
 
-const EditorLayout = () => {
+function EditorLayout() {
   return (
-    <ResizablePanelGroup direction="horizontal" className="h-full">
-      <ResizablePanel defaultSize={25}>
-        <Games />
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={75}>
-        <Outlet />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+    <React.Fragment>
+      <div className="flex border-b">
+        <Link
+          to="/e/games"
+          className="hover:underline border-e p-3 hover:bg-accent/50"
+          activeProps={{ className: 'bg-accent/75' }}
+        >
+          Game Editor
+        </Link>
+        <Link
+          to="/e/questions"
+          className="hover:underline border-e p-3 hover:bg-accent/50"
+          activeProps={{ className: 'bg-accent/75' }}
+        >
+          Question Editor
+        </Link>
+      </div>
+      <Outlet />
+    </React.Fragment>
   );
-};
+}

@@ -1,14 +1,7 @@
 import React from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEditorStore } from '@/store';
 import { Tables } from '@/types/supabase.types';
-import {
-  TrashIcon,
-  PlusIcon,
-  DashIcon,
-  CheckIcon,
-  Pencil1Icon,
-} from '@radix-ui/react-icons';
+import { TrashIcon, PlusIcon, Pencil1Icon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import {
   useInsertGame,
@@ -30,7 +23,6 @@ const gameSchema = z.object({
 
 const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
   const [editing, setEditing] = React.useState(false);
-  const selectedGame = useEditorStore((state) => state?.editorSelectedGame);
   const insertGame = useInsertGame();
   const updateGame = useUpdateGame();
   const deleteGame = useDeleteGame();
@@ -78,14 +70,13 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
               )}
             />
           ) : (
-            <Button
-              variant="link"
-              size="lg"
-              asChild
-              className="w-full pl-4 justify-start"
+            <Link
+              to={`/e/games/${game?.id}`}
+              className="w-full"
+              activeProps={{ className: 'font-extrabold' }}
             >
-              <Link to={`/e/${game?.id}`}>{game?.name}</Link>
-            </Button>
+              {game?.name}
+            </Link>
           )}
           {!addGame ? (
             <div className="flex">
@@ -112,7 +103,7 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <div className="flex flex-col justify-start h-full w-full gap-1">
+    <div className="flex flex-col justify-start h-full w-full gap-1 pt-3 px-3">
       {games?.map((g) => <Game key={g.id} game={g} />)}
       <div className="p-2">
         <Game addGame />
