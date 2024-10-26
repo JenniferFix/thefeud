@@ -70,7 +70,7 @@ const Navbar = () => {
     <header className="w-full flex justify-between border-b border-b-foreground/10">
       <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <SheetTrigger asChild>
-          <Button size="icon" variant="ghost" className="lg:hidden">
+          <Button size="icon" variant="ghost" className="md:hidden">
             <MenuIcon />
           </Button>
         </SheetTrigger>
@@ -110,7 +110,7 @@ const Navbar = () => {
           </SheetHeader>
         </SheetContent>
       </Sheet>
-      <div className="hidden lg:flex">
+      <div className="hidden md:flex">
         <Link
           to="/"
           className="flex items-center border-e p-4 hover:bg-accent/50"
@@ -127,7 +127,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex">
-        <div className="hidden lg:flex align-middle">
+        <div className="hidden md:flex align-middle">
           <LoginButton />
         </div>
         <ThemeToggle />

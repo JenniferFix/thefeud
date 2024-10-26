@@ -2,8 +2,6 @@ import React from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams, Link } from '@tanstack/react-router';
 import { questionsQueryOptions } from '@/hooks/usequestionqueries';
-import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
-import { useEditorStore } from '@/store';
 import Question from './Question';
 import { useSupabaseAuth } from '@/supabaseauth';
 
@@ -14,7 +12,7 @@ const QuestionEditor = () => {
     questionsQueryOptions(auth.user?.id!),
   );
   const questions = questionsQuery.data;
-  console.log(questions);
+
   return (
     <div className="flex flex-col">
       {questions?.map((q) => (
