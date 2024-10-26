@@ -18,7 +18,7 @@ import { useAddQuestionToGame } from '@/hooks/usegamequeries';
 const AddQuestionToGameModal = ({ gameid }: { gameid: string }) => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button size="sm" variant="default">
           Add <PlusIcon />
         </Button>

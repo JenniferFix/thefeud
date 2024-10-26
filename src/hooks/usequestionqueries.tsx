@@ -17,21 +17,22 @@ import { getSupabaseBrowserClient } from '@/utils/supabase/client';
 
 const supabase = getSupabaseBrowserClient();
 
-export function useGetUsersQuestions() {
+export function useGetUsersQuestions(userid: string) {
   const client = useSupabase();
   const queryKey = ['questions'];
 
   const queryFn = async () => {
-    return getUsersQuestions(client).then((result) => result?.data);
+    return getUsersQuestions(client, userid).then((result) => result?.data);
   };
 
   return useQuery({ queryKey, queryFn });
 }
-export const questionsQueryOptions = queryOptions({
-  queryKey: ['questions'],
-  queryFn: async () =>
-    getUsersQuestions(supabase).then((result) => result.data),
-});
+export const questionsQueryOptions = (userid: string) =>
+  queryOptions({
+    queryKey: ['questions'],
+    queryFn: async () =>
+      getUsersQuestions(supabase, userid).then((result) => result.data),
+  });
 
 export function useInsertQuestion() {
   const client = useSupabase();

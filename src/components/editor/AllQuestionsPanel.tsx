@@ -4,9 +4,13 @@ import { ToggleGroup } from '@/components/ui/toggle-group';
 import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
 import { useEditorStore } from '@/store';
 import Question from './Question';
+import { useSupabaseAuth } from '@/supabaseauth';
 
 const Questions = () => {
-  const { isError, data, error, isLoading } = useGetUsersQuestions();
+  const auth = useSupabaseAuth();
+  const { isError, data, error, isLoading } = useGetUsersQuestions(
+    auth.user?.id!,
+  );
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 

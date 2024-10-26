@@ -20,12 +20,14 @@ import { Route as CGameInstanceIdImport } from './routes/c.$gameInstanceId'
 import { Route as NavbarLayoutLoginImport } from './routes/_navbar-layout/login'
 import { Route as NavbarLayoutActiveImport } from './routes/_navbar-layout/active'
 import { Route as NavbarLayoutAuthImport } from './routes/_navbar-layout/_auth'
-import { Route as NavbarLayoutAuthEImport } from './routes/_navbar-layout/_auth.e'
-import { Route as NavbarLayoutAuthEIndexImport } from './routes/_navbar-layout/_auth.e.index'
-import { Route as NavbarLayoutAuthEQuestionsImport } from './routes/_navbar-layout/_auth.e.questions'
-import { Route as NavbarLayoutAuthEGamesImport } from './routes/_navbar-layout/_auth.e.games'
-import { Route as NavbarLayoutAuthEGamesIndexImport } from './routes/_navbar-layout/_auth.e.games.index'
-import { Route as NavbarLayoutAuthEGamesGameIdImport } from './routes/_navbar-layout/_auth.e.games.$gameId'
+import { Route as NavbarLayoutAuthEImport } from './routes/_navbar-layout/_auth/e'
+import { Route as NavbarLayoutAuthEIndexImport } from './routes/_navbar-layout/_auth/e.index'
+import { Route as NavbarLayoutAuthEQuestionsImport } from './routes/_navbar-layout/_auth/e.questions'
+import { Route as NavbarLayoutAuthEGamesImport } from './routes/_navbar-layout/_auth/e.games'
+import { Route as NavbarLayoutAuthEQuestionsIndexImport } from './routes/_navbar-layout/_auth/e.questions.index'
+import { Route as NavbarLayoutAuthEGamesIndexImport } from './routes/_navbar-layout/_auth/e.games.index'
+import { Route as NavbarLayoutAuthEQuestionsQuestionIdImport } from './routes/_navbar-layout/_auth/e.questions.$questionId'
+import { Route as NavbarLayoutAuthEGamesGameIdImport } from './routes/_navbar-layout/_auth/e.games.$gameId'
 
 // Create Virtual Routes
 
@@ -95,10 +97,22 @@ const NavbarLayoutAuthEGamesRoute = NavbarLayoutAuthEGamesImport.update({
   getParentRoute: () => NavbarLayoutAuthERoute,
 } as any)
 
+const NavbarLayoutAuthEQuestionsIndexRoute =
+  NavbarLayoutAuthEQuestionsIndexImport.update({
+    path: '/',
+    getParentRoute: () => NavbarLayoutAuthEQuestionsRoute,
+  } as any)
+
 const NavbarLayoutAuthEGamesIndexRoute =
   NavbarLayoutAuthEGamesIndexImport.update({
     path: '/',
     getParentRoute: () => NavbarLayoutAuthEGamesRoute,
+  } as any)
+
+const NavbarLayoutAuthEQuestionsQuestionIdRoute =
+  NavbarLayoutAuthEQuestionsQuestionIdImport.update({
+    path: '/$questionId',
+    getParentRoute: () => NavbarLayoutAuthEQuestionsRoute,
   } as any)
 
 const NavbarLayoutAuthEGamesGameIdRoute =
@@ -202,12 +216,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarLayoutAuthEGamesGameIdImport
       parentRoute: typeof NavbarLayoutAuthEGamesImport
     }
+    '/_navbar-layout/_auth/e/questions/$questionId': {
+      id: '/_navbar-layout/_auth/e/questions/$questionId'
+      path: '/$questionId'
+      fullPath: '/e/questions/$questionId'
+      preLoaderRoute: typeof NavbarLayoutAuthEQuestionsQuestionIdImport
+      parentRoute: typeof NavbarLayoutAuthEQuestionsImport
+    }
     '/_navbar-layout/_auth/e/games/': {
       id: '/_navbar-layout/_auth/e/games/'
       path: '/'
       fullPath: '/e/games/'
       preLoaderRoute: typeof NavbarLayoutAuthEGamesIndexImport
       parentRoute: typeof NavbarLayoutAuthEGamesImport
+    }
+    '/_navbar-layout/_auth/e/questions/': {
+      id: '/_navbar-layout/_auth/e/questions/'
+      path: '/'
+      fullPath: '/e/questions/'
+      preLoaderRoute: typeof NavbarLayoutAuthEQuestionsIndexImport
+      parentRoute: typeof NavbarLayoutAuthEQuestionsImport
     }
   }
 }
@@ -230,15 +258,32 @@ const NavbarLayoutAuthEGamesRouteWithChildren =
     NavbarLayoutAuthEGamesRouteChildren,
   )
 
+interface NavbarLayoutAuthEQuestionsRouteChildren {
+  NavbarLayoutAuthEQuestionsQuestionIdRoute: typeof NavbarLayoutAuthEQuestionsQuestionIdRoute
+  NavbarLayoutAuthEQuestionsIndexRoute: typeof NavbarLayoutAuthEQuestionsIndexRoute
+}
+
+const NavbarLayoutAuthEQuestionsRouteChildren: NavbarLayoutAuthEQuestionsRouteChildren =
+  {
+    NavbarLayoutAuthEQuestionsQuestionIdRoute:
+      NavbarLayoutAuthEQuestionsQuestionIdRoute,
+    NavbarLayoutAuthEQuestionsIndexRoute: NavbarLayoutAuthEQuestionsIndexRoute,
+  }
+
+const NavbarLayoutAuthEQuestionsRouteWithChildren =
+  NavbarLayoutAuthEQuestionsRoute._addFileChildren(
+    NavbarLayoutAuthEQuestionsRouteChildren,
+  )
+
 interface NavbarLayoutAuthERouteChildren {
   NavbarLayoutAuthEGamesRoute: typeof NavbarLayoutAuthEGamesRouteWithChildren
-  NavbarLayoutAuthEQuestionsRoute: typeof NavbarLayoutAuthEQuestionsRoute
+  NavbarLayoutAuthEQuestionsRoute: typeof NavbarLayoutAuthEQuestionsRouteWithChildren
   NavbarLayoutAuthEIndexRoute: typeof NavbarLayoutAuthEIndexRoute
 }
 
 const NavbarLayoutAuthERouteChildren: NavbarLayoutAuthERouteChildren = {
   NavbarLayoutAuthEGamesRoute: NavbarLayoutAuthEGamesRouteWithChildren,
-  NavbarLayoutAuthEQuestionsRoute: NavbarLayoutAuthEQuestionsRoute,
+  NavbarLayoutAuthEQuestionsRoute: NavbarLayoutAuthEQuestionsRouteWithChildren,
   NavbarLayoutAuthEIndexRoute: NavbarLayoutAuthEIndexRoute,
 }
 
@@ -284,10 +329,12 @@ export interface FileRoutesByFullPath {
   '/': typeof NavbarLayoutIndexRoute
   '/e': typeof NavbarLayoutAuthERouteWithChildren
   '/e/games': typeof NavbarLayoutAuthEGamesRouteWithChildren
-  '/e/questions': typeof NavbarLayoutAuthEQuestionsRoute
+  '/e/questions': typeof NavbarLayoutAuthEQuestionsRouteWithChildren
   '/e/': typeof NavbarLayoutAuthEIndexRoute
   '/e/games/$gameId': typeof NavbarLayoutAuthEGamesGameIdRoute
+  '/e/questions/$questionId': typeof NavbarLayoutAuthEQuestionsQuestionIdRoute
   '/e/games/': typeof NavbarLayoutAuthEGamesIndexRoute
+  '/e/questions/': typeof NavbarLayoutAuthEQuestionsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -298,10 +345,11 @@ export interface FileRoutesByTo {
   '/c/$gameInstanceId': typeof CGameInstanceIdRoute
   '/g/$gameInstanceId': typeof GGameInstanceIdRoute
   '/': typeof NavbarLayoutIndexRoute
-  '/e/questions': typeof NavbarLayoutAuthEQuestionsRoute
   '/e': typeof NavbarLayoutAuthEIndexRoute
   '/e/games/$gameId': typeof NavbarLayoutAuthEGamesGameIdRoute
+  '/e/questions/$questionId': typeof NavbarLayoutAuthEQuestionsQuestionIdRoute
   '/e/games': typeof NavbarLayoutAuthEGamesIndexRoute
+  '/e/questions': typeof NavbarLayoutAuthEQuestionsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -316,10 +364,12 @@ export interface FileRoutesById {
   '/_navbar-layout/': typeof NavbarLayoutIndexRoute
   '/_navbar-layout/_auth/e': typeof NavbarLayoutAuthERouteWithChildren
   '/_navbar-layout/_auth/e/games': typeof NavbarLayoutAuthEGamesRouteWithChildren
-  '/_navbar-layout/_auth/e/questions': typeof NavbarLayoutAuthEQuestionsRoute
+  '/_navbar-layout/_auth/e/questions': typeof NavbarLayoutAuthEQuestionsRouteWithChildren
   '/_navbar-layout/_auth/e/': typeof NavbarLayoutAuthEIndexRoute
   '/_navbar-layout/_auth/e/games/$gameId': typeof NavbarLayoutAuthEGamesGameIdRoute
+  '/_navbar-layout/_auth/e/questions/$questionId': typeof NavbarLayoutAuthEQuestionsQuestionIdRoute
   '/_navbar-layout/_auth/e/games/': typeof NavbarLayoutAuthEGamesIndexRoute
+  '/_navbar-layout/_auth/e/questions/': typeof NavbarLayoutAuthEQuestionsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -337,7 +387,9 @@ export interface FileRouteTypes {
     | '/e/questions'
     | '/e/'
     | '/e/games/$gameId'
+    | '/e/questions/$questionId'
     | '/e/games/'
+    | '/e/questions/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -347,10 +399,11 @@ export interface FileRouteTypes {
     | '/c/$gameInstanceId'
     | '/g/$gameInstanceId'
     | '/'
-    | '/e/questions'
     | '/e'
     | '/e/games/$gameId'
+    | '/e/questions/$questionId'
     | '/e/games'
+    | '/e/questions'
   id:
     | '__root__'
     | '/_navbar-layout'
@@ -366,7 +419,9 @@ export interface FileRouteTypes {
     | '/_navbar-layout/_auth/e/questions'
     | '/_navbar-layout/_auth/e/'
     | '/_navbar-layout/_auth/e/games/$gameId'
+    | '/_navbar-layout/_auth/e/questions/$questionId'
     | '/_navbar-layout/_auth/e/games/'
+    | '/_navbar-layout/_auth/e/questions/'
   fileRoutesById: FileRoutesById
 }
 
@@ -440,7 +495,7 @@ export const routeTree = rootRoute
       "parent": "/_navbar-layout"
     },
     "/_navbar-layout/_auth/e": {
-      "filePath": "_navbar-layout/_auth.e.tsx",
+      "filePath": "_navbar-layout/_auth/e.tsx",
       "parent": "/_navbar-layout/_auth",
       "children": [
         "/_navbar-layout/_auth/e/games",
@@ -449,7 +504,7 @@ export const routeTree = rootRoute
       ]
     },
     "/_navbar-layout/_auth/e/games": {
-      "filePath": "_navbar-layout/_auth.e.games.tsx",
+      "filePath": "_navbar-layout/_auth/e.games.tsx",
       "parent": "/_navbar-layout/_auth/e",
       "children": [
         "/_navbar-layout/_auth/e/games/$gameId",
@@ -457,20 +512,32 @@ export const routeTree = rootRoute
       ]
     },
     "/_navbar-layout/_auth/e/questions": {
-      "filePath": "_navbar-layout/_auth.e.questions.tsx",
-      "parent": "/_navbar-layout/_auth/e"
+      "filePath": "_navbar-layout/_auth/e.questions.tsx",
+      "parent": "/_navbar-layout/_auth/e",
+      "children": [
+        "/_navbar-layout/_auth/e/questions/$questionId",
+        "/_navbar-layout/_auth/e/questions/"
+      ]
     },
     "/_navbar-layout/_auth/e/": {
-      "filePath": "_navbar-layout/_auth.e.index.tsx",
+      "filePath": "_navbar-layout/_auth/e.index.tsx",
       "parent": "/_navbar-layout/_auth/e"
     },
     "/_navbar-layout/_auth/e/games/$gameId": {
-      "filePath": "_navbar-layout/_auth.e.games.$gameId.tsx",
+      "filePath": "_navbar-layout/_auth/e.games.$gameId.tsx",
       "parent": "/_navbar-layout/_auth/e/games"
     },
+    "/_navbar-layout/_auth/e/questions/$questionId": {
+      "filePath": "_navbar-layout/_auth/e.questions.$questionId.tsx",
+      "parent": "/_navbar-layout/_auth/e/questions"
+    },
     "/_navbar-layout/_auth/e/games/": {
-      "filePath": "_navbar-layout/_auth.e.games.index.tsx",
+      "filePath": "_navbar-layout/_auth/e.games.index.tsx",
       "parent": "/_navbar-layout/_auth/e/games"
+    },
+    "/_navbar-layout/_auth/e/questions/": {
+      "filePath": "_navbar-layout/_auth/e.questions.index.tsx",
+      "parent": "/_navbar-layout/_auth/e/questions"
     }
   }
 }
