@@ -9,11 +9,9 @@ export const Route = createFileRoute('/_navbar-layout')({
 
 function NavigationLayout() {
   return (
-    <React.Fragment>
+    <div className="absolute inset-0 flex flex-col">
       <Navbar />
-      <main className="h-full">
-        <Outlet />
-      </main>
-    </React.Fragment>
+      <Outlet />
+    </div>
   );
 }

@@ -5,10 +5,8 @@ import {
   ResizableHandle,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import AllQuestionsList from '@/components/editor/AllQuestionsList';
 import { useRouterState } from '@tanstack/react-router';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import AllQuestionsPanel from '@/components/editor/AllQuestionsPanel';
 import Questions from '@/components/editor/Questions';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/questions')({
@@ -26,16 +24,16 @@ function QuestionsLayout() {
     if (isQuestionRoute) {
       return <Outlet />;
     } else {
-      return <AllQuestionsList />;
+      return <Questions />;
     }
   } else {
     return (
       <ResizablePanelGroup direction="horizontal" autoSaveId="questionspanel">
-        <ResizablePanel>
+        <ResizablePanel defaultSize={25}>
           <Questions />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel>
+        <ResizablePanel defaultSize={75}>
           <Outlet />
         </ResizablePanel>
       </ResizablePanelGroup>

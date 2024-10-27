@@ -1,27 +1,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  TrashIcon,
-  PlusIcon,
-  Pencil1Icon,
-  DashIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from '@radix-ui/react-icons';
-import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
+import { Form, FormField } from '@/components/ui/form';
+import { TrashIcon, PlusIcon, Pencil1Icon } from '@radix-ui/react-icons';
+// import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
 import { useSupabaseAuth } from '@/supabaseauth';
-import { useParams, Link } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { questionsQueryOptions } from '@/hooks/usequestionqueries';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,6 +17,8 @@ import {
   useDeleteQuestion,
 } from '@/hooks/usequestionqueries';
 import { Tables } from '@/types/supabase.types';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/utils/utils';
 
 type TQuestionRow = Tables<'questions'>;
 
@@ -58,6 +44,11 @@ const Question = ({
     },
   });
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    deleteQuestion.mutate({ questionId: question?.id! });
+  };
+
   const handleSubmit = (values: z.infer<typeof questionSchema>) => {
     if (!add) return;
     insertQuestion.mutate({ question: values?.question });
@@ -73,17 +64,12 @@ const Question = ({
     });
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    deleteQuestion.mutate({ questionId: question?.id! });
-  };
-
   const handleEditing = () => {
     setIsEditing(!isEditing);
   };
 
   return (
-    <div className="flex items-center w-full">
+    <div className="w-full flex items-center mx-2">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -93,13 +79,13 @@ const Question = ({
           {isEditing || add ? (
             <FormField
               control={form.control}
-              name={'question'}
+              name="question"
               render={({ field }) => (
                 <Input
-                  variant="list"
-                  className="w-full"
-                  placeholder="Question"
                   {...field}
+                  variant={add ? 'default' : 'list'}
+                  className={cn('w-full', add ? 'm-2' : '')}
+                  placeholder="Question"
                 />
               )}
             />
@@ -138,18 +124,14 @@ const Questions = () => {
     questionsQueryOptions(auth.user?.id!),
   );
   const questions = questionsQuery.data;
-  return questions?.map((q) => <Question key={q.id} question={q} />);
-};
-
-const QuestionsPanel = () => {
-  /* <div className="flex flex-col justify-apart h-full w-full p-1"> */
   return (
-    <div className="h-full p-2">
-      <Questions />
+    <div className="flex flex-col justify-between h-full w-full gap-1 pt-3 px-2">
+      <ScrollArea className="flex flex-col justify-start h-full">
+        {questions?.map((q) => <Question key={q.id} question={q} />)}
+      </ScrollArea>
       <Question add />
     </div>
   );
-  // </div>
 };
 
-export default QuestionsPanel;
+export default Questions;

@@ -14,7 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { gamesQueryOptions } from '@/hooks/usegamequeries';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Link } from '@tanstack/react-router';
+import { cn } from '@/utils/utils';
 type TGameRow = Tables<'games'>;
 
 const gameSchema = z.object({
@@ -54,7 +56,7 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
   };
 
   return (
-    <div key={game?.id} className="w-full flex items-center">
+    <div className="w-full flex items-center mx-2">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -68,9 +70,8 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  variant="list"
-                  // active="bold"
-                  className="w-full"
+                  variant={addGame ? 'default' : 'list'}
+                  className={cn('w-full', addGame ? 'm-2' : '')}
                   placeholder="Game Name"
                 />
               )}
@@ -85,7 +86,7 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
             </Link>
           )}
           {!addGame ? (
-            <div className="flex">
+            <div className="flex items-center">
               <Button size="icon" variant="ghost" onClick={handleEditing}>
                 <Pencil1Icon />
               </Button>
@@ -109,11 +110,11 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <div className="flex flex-col justify-start h-full w-full gap-1 pt-3 px-2">
-      {games?.map((g) => <Game key={g.id} game={g} />)}
-      <div className="p-2">
-        <Game addGame />
-      </div>
+    <div className="flex flex-col justify-between h-full w-full gap-1 pt-3 px-2">
+      <ScrollArea className="flex flex-col justify-start h-full">
+        {games?.map((g) => <Game key={g.id} game={g} />)}
+      </ScrollArea>
+      <Game addGame />
     </div>
   );
 };

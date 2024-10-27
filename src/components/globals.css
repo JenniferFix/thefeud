@@ -81,5 +81,8 @@
 html,
 body,
 #app {
+  margin: 0;
+  max-height: 100vh;
   height: 100%;
+  /* overflow: hidden; */
 }
