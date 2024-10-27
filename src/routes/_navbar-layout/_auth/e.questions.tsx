@@ -8,6 +8,8 @@ import {
 import AllQuestionsList from '@/components/editor/AllQuestionsList';
 import { useRouterState } from '@tanstack/react-router';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import AllQuestionsPanel from '@/components/editor/AllQuestionsPanel';
+import Questions from '@/components/editor/Questions';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/questions')({
   loader: ({ context: { queryClient, auth } }) =>
@@ -28,9 +30,9 @@ function QuestionsLayout() {
     }
   } else {
     return (
-      <ResizablePanelGroup direction="horizontal">
+      <ResizablePanelGroup direction="horizontal" autoSaveId="questionspanel">
         <ResizablePanel>
-          <AllQuestionsList />
+          <Questions />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel>

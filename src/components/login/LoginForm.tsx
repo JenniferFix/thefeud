@@ -1,5 +1,5 @@
-import { useForm } from 'react-hook-form';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ import {
 import { cn } from '@/utils/utils';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/supabaseauth';
-import { useRouter, useRouterState, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -73,24 +73,10 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
         navigate({ to: redirect });
       }
     });
-
-    // supabase.auth
-    //   .signInWithPassword({ email: data.email, password: data.password })
-    //   .then(({ data, error }) => {
-    //     if (!error) {
-    //       setSession(data.session);
-    //       setIsLoggingIn(false);
-    //       navigate({ to: '/' });
-    //     } else {
-    //       setIsLoggingIn(false);
-    //       if (error.code === 'invalid_credentials') {
-    //         toast('Invalid Credentials');
-    //       }
-    //     }
-    //   });
   };
 
   const onCreateAccountSubmit = (data: FormValues) => {
+    // TODO: Implement this
     console.log('Account creation submitted with:', data);
   };
 

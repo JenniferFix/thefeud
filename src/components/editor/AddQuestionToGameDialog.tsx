@@ -30,7 +30,7 @@ const AddQuestionToGameModal = ({ gameid }: { gameid: string }) => {
             Select a question to add to the current game
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="border h-full">
+        <ScrollArea className="border max-h-5/6">
           <AllQuestionsPanel />
         </ScrollArea>
         <DialogFooter>

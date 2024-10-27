@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SupabaseAuthProvider, useSupabaseAuth } from './supabaseauth';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,9 @@ const InnerApp = () => {
   const auth = useSupabaseAuth();
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} context={{ auth }} />
+      <ThemeProvider defaultTheme="dark" storageKey="FeudTheme">
+        <RouterProvider router={router} context={{ auth }} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

@@ -67,10 +67,10 @@ const Navbar = () => {
   };
 
   return (
-    <header className="w-full flex justify-between border-b border-b-foreground/10">
+    <header className="w-full flex justify-between border-b border-b-foreground/10 items-center">
       <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <SheetTrigger asChild>
-          <Button size="icon" variant="ghost" className="md:hidden">
+          <Button size="icon" variant="ghost" className="md:hidden ml-2">
             <MenuIcon />
           </Button>
         </SheetTrigger>
@@ -82,24 +82,24 @@ const Navbar = () => {
               <ul className="flex flex-col justify-start">
                 <Link
                   to="/"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
-                  activeProps={{ className: 'bg-accent/75' }}
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
+                  activeProps={{ className: 'bg-active' }}
                   onClick={closeSidebar}
                 >
                   Home
                 </Link>
                 <Link
                   to="/e"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
-                  activeProps={{ className: 'bg-accent/75' }}
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
+                  activeProps={{ className: 'bg-accent' }}
                   onClick={closeSidebar}
                 >
                   Editor
                 </Link>
                 <Link
                   to="/active"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/50"
-                  activeProps={{ className: 'bg-accent/75' }}
+                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
+                  activeProps={{ className: 'bg-accent' }}
                   onClick={closeSidebar}
                 >
                   Active Games
@@ -113,15 +113,15 @@ const Navbar = () => {
       <div className="hidden md:flex">
         <Link
           to="/"
-          className="flex items-center border-e p-4 hover:bg-accent/50"
-          activeProps={{ className: 'bg-accent/75' }}
+          className="flex items-center border-e p-4 hover:bg-accent/75"
+          activeProps={{ className: 'bg-accent' }}
         >
           Home
         </Link>
         <Link
           to="/e"
-          className="flex items-center border-e p-4 hover:bg-accent/50"
-          activeProps={{ className: 'bg-accent/75' }}
+          className="flex items-center border-e p-4 hover:bg-accent/75"
+          activeProps={{ className: 'bg-accent' }}
         >
           Editor
         </Link>

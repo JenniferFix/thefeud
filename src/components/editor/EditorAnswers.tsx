@@ -152,7 +152,7 @@ const Answers = () => {
   const answers = answerQuery.data;
 
   return (
-    <div>
+    <React.Fragment>
       {answers?.map((a) => (
         <Answer
           key={a.id}
@@ -164,7 +164,7 @@ const Answers = () => {
       {answers && answers.length < 8 && (
         <Answer questionid={questionId} addAnswer />
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

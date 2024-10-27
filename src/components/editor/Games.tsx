@@ -54,26 +54,32 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
   };
 
   return (
-    <div key={game?.id} className="w-full">
+    <div key={game?.id} className="w-full flex items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           onBlur={form.handleSubmit(handleBlur)}
-          className="w-full flex"
+          className="w-full flex items-center gap-2"
         >
           {editing || addGame ? (
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <Input {...field} className="w-full" placeholder="Game Name" />
+                <Input
+                  {...field}
+                  variant="list"
+                  // active="bold"
+                  className="w-full"
+                  placeholder="Game Name"
+                />
               )}
             />
           ) : (
             <Link
               to={`/e/games/${game?.id}`}
-              className="w-full"
-              activeProps={{ className: 'font-extrabold' }}
+              className="w-full flex items-center pl-2"
+              activeProps={{ className: 'font-bold' }}
             >
               {game?.name}
             </Link>
@@ -103,7 +109,7 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <div className="flex flex-col justify-start h-full w-full gap-1 pt-3 px-3">
+    <div className="flex flex-col justify-start h-full w-full gap-1 pt-3 px-2">
       {games?.map((g) => <Game key={g.id} game={g} />)}
       <div className="p-2">
         <Game addGame />

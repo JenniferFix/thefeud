@@ -1,7 +1,6 @@
 import * as React from 'react';
 import '@/components/globals.css';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import Providers from '@/components/providers/Providers';
 import Devtools from '@/components/providers/Devtools';
 import { Toaster } from '@/components/ui/sonner';
 import type { AuthContext } from '@/supabaseauth';
@@ -18,10 +17,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   return (
-    <Providers>
+    <React.Fragment>
       <Outlet />
       <Devtools />
       <Toaster />
-    </Providers>
+    </React.Fragment>
   );
 }
