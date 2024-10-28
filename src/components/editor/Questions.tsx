@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form, FormField } from '@/components/ui/form';
+import { Form, FormField, FormItem, FormControl } from '@/components/ui/form';
 import { TrashIcon, PlusIcon, Pencil1Icon } from '@radix-ui/react-icons';
 // import { useGetUsersQuestions } from '@/hooks/usequestionqueries';
 import { useSupabaseAuth } from '@/supabaseauth';
@@ -69,24 +69,27 @@ const Question = ({
   };
 
   return (
-    <div className="w-full flex items-center mx-2">
+    <div className="w-full flex items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           onBlur={form.handleSubmit(handleBlur)}
-          className="w-full flex items-center gap-2"
+          className={cn('w-full flex items-center gap-2', add && 'pb-4')}
         >
           {isEditing || add ? (
             <FormField
               control={form.control}
               name="question"
               render={({ field }) => (
-                <Input
-                  {...field}
-                  variant={add ? 'default' : 'list'}
-                  className={cn('w-full', add ? 'm-2' : '')}
-                  placeholder="Question"
-                />
+                <FormItem className={cn('grow', add ? '' : '')}>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      variant={'list'}
+                      placeholder="Your question goes here..."
+                    />
+                  </FormControl>
+                </FormItem>
               )}
             />
           ) : (
@@ -99,14 +102,14 @@ const Question = ({
             </Link>
           )}
           {!add ? (
-            <div className="flex items-center">
+            <React.Fragment>
               <Button size="icon" variant="ghost" onClick={handleEditing}>
                 <Pencil1Icon />
               </Button>
               <Button size="icon" variant="ghost" onClick={handleDelete}>
                 <TrashIcon />
               </Button>
-            </div>
+            </React.Fragment>
           ) : (
             <Button type="submit" size="icon" variant="ghost">
               <PlusIcon />
@@ -125,12 +128,12 @@ const Questions = () => {
   );
   const questions = questionsQuery.data;
   return (
-    <div className="flex flex-col justify-between h-full w-full gap-1 pt-3 px-2">
+    <section className="flex flex-col justify-between h-full w-full pt-3 px-2">
       <ScrollArea className="flex flex-col justify-start h-full">
         {questions?.map((q) => <Question key={q.id} question={q} />)}
       </ScrollArea>
       <Question add />
-    </div>
+    </section>
   );
 };
 

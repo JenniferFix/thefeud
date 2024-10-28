@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -25,6 +26,7 @@ import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { answersByQuestionIdQueryOptions } from '@/hooks/useanswerqueries';
+import { cn } from '@/utils/utils';
 
 type AnswerRow = Tables<'answers'>;
 
@@ -34,11 +36,11 @@ const answerSchema = z.object({
 });
 
 const Answer = ({
-  addAnswer,
+  add,
   answer,
   questionid,
 }: {
-  addAnswer?: boolean;
+  add?: boolean;
   answer?: AnswerRow;
   questionid: string;
 }) => {
@@ -54,8 +56,6 @@ const Answer = ({
     },
   });
 
-  const { register } = form;
-
   const handleDelete = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     deleteAnswer.mutate(id);
@@ -63,7 +63,7 @@ const Answer = ({
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
     if (!form.formState.isDirty) return;
-    if (addAnswer) {
+    if (add) {
       insertAnswer.mutate({
         answer: values.answer,
         question_id: questionid,
@@ -81,62 +81,57 @@ const Answer = ({
     form.reset();
   };
 
-  const AddForm = ({ children }: { children: React.ReactNode }) => {
-    <form>{children}</form>;
-  };
-
   return (
-    <div className="flex w-full">
+    <div className="flex w-full items-center">
       <Form {...form}>
         <form
-          className="w-full"
           onSubmit={form.handleSubmit(handleFormSubmit)}
           onBlur={form.handleSubmit(handleFormSubmit)}
+          className={cn('w-full flex items-center gap-2', add && 'pb-4')}
         >
-          <div className="flex w-full">
-            <FormField
-              control={form.control}
-              name={'answer'}
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      className="m-1 w-full"
-                      placeholder="Answer..."
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={'score'}
-              render={({ field }) => (
-                <FormItem className="w-14">
-                  <FormControl>
-                    <Input maxLength={3} className="m-1" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            {!answer && (
-              <Button size="icon" variant="ghost" type="submit">
-                <PlusIcon />
-              </Button>
+          <FormField
+            control={form.control}
+            name={'answer'}
+            render={({ field }) => (
+              <FormItem className="grow">
+                <FormControl>
+                  <Input variant="list" placeholder="Answer..." {...field} />
+                </FormControl>
+              </FormItem>
             )}
-          </div>
+          />
+          <FormField
+            control={form.control}
+            name={'score'}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    variant="list"
+                    size={2}
+                    maxLength={3}
+                    className=""
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          {!answer ? (
+            <Button size="icon" variant="ghost" type="submit">
+              <PlusIcon />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              onClick={(e) => handleDelete(e, answer.id)}
+              variant="ghost"
+            >
+              <TrashIcon />
+            </Button>
+          )}
         </form>
       </Form>
-      {answer && (
-        <Button
-          size="icon"
-          onClick={(e) => handleDelete(e, answer.id)}
-          variant="ghost"
-        >
-          <TrashIcon />
-        </Button>
-      )}
     </div>
   );
 };
@@ -152,19 +147,18 @@ const Answers = () => {
   const answers = answerQuery.data;
 
   return (
-    <React.Fragment>
-      {answers?.map((a) => (
-        <Answer
-          key={a.id}
-          questionid={questionId}
-          answer={a}
-          addAnswer={false}
-        />
-      ))}
-      {answers && answers.length < 8 && (
-        <Answer questionid={questionId} addAnswer />
+    <section className="flex flex-col justify-between h-full pt-2 px-2">
+      <ScrollArea className="flex flex-col justify-start h-full">
+        {answers?.map((a) => (
+          <Answer key={a.id} questionid={questionId} answer={a} />
+        ))}
+      </ScrollArea>
+      {answers && answers.length < 8 ? (
+        <Answer questionid={questionId} add />
+      ) : (
+        <div>Only 8 answers</div>
       )}
-    </React.Fragment>
+    </section>
   );
 };
 

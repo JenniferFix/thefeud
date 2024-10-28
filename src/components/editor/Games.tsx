@@ -8,7 +8,7 @@ import {
   useUpdateGame,
   useDeleteGame,
 } from '@/hooks/usegamequeries';
-import { Form, FormField } from '@/components/ui/form';
+import { Form, FormField, FormItem, FormControl } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -23,7 +23,7 @@ const gameSchema = z.object({
   name: z.string(),
 });
 
-const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
+const Game = ({ game, add }: { game?: TGameRow; add?: boolean }) => {
   const [editing, setEditing] = React.useState(false);
   const insertGame = useInsertGame();
   const updateGame = useUpdateGame();
@@ -44,36 +44,35 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
   };
 
   const handleSubmit = (values: z.infer<typeof gameSchema>) => {
-    if (!addGame) return;
+    if (!add) return;
     insertGame.mutate({ name: values.name });
     form.reset();
   };
 
   const handleBlur = (values: z.infer<typeof gameSchema>) => {
-    if (addGame) return;
+    if (add) return;
     if (!form.formState.isDirty) return;
     updateGame.mutate({ gameId: game?.id!, name: values.name });
   };
 
   return (
-    <div className="w-full flex items-center mx-2">
+    <div className="w-full flex items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           onBlur={form.handleSubmit(handleBlur)}
-          className="w-full flex items-center gap-2"
+          className={cn('w-full flex items-center gap-2', add ? 'pb-3' : '')}
         >
-          {editing || addGame ? (
+          {editing || add ? (
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <Input
-                  {...field}
-                  variant={addGame ? 'default' : 'list'}
-                  className={cn('w-full', addGame ? 'm-2' : '')}
-                  placeholder="Game Name"
-                />
+                <FormItem className={cn('grow', add ? '' : '')}>
+                  <FormControl>
+                    <Input {...field} variant="list" placeholder="Game Name" />
+                  </FormControl>
+                </FormItem>
               )}
             />
           ) : (
@@ -85,7 +84,7 @@ const Game = ({ game, addGame }: { game?: TGameRow; addGame?: boolean }) => {
               {game?.name}
             </Link>
           )}
-          {!addGame ? (
+          {!add ? (
             <div className="flex items-center">
               <Button size="icon" variant="ghost" onClick={handleEditing}>
                 <Pencil1Icon />
@@ -110,11 +109,11 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <div className="flex flex-col justify-between h-full w-full gap-1 pt-3 px-2">
+    <div className="flex flex-col justify-between h-full w-full pt-3 px-2">
       <ScrollArea className="flex flex-col justify-start h-full">
         {games?.map((g) => <Game key={g.id} game={g} />)}
       </ScrollArea>
-      <Game addGame />
+      <Game add />
     </div>
   );
 };

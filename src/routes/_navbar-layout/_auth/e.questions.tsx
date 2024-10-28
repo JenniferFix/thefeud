@@ -28,7 +28,11 @@ function QuestionsLayout() {
     }
   } else {
     return (
-      <ResizablePanelGroup direction="horizontal" autoSaveId="questionspanel">
+      <ResizablePanelGroup
+        direction="horizontal"
+        autoSaveId="questionspanel"
+        tagName="main"
+      >
         <ResizablePanel defaultSize={25}>
           <Questions />
         </ResizablePanel>
