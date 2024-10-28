@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
   Collapsible,
   CollapsibleContent,
@@ -29,14 +28,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Tables } from '@/types/supabase.types';
-import { useEditorStore } from '@/store';
 import {
   useInsertQuestion,
   useUpdateQuestion,
-  useDeleteQuestion,
 } from '@/hooks/usequestionqueries';
-
-type TQuestionRow = Tables<'questions'>;
+import { useRemoveQuestionFromGame } from '@/hooks/usegamequeries';
+import { useParams } from '@tanstack/react-router';
+import { WarningDialog } from '@/components/ui/warning';
+import { Waiting } from '@/components/ui/waiting';
 
 const questionSchema = z.object({
   question: z.string(),
@@ -51,14 +50,12 @@ const Question = ({
   text?: string;
   addQuestion?: boolean;
 }) => {
-  const deleteQuestion = useDeleteQuestion();
+  const params = useParams({ from: '/_navbar-layout/_auth/e/games/$gameId' });
+  const removeQuestionFromGame = useRemoveQuestionFromGame(params.gameId);
   const updateQuestion = useUpdateQuestion();
   const insertQuestion = useInsertQuestion();
-
-  const currentSelection = useEditorStore(
-    (state) => state.editorSelectedFromAllQuestions,
-  );
   const [isOpen, setIsOpen] = React.useState(false);
+
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     values: {
@@ -78,34 +75,45 @@ const Question = ({
     updateQuestion.mutate({ questionId: id!, question: values.question });
   };
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    deleteQuestion.mutate({ questionId: id! });
+  const handleDelete = () => {
+    removeQuestionFromGame.mutate({ questionId: id! });
   };
 
-  const selected = id === currentSelection;
-
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
-      <div className="flex justify-between items-center w-full py-1">
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="">
+      <div className="flex justify-between items-center w-full">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
             onBlur={form.handleSubmit(handleBlur)}
-            className="w-full flex"
+            className="w-full flex items-center"
           >
-            <FormField
-              control={form.control}
-              name={'question'}
-              render={({ field }) => (
-                <Input className="w-full" placeholder="Question" {...field} />
-              )}
-            />
+            <FormItem className="grow">
+              <FormControl>
+                <FormField
+                  control={form.control}
+                  name={'question'}
+                  render={({ field }) => (
+                    <Input variant="list" placeholder="Question" {...field} />
+                  )}
+                />
+              </FormControl>
+            </FormItem>
             {!addQuestion ? (
               <React.Fragment>
-                <Button size="icon" variant="ghost" onClick={handleDelete}>
-                  <TrashIcon />
-                </Button>
+                <WarningDialog onClick={handleDelete}>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    disabled={removeQuestionFromGame.isPending}
+                  >
+                    {removeQuestionFromGame.isPending ? (
+                      <Waiting />
+                    ) : (
+                      <TrashIcon />
+                    )}
+                  </Button>
+                </WarningDialog>
                 <CollapsibleTrigger asChild>
                   <Button
                     size="icon"
@@ -125,7 +133,7 @@ const Question = ({
         </Form>
       </div>
       {!addQuestion && (
-        <CollapsibleContent className="pl-6 pr-3 mt-3">
+        <CollapsibleContent className="pl-4">
           <Answers questionid={id!} />
         </CollapsibleContent>
       )}

@@ -80,7 +80,7 @@ export function useInsertAnswer() {
 export function useDeleteAnswer() {
   const client = useSupabase();
   const queryClient = useQueryClient();
-  const mutationFn = async (id: string) => {
+  const mutationFn = async ({ id }: { id: string }) => {
     return deleteAnswer(client, id).then((result) => result?.data);
   };
   const onSuccess = () => {

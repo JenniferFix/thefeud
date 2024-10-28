@@ -53,31 +53,25 @@ export const gameQuestionsQueryOptions = (gameid: string) =>
 export function useAddQuestionToGame(gameId: string) {
   const client = useSupabase();
   const queryClient = useQueryClient();
-  // const queryKey = ['gameQustions', gameId];
+  const queryKey = ['gamequestions', gameId];
   const mutationFn = async ({ questionId }: { questionId: string }) => {
     return addQuestionToGame(client, questionId, gameId);
   };
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['gamequestions', gameId] });
+    queryClient.invalidateQueries({ queryKey });
   };
   return useMutation({ mutationFn, onSuccess });
 }
 
-export function useRemoveQuestionFromGame() {
+export function useRemoveQuestionFromGame(gameId: string) {
   const client = useSupabase();
   const queryClient = useQueryClient();
-  // const queryKey = ['gameQustions', gameId];
-  const mutationFn = async ({
-    questionId,
-    gameId,
-  }: {
-    questionId: string;
-    gameId: string;
-  }) => {
+  const queryKey = ['gamequestions', gameId];
+  const mutationFn = async ({ questionId }: { questionId: string }) => {
     return removeQuestionFromGame(client, questionId, gameId);
   };
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['questions'] });
+    queryClient.invalidateQueries({ queryKey });
   };
   return useMutation({ onSuccess, mutationFn });
 }

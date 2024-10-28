@@ -36,8 +36,7 @@ export function removeQuestionFromGame(
   return client
     .from('game_questions')
     .delete()
-    .eq('gameid', gameid)
-    .eq('questionid', questionid)
+    .match({ gameid, questionid })
     .throwOnError();
 }
 

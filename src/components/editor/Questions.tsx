@@ -19,6 +19,9 @@ import {
 import { Tables } from '@/types/supabase.types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/utils/utils';
+import { useNavigate } from '@tanstack/react-router';
+import { WarningDialog } from '@/components/ui/warning';
+import { Waiting } from '@/components/ui/waiting';
 
 type TQuestionRow = Tables<'questions'>;
 
@@ -37,6 +40,8 @@ const Question = ({
   const deleteQuestion = useDeleteQuestion();
   const updateQuestion = useUpdateQuestion();
   const insertQuestion = useInsertQuestion();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     values: {
@@ -44,8 +49,13 @@ const Question = ({
     },
   });
 
-  const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
+  React.useEffect(() => {
+    if (deleteQuestion.status === 'success') {
+      navigate({ to: '/e/questions' });
+    }
+  }, [deleteQuestion.status]);
+
+  const handleDelete = () => {
     deleteQuestion.mutate({ questionId: question?.id! });
   };
 
@@ -106,9 +116,11 @@ const Question = ({
               <Button size="icon" variant="ghost" onClick={handleEditing}>
                 <Pencil1Icon />
               </Button>
-              <Button size="icon" variant="ghost" onClick={handleDelete}>
-                <TrashIcon />
-              </Button>
+              <WarningDialog onClick={handleDelete}>
+                <Button size="icon" variant="ghost">
+                  {deleteQuestion.isPending ? <Waiting /> : <TrashIcon />}
+                </Button>
+              </WarningDialog>
             </React.Fragment>
           ) : (
             <Button type="submit" size="icon" variant="ghost">

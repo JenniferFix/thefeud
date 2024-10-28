@@ -27,6 +27,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { answersByQuestionIdQueryOptions } from '@/hooks/useanswerqueries';
 import { cn } from '@/utils/utils';
+import { WarningDialog } from '@/components/ui/warning';
+import { Waiting } from '@/components/ui/waiting';
 
 type AnswerRow = Tables<'answers'>;
 
@@ -56,12 +58,12 @@ const Answer = ({
     },
   });
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    deleteAnswer.mutate(id);
+  const handleDelete = () => {
+    deleteAnswer.mutate({ id: answer?.id! });
   };
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
+    console.log('here');
     if (!form.formState.isDirty) return;
     if (add) {
       insertAnswer.mutate({
@@ -93,7 +95,13 @@ const Answer = ({
             control={form.control}
             name={'answer'}
             render={({ field }) => (
-              <FormItem className="grow">
+              <FormItem
+                className={cn(
+                  'grow',
+                  (add && insertAnswer.isPending) ||
+                    (updateAnswer.isPending && 'animate-pulse'),
+                )}
+              >
                 <FormControl>
                   <Input variant="list" placeholder="Answer..." {...field} />
                 </FormControl>
@@ -122,13 +130,15 @@ const Answer = ({
               <PlusIcon />
             </Button>
           ) : (
-            <Button
-              size="icon"
-              onClick={(e) => handleDelete(e, answer.id)}
-              variant="ghost"
-            >
-              <TrashIcon />
-            </Button>
+            <WarningDialog onClick={handleDelete}>
+              <Button
+                size="icon"
+                variant="ghost"
+                disabled={deleteAnswer.isPending}
+              >
+                {deleteAnswer.isPending ? <Waiting /> : <TrashIcon />}
+              </Button>
+            </WarningDialog>
           )}
         </form>
       </Form>

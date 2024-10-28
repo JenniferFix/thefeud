@@ -17,6 +17,8 @@ import { gamesQueryOptions } from '@/hooks/usegamequeries';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/utils/utils';
+import { WarningDialog } from '@/components/ui/warning';
+import { Waiting } from '@/components/ui/waiting';
 type TGameRow = Tables<'games'>;
 
 const gameSchema = z.object({
@@ -89,9 +91,15 @@ const Game = ({ game, add }: { game?: TGameRow; add?: boolean }) => {
               <Button size="icon" variant="ghost" onClick={handleEditing}>
                 <Pencil1Icon />
               </Button>
-              <Button size="icon" variant="ghost" onClick={handleDelete}>
-                <TrashIcon />
-              </Button>
+              <WarningDialog onClick={handleDelete}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  disabled={deleteGame.isPending}
+                >
+                  {deleteGame.isPending ? <Waiting /> : <TrashIcon />}
+                </Button>
+              </WarningDialog>
             </div>
           ) : (
             <Button type="submit" variant="ghost" size="icon">
@@ -109,12 +117,12 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <div className="flex flex-col justify-between h-full w-full pt-3 px-2">
+    <section className="flex flex-col justify-between h-full w-full gap-2 pt-3 px-2">
       <ScrollArea className="flex flex-col justify-start h-full">
         {games?.map((g) => <Game key={g.id} game={g} />)}
       </ScrollArea>
       <Game add />
-    </div>
+    </section>
   );
 };
 export default Games;

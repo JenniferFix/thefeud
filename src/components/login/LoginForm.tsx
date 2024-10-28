@@ -25,6 +25,7 @@ import { cn } from '@/utils/utils';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/supabaseauth';
 import { useNavigate } from '@tanstack/react-router';
+import { Waiting } from '@/components/ui/waiting';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -114,11 +115,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
         />
         <div className="flex space-x-2">
           <Button type="submit" className="flex-1" disabled={auth.isLoggingIn}>
-            {auth.isLoggingIn ? (
-              <Loader2 className={cn('mr-2 h-4 w-4 animate-spin')} />
-            ) : (
-              'Login'
-            )}
+            {auth.isLoggingIn ? <Waiting /> : 'Login'}
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
