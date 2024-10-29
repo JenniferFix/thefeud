@@ -4,6 +4,7 @@ import useSupabase from '@/hooks/useSupabase';
 
 export interface AuthContext {
   isAuthenticated: boolean;
+  checkAuthenticated: () => Promise<boolean>;
   session: Session | null;
   user: User | null;
   login: ({
@@ -95,9 +96,20 @@ export const SupabaseAuthProvider = ({
     });
   }, []);
 
+  const checkAuthenticated = async (): Promise<boolean> => {
+    if (!isAuthenticated) {
+      const { data, error } = await supabase.auth.refreshSession();
+      if (!data.user) return false;
+      setSession(data.session);
+      setUser(data.user);
+    }
+    return true;
+  };
+
   return (
     <AuthContext.Provider
       value={{
+        checkAuthenticated,
         isAuthenticated,
         session,
         user,
