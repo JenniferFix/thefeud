@@ -16,6 +16,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootComponent() {
+  console.log('root');
   return (
     <React.Fragment>
       <Outlet />

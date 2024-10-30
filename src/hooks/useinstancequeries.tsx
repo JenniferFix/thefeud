@@ -1,6 +1,11 @@
 'use client';
 import useSupabase from '@/hooks/useSupabase';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from '@tanstack/react-query';
 import {
   deleteGameInstance,
   getGameInstance,
@@ -8,6 +13,9 @@ import {
   getInstanceGame,
   getActiveInstances,
 } from '@/queries/instancequeries';
+import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+const supabase = getSupabaseBrowserClient();
 
 export function useCreateGameInstance() {
   const client = useSupabase();
@@ -52,6 +60,13 @@ export function useGetInstanceGame(instanceId: string) {
   };
   return useQuery({ queryKey, queryFn });
 }
+
+export const getInstanceGameQueryOptions = (instanceId: string) =>
+  queryOptions({
+    queryKey: ['gameinstancegame', instanceId],
+    queryFn: async () =>
+      getInstanceGame(supabase, instanceId).then((result) => result?.data),
+  });
 
 export function useGetActiveInstances() {
   const client = useSupabase();

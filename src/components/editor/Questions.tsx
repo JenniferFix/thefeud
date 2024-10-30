@@ -79,62 +79,61 @@ const Question = ({
   };
 
   return (
-    <div className="w-full flex items-center">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          onBlur={form.handleSubmit(handleBlur)}
-          className={cn('w-full flex items-center gap-2', add && 'pb-4')}
-        >
-          {isEditing || add ? (
-            <FormField
-              control={form.control}
-              name="question"
-              render={({ field }) => (
-                <FormItem className={cn('grow', add ? '' : '')}>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      variant={'list'}
-                      placeholder="Your question goes here..."
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          ) : (
-            <Link
-              to={`/e/questions/${question?.id}`}
-              className="w-full flex items-center pl-2"
-              activeProps={{ className: 'font-bold' }}
-            >
-              {question?.question}
-            </Link>
-          )}
-          {!add ? (
-            <React.Fragment>
-              <Button size="icon" variant="ghost" onClick={handleEditing}>
-                <Pencil1Icon />
-              </Button>
-              <WarningDialog onClick={handleDelete}>
-                <Button size="icon" variant="ghost">
-                  {deleteQuestion.isPending ? <Waiting /> : <TrashIcon />}
-                </Button>
-              </WarningDialog>
-            </React.Fragment>
-          ) : (
-            <Button type="submit" size="icon" variant="ghost">
-              <PlusIcon />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        onBlur={form.handleSubmit(handleBlur)}
+        className={cn('w-full flex items-center gap-2', add && 'pb-4')}
+      >
+        {isEditing || add ? (
+          <FormField
+            control={form.control}
+            name="question"
+            render={({ field }) => (
+              <FormItem className={cn('grow', add ? '' : '')}>
+                <FormControl>
+                  <Input
+                    {...field}
+                    variant={'list'}
+                    placeholder="Your question goes here..."
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        ) : (
+          <Link
+            to={`/e/questions/${question?.id}`}
+            className="w-full flex items-center pl-2"
+            activeProps={{ className: 'font-bold' }}
+          >
+            {question?.question}
+          </Link>
+        )}
+        {!add ? (
+          <React.Fragment>
+            <Button size="icon" variant="ghost" onClick={handleEditing}>
+              <Pencil1Icon />
             </Button>
-          )}
-        </form>
-      </Form>
-    </div>
+            <WarningDialog onClick={handleDelete}>
+              <Button size="icon" variant="ghost">
+                {deleteQuestion.isPending ? <Waiting /> : <TrashIcon />}
+              </Button>
+            </WarningDialog>
+          </React.Fragment>
+        ) : (
+          <Button type="submit" size="icon" variant="ghost">
+            <PlusIcon />
+          </Button>
+        )}
+      </form>
+    </Form>
   );
 };
 
 const Questions = () => {
   const auth = useSupabaseAuth();
+  console.log('auth', auth);
   const questionsQuery = useSuspenseQuery(
     questionsQueryOptions(auth.user?.id!),
   );

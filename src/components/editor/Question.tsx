@@ -45,10 +45,14 @@ const Question = ({
   id,
   text,
   addQuestion,
+  editable = false,
+  showAnswers = false,
 }: {
   id?: string;
   text?: string;
   addQuestion?: boolean;
+  editable?: boolean;
+  showAnswers?: boolean;
 }) => {
   const params = useParams({ from: '/_navbar-layout/_auth/e/games/$gameId' });
   const removeQuestionFromGame = useRemoveQuestionFromGame(params.gameId);
@@ -81,59 +85,56 @@ const Question = ({
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="">
-      <div className="flex justify-between items-center w-full">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            onBlur={form.handleSubmit(handleBlur)}
-            className="w-full flex items-center"
-          >
-            <FormItem className="grow">
-              <FormControl>
-                <FormField
-                  control={form.control}
-                  name={'question'}
-                  render={({ field }) => (
-                    <Input variant="list" placeholder="Question" {...field} />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          onBlur={form.handleSubmit(handleBlur)}
+          className="w-full flex items-center gap-1"
+        >
+          <FormItem className="grow">
+            <FormControl>
+              <FormField
+                control={form.control}
+                name={'question'}
+                render={({ field }) => (
+                  <Input variant="list" placeholder="Question" {...field} />
+                )}
+              />
+            </FormControl>
+          </FormItem>
+          {!addQuestion ? (
+            <React.Fragment>
+              <WarningDialog
+                title="Are you sure you want to delete this?"
+                onClick={handleDelete}
+              >
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  disabled={removeQuestionFromGame.isPending}
+                >
+                  {removeQuestionFromGame.isPending ? (
+                    <Waiting />
+                  ) : (
+                    <TrashIcon />
                   )}
-                />
-              </FormControl>
-            </FormItem>
-            {!addQuestion ? (
-              <React.Fragment>
-                <WarningDialog onClick={handleDelete}>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    disabled={removeQuestionFromGame.isPending}
-                  >
-                    {removeQuestionFromGame.isPending ? (
-                      <Waiting />
-                    ) : (
-                      <TrashIcon />
-                    )}
-                  </Button>
-                </WarningDialog>
-                <CollapsibleTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="rounded-none rounded-r-md"
-                  >
-                    {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                  </Button>
-                </CollapsibleTrigger>
-              </React.Fragment>
-            ) : (
-              <Button type="submit" size="icon" variant="ghost">
-                <PlusIcon />
-              </Button>
-            )}
-          </form>
-        </Form>
-      </div>
+                </Button>
+              </WarningDialog>
+              <CollapsibleTrigger asChild>
+                <Button size="icon" variant="ghost" className="rounded-md">
+                  {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </Button>
+              </CollapsibleTrigger>
+            </React.Fragment>
+          ) : (
+            <Button type="submit" size="icon" variant="ghost">
+              <PlusIcon />
+            </Button>
+          )}
+        </form>
+      </Form>
       {!addQuestion && (
-        <CollapsibleContent className="pl-4">
+        <CollapsibleContent className="pl-4 mt-1">
           <Answers questionid={id!} />
         </CollapsibleContent>
       )}

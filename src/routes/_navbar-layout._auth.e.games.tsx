@@ -7,13 +7,14 @@ import {
   ResizableHandle,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { gameQuestionsQueryOptions } from '@/hooks/usegamequeries';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useRouterState } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/games')({
-  loader: ({ context: { queryClient } }) =>
-    queryClient.ensureQueryData(gamesQueryOptions),
+  loader: ({ context }) => {
+    console.log('games context', context);
+    return context.queryClient.ensureQueryData(gamesQueryOptions);
+  },
   component: () => <EditorLayout />,
 });
 const EditorLayout = () => {
@@ -34,15 +35,13 @@ const EditorLayout = () => {
         autoSaveId="gamespanels"
         tagName="main"
       >
-        <ResizablePanel defaultSize={25}>
+        <ResizablePanel tagName="section" defaultSize={25}>
           <Games />
         </ResizablePanel>
-        <React.Fragment>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={75}>
-            <Outlet />
-          </ResizablePanel>
-        </React.Fragment>
+        <ResizableHandle withHandle />
+        <ResizablePanel tagName="section" defaultSize={75}>
+          <Outlet />
+        </ResizablePanel>
       </ResizablePanelGroup>
     );
   }

@@ -1,10 +1,16 @@
 import React from 'react';
-import { Session, User, AuthError } from '@supabase/supabase-js';
+import type {
+  Session,
+  User,
+  AuthError,
+  AuthResponse,
+} from '@supabase/supabase-js';
 import useSupabase from '@/hooks/useSupabase';
 
 export interface AuthContext {
   isAuthenticated: boolean;
   checkAuthenticated: () => Promise<boolean>;
+  refresh: () => Promise<AuthResponse>;
   session: Session | null;
   user: User | null;
   login: ({
@@ -96,21 +102,25 @@ export const SupabaseAuthProvider = ({
     });
   }, []);
 
-  const checkAuthenticated = async (): Promise<boolean> => {
+  const checkAuthenticated = React.useCallback(async (): Promise<boolean> => {
     if (!isAuthenticated) {
       const { data, error } = await supabase.auth.refreshSession();
+      console.log('authdata', data);
       if (!data.user) return false;
       setSession(data.session);
       setUser(data.user);
+      setIsAuthenticated(true);
     }
+    console.log('returning true');
     return true;
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         checkAuthenticated,
         isAuthenticated,
+        refresh: () => supabase.auth.refreshSession(),
         session,
         user,
         login,

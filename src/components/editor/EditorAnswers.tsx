@@ -22,13 +22,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Tables } from '@/types/supabase.types';
-import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
+import { TrashIcon, PlusIcon, ArrowLeftIcon } from '@radix-ui/react-icons';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useParams } from '@tanstack/react-router';
+import { useParams, useRouter } from '@tanstack/react-router';
 import { answersByQuestionIdQueryOptions } from '@/hooks/useanswerqueries';
 import { cn } from '@/utils/utils';
 import { WarningDialog } from '@/components/ui/warning';
 import { Waiting } from '@/components/ui/waiting';
+import { getQuestionQueryOptions } from '@/hooks/usequestionqueries';
 
 type AnswerRow = Tables<'answers'>;
 
@@ -63,7 +64,6 @@ const Answer = ({
   };
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
-    console.log('here');
     if (!form.formState.isDirty) return;
     if (add) {
       insertAnswer.mutate({
@@ -84,64 +84,84 @@ const Answer = ({
   };
 
   return (
-    <div className="flex w-full items-center">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleFormSubmit)}
-          onBlur={form.handleSubmit(handleFormSubmit)}
-          className={cn('w-full flex items-center gap-2', add && 'pb-4')}
-        >
-          <FormField
-            control={form.control}
-            name={'answer'}
-            render={({ field }) => (
-              <FormItem
-                className={cn(
-                  'grow',
-                  (add && insertAnswer.isPending) ||
-                    (updateAnswer.isPending && 'animate-pulse'),
-                )}
-              >
-                <FormControl>
-                  <Input variant="list" placeholder="Answer..." {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name={'score'}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    variant="list"
-                    size={2}
-                    maxLength={3}
-                    className=""
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          {!answer ? (
-            <Button size="icon" variant="ghost" type="submit">
-              <PlusIcon />
-            </Button>
-          ) : (
-            <WarningDialog onClick={handleDelete}>
-              <Button
-                size="icon"
-                variant="ghost"
-                disabled={deleteAnswer.isPending}
-              >
-                {deleteAnswer.isPending ? <Waiting /> : <TrashIcon />}
-              </Button>
-            </WarningDialog>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        onBlur={form.handleSubmit(handleFormSubmit)}
+        className={cn('w-full flex items-center gap-2', add && 'pb-4')}
+      >
+        <FormField
+          control={form.control}
+          name={'answer'}
+          render={({ field }) => (
+            <FormItem
+              className={cn(
+                'grow',
+                (add && insertAnswer.isPending) ||
+                  (updateAnswer.isPending && 'animate-pulse'),
+              )}
+            >
+              <FormControl>
+                <Input variant="list" placeholder="Answer..." {...field} />
+              </FormControl>
+            </FormItem>
           )}
-        </form>
-      </Form>
+        />
+        <FormField
+          control={form.control}
+          name={'score'}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  variant="list"
+                  size={2}
+                  maxLength={3}
+                  className=""
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        {!answer ? (
+          <Button size="icon" variant="ghost" type="submit">
+            <PlusIcon />
+          </Button>
+        ) : (
+          <WarningDialog onClick={handleDelete}>
+            <Button
+              size="icon"
+              variant="ghost"
+              disabled={deleteAnswer.isPending}
+            >
+              {deleteAnswer.isPending ? <Waiting /> : <TrashIcon />}
+            </Button>
+          </WarningDialog>
+        )}
+      </form>
+    </Form>
+  );
+};
+
+const HeaderSection = () => {
+  const params = useParams({
+    from: '/_navbar-layout/_auth/e/questions/$questionId',
+  });
+  const {
+    history: { back },
+  } = useRouter();
+  const questionId = params.questionId;
+  const questionQuery = useSuspenseQuery(getQuestionQueryOptions(questionId));
+  const question = questionQuery.data;
+
+  return (
+    <div className="flex justify-between items-center border-b border-b-foreground/10 px-2 py-1">
+      <div>{question?.question}</div>
+
+      <Button variant="outline" size="icon" onClick={() => back()}>
+        <ArrowLeftIcon />
+      </Button>
     </div>
   );
 };
@@ -157,18 +177,21 @@ const Answers = () => {
   const answers = answerQuery.data;
 
   return (
-    <section className="flex flex-col justify-between h-full pt-2 px-2">
-      <ScrollArea className="flex flex-col justify-start h-full">
+    <div className="flex flex-col justify-between h-full gap-2 ">
+      <HeaderSection />
+      <ScrollArea className="flex flex-col justify-start h-full px-2">
         {answers?.map((a) => (
           <Answer key={a.id} questionid={questionId} answer={a} />
         ))}
       </ScrollArea>
-      {answers && answers.length < 8 ? (
-        <Answer questionid={questionId} add />
-      ) : (
-        <div>Only 8 answers</div>
-      )}
-    </section>
+      <div className="px-2">
+        {answers && answers.length < 8 ? (
+          <Answer questionid={questionId} add />
+        ) : (
+          <div>Only 8 answers</div>
+        )}
+      </div>
+    </div>
   );
 };
 

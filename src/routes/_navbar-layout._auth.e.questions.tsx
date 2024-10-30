@@ -1,17 +1,22 @@
+import * as React from 'react';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { questionsQueryOptions } from '@/hooks/usequestionqueries';
+import Questions from '@/components/editor/Questions';
 import {
   ResizablePanel,
   ResizableHandle,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { useRouterState } from '@tanstack/react-router';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import Questions from '@/components/editor/Questions';
+import { useRouterState } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/questions')({
-  loader: ({ context: { queryClient, auth } }) =>
-    queryClient.ensureQueryData(questionsQueryOptions(auth?.user?.id!)),
+  loader: async ({ context: { queryClient, auth } }) => {
+    console.log('questions auth state', auth);
+    return await queryClient.ensureQueryData(
+      questionsQueryOptions(auth?.user?.id!),
+    );
+  },
   component: () => <QuestionsLayout />,
 });
 
@@ -33,11 +38,11 @@ function QuestionsLayout() {
         autoSaveId="questionspanel"
         tagName="main"
       >
-        <ResizablePanel defaultSize={25}>
+        <ResizablePanel tagName="section" defaultSize={25}>
           <Questions />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>
+        <ResizablePanel tagName="section" defaultSize={75}>
           <Outlet />
         </ResizablePanel>
       </ResizablePanelGroup>

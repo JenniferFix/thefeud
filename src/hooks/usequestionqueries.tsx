@@ -5,6 +5,7 @@ import {
   insertQuestion,
   updateQuestion,
   deleteQuestion,
+  getQuestion,
 } from '@/queries/questionqueries';
 import {
   useQuery,
@@ -16,6 +17,13 @@ import { Tables } from '@/types/supabase.types';
 import { getSupabaseBrowserClient } from '@/utils/supabase/client';
 
 const supabase = getSupabaseBrowserClient();
+
+export const getQuestionQueryOptions = (questionid: string) =>
+  queryOptions({
+    queryKey: ['question', questionid],
+    queryFn: async () =>
+      getQuestion(supabase, questionid).then((result) => result?.data),
+  });
 
 export function useGetUsersQuestions(userid: string) {
   const client = useSupabase();

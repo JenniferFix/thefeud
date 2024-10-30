@@ -7,6 +7,7 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 import {
+  getGame,
   getGames,
   getGameQuestions,
   addQuestionToGame,
@@ -18,6 +19,13 @@ import {
 import { getSupabaseBrowserClient } from '@/utils/supabase/client';
 
 const supabase = getSupabaseBrowserClient();
+
+export const getGameQueryOptions = (gameId: string) =>
+  queryOptions({
+    queryKey: ['game', gameId],
+    queryFn: async () =>
+      getGame(supabase, gameId).then((result) => result?.data),
+  });
 
 export function useGetGames() {
   const client = useSupabase();

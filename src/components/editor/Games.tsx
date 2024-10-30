@@ -58,57 +58,55 @@ const Game = ({ game, add }: { game?: TGameRow; add?: boolean }) => {
   };
 
   return (
-    <div className="w-full flex items-center">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          onBlur={form.handleSubmit(handleBlur)}
-          className={cn('w-full flex items-center gap-2', add ? 'pb-3' : '')}
-        >
-          {editing || add ? (
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className={cn('grow', add ? '' : '')}>
-                  <FormControl>
-                    <Input {...field} variant="list" placeholder="Game Name" />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          ) : (
-            <Link
-              to={`/e/games/${game?.id}`}
-              className="w-full flex items-center pl-2"
-              activeProps={{ className: 'font-bold' }}
-            >
-              {game?.name}
-            </Link>
-          )}
-          {!add ? (
-            <div className="flex items-center">
-              <Button size="icon" variant="ghost" onClick={handleEditing}>
-                <Pencil1Icon />
-              </Button>
-              <WarningDialog onClick={handleDelete}>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  disabled={deleteGame.isPending}
-                >
-                  {deleteGame.isPending ? <Waiting /> : <TrashIcon />}
-                </Button>
-              </WarningDialog>
-            </div>
-          ) : (
-            <Button type="submit" variant="ghost" size="icon">
-              <PlusIcon />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        onBlur={form.handleSubmit(handleBlur)}
+        className={cn('w-full flex items-center gap-1', add ? 'pb-3' : '')}
+      >
+        {editing || add ? (
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className={cn('grow', add ? '' : '')}>
+                <FormControl>
+                  <Input {...field} variant="list" placeholder="Game Name" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        ) : (
+          <Link
+            to={`/e/games/${game?.id}`}
+            className="w-full flex items-center pl-2"
+            activeProps={{ className: 'font-bold' }}
+          >
+            {game?.name}
+          </Link>
+        )}
+        {!add ? (
+          <div className="flex items-center">
+            <Button size="icon" variant="ghost" onClick={handleEditing}>
+              <Pencil1Icon />
             </Button>
-          )}
-        </form>
-      </Form>
-    </div>
+            <WarningDialog onClick={handleDelete}>
+              <Button
+                size="icon"
+                variant="ghost"
+                disabled={deleteGame.isPending}
+              >
+                {deleteGame.isPending ? <Waiting /> : <TrashIcon />}
+              </Button>
+            </WarningDialog>
+          </div>
+        ) : (
+          <Button type="submit" variant="ghost" size="icon">
+            <PlusIcon />
+          </Button>
+        )}
+      </form>
+    </Form>
   );
 };
 
@@ -117,12 +115,12 @@ const Games = () => {
   const games = gamesQuery.data;
 
   return (
-    <section className="flex flex-col justify-between h-full w-full gap-2 pt-3 px-2">
+    <div className="flex flex-col justify-between h-full w-full gap-2 pt-3 px-2">
       <ScrollArea className="flex flex-col justify-start h-full">
         {games?.map((g) => <Game key={g.id} game={g} />)}
       </ScrollArea>
       <Game add />
-    </section>
+    </div>
   );
 };
 export default Games;

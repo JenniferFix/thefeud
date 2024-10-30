@@ -1,9 +1,9 @@
-import React from 'react';
-import { createFileRoute, Outlet, Link } from '@tanstack/react-router';
+import React from 'react'
+import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e')({
   component: () => <EditorLayout />,
-});
+})
 
 function EditorLayout() {
   return (
@@ -26,5 +26,5 @@ function EditorLayout() {
       </div>
       <Outlet />
     </React.Fragment>
-  );
+  )
 }
