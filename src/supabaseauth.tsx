@@ -103,9 +103,9 @@ export const SupabaseAuthProvider = ({
   }, []);
 
   const checkAuthenticated = React.useCallback(async (): Promise<boolean> => {
+    console.log('checkisAuthenticated', isAuthenticated);
     if (!isAuthenticated) {
       const { data, error } = await supabase.auth.refreshSession();
-      console.log('authdata', data);
       if (!data.user) return false;
       setSession(data.session);
       setUser(data.user);
