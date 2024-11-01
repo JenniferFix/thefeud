@@ -12,7 +12,6 @@ import { useRouterState } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/games')({
   loader: ({ context }) => {
-    console.log('games context', context);
     return context.queryClient.ensureQueryData(gamesQueryOptions);
   },
   component: () => <EditorLayout />,

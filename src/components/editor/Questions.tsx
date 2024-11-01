@@ -133,7 +133,6 @@ const Question = ({
 
 const Questions = () => {
   const auth = useSupabaseAuth();
-  console.log('auth', auth);
   const questionsQuery = useSuspenseQuery(
     questionsQueryOptions(auth.user?.id!),
   );

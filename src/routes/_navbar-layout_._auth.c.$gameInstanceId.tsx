@@ -9,10 +9,11 @@ export const Route = createFileRoute('/_navbar-layout/_auth/c/$gameInstanceId')(
       context: { queryClient },
       params: { gameInstanceId },
     }) => {
-      const _instanceGame = queryClient.ensureQueryData(
-        getInstanceGameQueryOptions(gameInstanceId),
-      );
-      const [instanceGame] = await Promise.all([_instanceGame]);
+      const [instanceGame] = await Promise.all([
+        queryClient.ensureQueryData(
+          getInstanceGameQueryOptions(gameInstanceId),
+        ),
+      ]);
       return { instanceGame };
     },
     component: ControlComponent,
