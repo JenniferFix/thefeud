@@ -10,7 +10,6 @@ import useSupabase from '@/hooks/useSupabase';
 export interface AuthContext {
   isAuthenticated: boolean;
   checkAuthenticated: () => Promise<boolean>;
-  refresh: () => Promise<AuthResponse>;
   session: Session | null;
   user: User | null;
   login: ({
@@ -45,24 +44,30 @@ export const SupabaseAuthProvider = ({
   const [isLogoutError, setIsLogoutError] = React.useState<boolean>(false);
   const [error, setError] = React.useState<AuthError | null>(null);
 
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-    return () => subscription.unsubscribe();
+  const initializeAuth = React.useCallback(async () => {
+    const { data } = await supabase.auth.refreshSession();
+    if (data.session) {
+      setIsAuthenticated(Boolean(data.session));
+      setSession(data.session);
+      setUser(data.user);
+    }
   }, []);
 
   React.useEffect(() => {
-    setIsAuthenticated(Boolean(session));
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+    initializeAuth();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      supabase.auth.getUser().then(({ data }) => {
+        setIsAuthenticated(Boolean(session));
+        setSession(session);
+        setUser(data.user);
+      });
+
+      setSession(session);
     });
-  }, [session]);
+    return () => subscription.unsubscribe();
+  }, [initializeAuth]);
 
   const login = React.useCallback(
     async ({ email, password }: { email: string; password: string }) => {
@@ -103,7 +108,6 @@ export const SupabaseAuthProvider = ({
   }, []);
 
   const checkAuthenticated = React.useCallback(async (): Promise<boolean> => {
-    console.log('checkisAuthenticated', isAuthenticated);
     if (!isAuthenticated) {
       const { data, error } = await supabase.auth.refreshSession();
       if (!data.user) return false;
@@ -111,7 +115,6 @@ export const SupabaseAuthProvider = ({
       setUser(data.user);
       setIsAuthenticated(true);
     }
-    console.log('returning true');
     return true;
   }, []);
 
@@ -120,7 +123,6 @@ export const SupabaseAuthProvider = ({
       value={{
         checkAuthenticated,
         isAuthenticated,
-        refresh: () => supabase.auth.refreshSession(),
         session,
         user,
         login,

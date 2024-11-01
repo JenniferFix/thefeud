@@ -12,10 +12,11 @@ import { useRouterState } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/questions')({
   loader: async ({ context: { queryClient, auth } }) => {
-    console.log('questions auth state', auth);
-    return await queryClient.ensureQueryData(
-      questionsQueryOptions(auth?.user?.id!),
-    );
+    // TODO: Fix the problem with not having the user.id on the first render
+    // (hence no data query possible here)
+    // return await queryClient.ensureQueryData(
+    //   questionsQueryOptions(auth?.user?.id!),
+    // );
   },
   component: () => <QuestionsLayout />,
 });
