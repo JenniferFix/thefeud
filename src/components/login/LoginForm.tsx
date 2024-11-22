@@ -40,6 +40,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const navigate = useNavigate();
   const auth = useSupabaseAuth();
+  console.log(redirect);
 
   React.useEffect(() => {
     if (auth.isLoginError) {
