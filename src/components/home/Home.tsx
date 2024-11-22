@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@tanstack/react-router';
 import StartGame from '@/components/gamecontrol/SelectAndStart';
-import ActiveGames from '@/components/home/ActiveGames';
+import ActiveGames from '@/components/ActiveGames';
 import { animated, useSpring } from '@react-spring/web';
 import { useSupabaseAuth } from '@/supabaseauth';
 
