@@ -11,6 +11,7 @@ import {
   getGameInstance,
   createGameInstance,
   getInstanceGame,
+  getUserInstances,
   getActiveInstances,
 } from '@/queries/instancequeries';
 import { getSupabaseBrowserClient } from '@/utils/supabase/client';
@@ -54,7 +55,7 @@ export function useDeleteGameInstance() {
 
 export function useGetInstanceGame(instanceId: string) {
   const client = useSupabase();
-  const queryKey = ['gameInstanceGame', instanceId];
+  const queryKey = ['gameInstancegame', instanceId];
   const queryFn = async () => {
     return getInstanceGame(client, instanceId).then((result) => result?.data);
   };
@@ -82,3 +83,19 @@ export const getActiveInstancesQueryOptions = queryOptions({
   queryFn: async () =>
     getActiveInstances(supabase).then((result) => result?.data),
 });
+
+export function useGetUserInstances(userId: string) {
+  const client = useSupabase();
+  const queryKey = ['activeinstances'];
+  const queryFn = async () => {
+    return getUserInstances(client, userId).then((result) => result?.data);
+  };
+  return useQuery({ queryKey, queryFn });
+}
+
+export const getUserInstancesQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ['activeinstances'],
+    queryFn: async () =>
+      getUserInstances(supabase, userId).then((result) => result?.data),
+  });

@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/header/ThemeToggle';
-import { Link, useNavigate } from '@tanstack/react-router';
+import {
+  Link,
+  type LinkProps,
+  useNavigate,
+  linkOptions,
+} from '@tanstack/react-router';
 import {
   Sheet,
   SheetTrigger,
@@ -13,6 +18,23 @@ import {
 import { MenuIcon } from 'lucide-react';
 import { useSupabaseAuth } from '@/supabaseauth';
 import { cn } from '@/utils/utils';
+import NavLink from '@/components/NavLink';
+import { routeTree, FileRouteTypes, FileRoutesById } from '@/routeTree.gen';
+
+const links = [
+  linkOptions({
+    label: 'Home',
+    to: '/',
+  }),
+  linkOptions({
+    label: 'Editor',
+    to: '/e',
+  }),
+  linkOptions({
+    label: 'Play',
+    to: '/c',
+  }),
+];
 
 const LoginButton = ({
   closeCallback,
@@ -35,8 +57,8 @@ const LoginButton = ({
     return (
       <div
         className={cn(
-          'flex items-center hover:bg-accent/50 py-2',
-          mobile ? 'border-b pl-2' : 'py-4 px-4 border-x',
+          'flex items-center hover:bg-accent/50',
+          mobile ? 'border-b pl-2' : 'border-x',
         )}
         onClick={() => {
           handleLogoutClick();
@@ -50,7 +72,7 @@ const LoginButton = ({
     return (
       <Link
         href="/login"
-        className="flex items-center hover:underline hover:bg-accent/50 p-4 border-x"
+        className="flex items-center hover:underline hover:bg-accent/50 border-x"
         onClick={() => closeCallback && closeCallback()}
       >
         Login
@@ -80,30 +102,17 @@ const Navbar = () => {
             <SheetDescription hidden>Application Menu</SheetDescription>
             <nav>
               <ul className="flex flex-col justify-start">
-                <Link
-                  to="/"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
-                  activeProps={{ className: 'bg-active' }}
-                  onClick={closeSidebar}
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/e"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
-                  activeProps={{ className: 'bg-accent' }}
-                  onClick={closeSidebar}
-                >
-                  Editor
-                </Link>
-                <Link
-                  to="/active"
-                  className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
-                  activeProps={{ className: 'bg-accent' }}
-                  onClick={closeSidebar}
-                >
-                  Active Games
-                </Link>
+                {links.map((link) => (
+                  <Link
+                    key={'moblink' + link.to}
+                    to={link.to}
+                    className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
+                    activeProps={{ className: 'bg-active' }}
+                    onClick={closeSidebar}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
                 <LoginButton closeCallback={closeSidebar} mobile />
               </ul>
             </nav>
@@ -111,23 +120,14 @@ const Navbar = () => {
         </SheetContent>
       </Sheet>
       <div className="hidden md:flex">
-        <Link
-          to="/"
-          className="flex items-center border-e p-4 hover:bg-accent/75"
-          activeProps={{ className: 'bg-accent' }}
-        >
-          Home
-        </Link>
-        <Link
-          to="/e"
-          className="flex items-center border-e p-4 hover:bg-accent/75"
-          activeProps={{ className: 'bg-accent' }}
-        >
-          Editor
-        </Link>
+        {links.map((link) => (
+          <NavLink key={'link' + link.to} {...link}>
+            {link.label}
+          </NavLink>
+        ))}
       </div>
       <div className="flex">
-        <div className="hidden md:flex align-middle">
+        <div className="hidden md:flex">
           <LoginButton />
         </div>
         <ThemeToggle />

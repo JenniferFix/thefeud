@@ -8,14 +8,13 @@ const ContinueActiveGame = () => {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>{error.message}</div>;
   if (!data) return <div>data error</div>;
+  console.log(data);
   return (
-    <div>
-      <ScrollArea>
-        {data.games.map((i) => (
-          <div></div>
-        ))}
-      </ScrollArea>
-    </div>
+    <ScrollArea>
+      {data.map((i) => (
+        <div key={i.id}>{i.games?.name}</div>
+      ))}
+    </ScrollArea>
   );
 };
 

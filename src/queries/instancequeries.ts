@@ -63,5 +63,11 @@ export function getActiveInstances(client: TypedSupabaseClient) {
     .gt('created_at', prevTime.toISOString())
     .throwOnError();
 }
+export function getUserInstances(client: TypedSupabaseClient, userId: string) {
+  return client
+    .from('game_instance')
+    .select('id, created_at, userid, games(id,name)')
+    .throwOnError();
+}
 
 export type TInstance = QueryData<ReturnType<typeof getInstanceGame>>;

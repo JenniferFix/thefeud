@@ -13,7 +13,7 @@ export default function ThemeToggle() {
   const { setTheme } = useTheme();
 
   return (
-    <div className="flex items-center py-2 px-4">
+    <div className="flex items-center px-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
