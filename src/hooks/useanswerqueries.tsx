@@ -1,6 +1,11 @@
 'use client';
 import useSupabase from '@/hooks/useSupabase';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from '@tanstack/react-query';
 import {
   getAnswersByQuestionId,
   updateAnswer,
@@ -8,6 +13,9 @@ import {
   deleteAnswer,
 } from '@/queries/answerqueries';
 import type { Database, Tables } from '@/types/supabase.types';
+import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+const supabase = getSupabaseBrowserClient();
 
 export function useGetAnswersByQuestionId(questionid: string) {
   const client = useSupabase();
@@ -21,6 +29,15 @@ export function useGetAnswersByQuestionId(questionid: string) {
 
   return useQuery({ queryKey, queryFn });
 }
+
+export const answersByQuestionIdQueryOptions = (questionId: string) =>
+  queryOptions({
+    queryKey: ['answers', questionId],
+    queryFn: async () =>
+      getAnswersByQuestionId(supabase, questionId).then(
+        (result) => result.data,
+      ),
+  });
 
 export function useUpdateAnswerMutation() {
   const client = useSupabase();
@@ -63,7 +80,7 @@ export function useInsertAnswer() {
 export function useDeleteAnswer() {
   const client = useSupabase();
   const queryClient = useQueryClient();
-  const mutationFn = async (id: string) => {
+  const mutationFn = async ({ id }: { id: string }) => {
     return deleteAnswer(client, id).then((result) => result?.data);
   };
   const onSuccess = () => {

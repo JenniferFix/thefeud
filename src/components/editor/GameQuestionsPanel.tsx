@@ -1,44 +1,59 @@
 import React from 'react';
-import { ToggleGroup } from '../ui/toggle-group';
-import { useGetGameQuestions } from '@/hooks/usegamequeries';
-import { type TGameQuestions } from '@/queries/gamequeries';
-import { useEditorStore } from '@/store';
 import Question from './Question';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import {
+  gameQuestionsQueryOptions,
+  getGameQueryOptions,
+} from '@/hooks/usegamequeries';
+import { useParams } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import AddQuestionToGameDialog from './AddQuestionToGameDialog';
+import { useNavigate, useRouter } from '@tanstack/react-router';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
-const Questions = ({ gameId }: { gameId: string }) => {
-  const { isError, data, error, isLoading } = useGetGameQuestions(gameId);
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-  if (!data) return <div>No Data</div>;
-  const typedData: TGameQuestions = data;
-
-  return typedData.questions.map((q) => (
-    <Question key={q.id} id={q.id} text={q.question ?? ''} />
-  ));
+const HeaderSection = ({ gameId }: { gameId: string }) => {
+  const params = useParams({ from: '/_navbar-layout/_auth/e/games/$gameId' });
+  const {
+    history: { back },
+  } = useRouter();
+  const gameQuery = useSuspenseQuery(getGameQueryOptions(params.gameId));
+  const gameData = gameQuery.data;
+  return (
+    <div className="flex items-center justify-between border-b border-b-foreground/10 px-2 py-1">
+      <div>{gameData?.name}</div>
+      <Button variant="outline" size="icon" onClick={() => back()}>
+        <ArrowLeftIcon />
+      </Button>
+    </div>
+  );
 };
 
 const QuestionsPanel = () => {
-  const selectedGame = useEditorStore((state) => state.editorSelectedGame);
-  const selectedGameQuestion = useEditorStore(
-    (state) => state.editorSelectedGameQuestion,
+  const params = useParams({ from: '/_navbar-layout/_auth/e/games/$gameId' });
+  const gameQuestionsQuery = useSuspenseQuery(
+    gameQuestionsQueryOptions(params.gameId),
   );
-  const updateSelectedGameQuestion = useEditorStore(
-    (state) => state.updateEditorSelectedGameQuestion,
-  );
+  const gameQuestions = gameQuestionsQuery.data;
+
+  if (!gameQuestions) return <div>nothing here</div>;
   return (
-    <div className="flex flex-col justify-apart h-full w-full p-1">
-      {selectedGame !== '' ? (
-        <ToggleGroup
-          type="single"
-          className="h-full items-start justify-start w-full flex flex-col"
-          value={selectedGameQuestion}
-          onValueChange={(value) => updateSelectedGameQuestion(value)}
-        >
-          <Questions gameId={selectedGame} />
-        </ToggleGroup>
-      ) : (
-        <div>Nothing Selected</div>
-      )}
+    <div className="flex flex-col h-full w-full gap-2">
+      <HeaderSection gameId={params.gameId} />
+      <ScrollArea className="flex flex-col min-h-0 grow px-2">
+        {gameQuestions.questions.map((q) => (
+          <Question
+            key={q.id}
+            id={q.id}
+            text={q.question ?? ''}
+            editable={false}
+            showAnswers={false}
+          />
+        ))}
+      </ScrollArea>
+      <div className="px-2 pb-3">
+        <AddQuestionToGameDialog gameid={params.gameId} />
+      </div>
     </div>
   );
 };

@@ -21,11 +21,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import useSupabase from '@/hooks/useSupabase';
-import { useAuthStore } from '@/store';
 import { cn } from '@/utils/utils';
-import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
+import { useSupabaseAuth } from '@/supabaseauth';
+import { useNavigate } from '@tanstack/react-router';
+import { Waiting } from '@/components/ui/waiting';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -36,12 +36,20 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const LoginForm = () => {
-  const supabase = useSupabase();
-  const setSession = useAuthStore((state) => state.updateSession);
-  const [isLoggingIn, setIsLoggingIn] = React.useState(false);
+const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const navigate = useNavigate();
+  const auth = useSupabaseAuth();
+
+  React.useEffect(() => {
+    if (auth.isLoginError) {
+      toast(auth.error?.message);
+    }
+  }, [auth.isLoginError, auth.error]);
+
+  React.useEffect(() => {
+    if (auth.isAuthenticated) navigate({ to: '/' });
+  }, [auth.isAuthenticated]);
 
   const loginForm = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -60,24 +68,16 @@ const LoginForm = () => {
   });
 
   const onLoginSubmit = (data: FormValues) => {
-    setIsLoggingIn(true);
-    supabase.auth
-      .signInWithPassword({ email: data.email, password: data.password })
-      .then(({ data, error }) => {
-        if (!error) {
-          setSession(data.session);
-          setIsLoggingIn(false);
-          navigate({ to: '/' });
-        } else {
-          setIsLoggingIn(false);
-          if (error.code === 'invalid_credentials') {
-            toast('Invalid Credentials');
-          }
-        }
-      });
+    const { email, password } = data;
+    auth.login({ email, password }).then(() => {
+      if (redirect) {
+        navigate({ to: redirect });
+      }
+    });
   };
 
   const onCreateAccountSubmit = (data: FormValues) => {
+    // TODO: Implement this
     console.log('Account creation submitted with:', data);
   };
 
@@ -85,7 +85,7 @@ const LoginForm = () => {
     <Form {...loginForm}>
       <form
         onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-        className="space-y-4"
+        className="space-y-4 z-60 max-w-screen-sm m-auto"
       >
         <FormField
           control={loginForm.control}
@@ -114,12 +114,8 @@ const LoginForm = () => {
           )}
         />
         <div className="flex space-x-2">
-          <Button type="submit" className="flex-1" disabled={isLoggingIn}>
-            {isLoggingIn ? (
-              <Loader2 className={cn('mr-2 h-4 w-4 animate-spin')} />
-            ) : (
-              'Login'
-            )}
+          <Button type="submit" className="flex-1" disabled={auth.isLoggingIn}>
+            {auth.isLoggingIn ? <Waiting /> : 'Login'}
           </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>

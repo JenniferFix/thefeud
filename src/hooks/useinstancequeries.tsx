@@ -1,13 +1,22 @@
 'use client';
 import useSupabase from '@/hooks/useSupabase';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  queryOptions,
+} from '@tanstack/react-query';
 import {
   deleteGameInstance,
   getGameInstance,
   createGameInstance,
   getInstanceGame,
+  getUserInstances,
   getActiveInstances,
 } from '@/queries/instancequeries';
+import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+const supabase = getSupabaseBrowserClient();
 
 export function useCreateGameInstance() {
   const client = useSupabase();
@@ -46,18 +55,47 @@ export function useDeleteGameInstance() {
 
 export function useGetInstanceGame(instanceId: string) {
   const client = useSupabase();
-  const queryKey = ['gameInstanceGame', instanceId];
+  const queryKey = ['gameInstancegame', instanceId];
   const queryFn = async () => {
     return getInstanceGame(client, instanceId).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }
 
+export const getInstanceGameQueryOptions = (instanceId: string) =>
+  queryOptions({
+    queryKey: ['gameinstancegame', instanceId],
+    queryFn: async () =>
+      getInstanceGame(supabase, instanceId).then((result) => result?.data),
+  });
+
 export function useGetActiveInstances() {
   const client = useSupabase();
-  const queryKey = ['gameInstances'];
+  const queryKey = ['activeinstances'];
   const queryFn = async () => {
     return getActiveInstances(client).then((result) => result?.data);
   };
   return useQuery({ queryKey, queryFn });
 }
+
+export const getActiveInstancesQueryOptions = queryOptions({
+  queryKey: ['activeinstances'],
+  queryFn: async () =>
+    getActiveInstances(supabase).then((result) => result?.data),
+});
+
+export function useGetUserInstances(userId: string) {
+  const client = useSupabase();
+  const queryKey = ['activeinstances'];
+  const queryFn = async () => {
+    return getUserInstances(client, userId).then((result) => result?.data);
+  };
+  return useQuery({ queryKey, queryFn });
+}
+
+export const getUserInstancesQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ['activeinstances'],
+    queryFn: async () =>
+      getUserInstances(supabase, userId).then((result) => result?.data),
+  });

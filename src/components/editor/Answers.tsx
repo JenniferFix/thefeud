@@ -22,6 +22,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Tables } from '@/types/supabase.types';
 import { TrashIcon, PlusIcon } from '@radix-ui/react-icons';
+import { WarningDialog } from '@/components/ui/warning';
+import { Waiting } from '@/components/ui/waiting';
+import { deleteQuestion } from '@/queries/questionqueries';
 
 type AnswerRow = Tables<'answers'>;
 
@@ -51,11 +54,8 @@ const Answer = ({
     },
   });
 
-  const { register } = form;
-
-  const handleDelete = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
-    deleteAnswer.mutate(id);
+  const handleDelete = (id: string) => {
+    deleteAnswer.mutate({ id });
   };
 
   const handleFormSubmit = (values: z.infer<typeof answerSchema>) => {
@@ -78,55 +78,49 @@ const Answer = ({
     form.reset();
   };
 
-  const AddForm = ({ children }: { children: React.ReactNode }) => {
-    <form>{children}</form>;
-  };
-
   return (
-    <div className="flex w-full">
-      <Form {...form}>
-        <form
-          className="w-full"
-          onSubmit={form.handleSubmit(handleFormSubmit)}
-          onBlur={form.handleSubmit(handleFormSubmit)}
-        >
-          <div className="flex w-full">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        onBlur={form.handleSubmit(handleFormSubmit)}
+        className="flex w-full gap-1"
+      >
+        <FormItem className="grow">
+          <FormControl>
             <FormField
               control={form.control}
               name={'answer'}
               render={({ field }) => (
-                <Input
-                  className="m-1 w-full"
-                  placeholder="Answer..."
-                  {...field}
-                />
+                <Input variant="list" placeholder="Answer..." {...field} />
               )}
             />
+          </FormControl>
+        </FormItem>
+        <FormItem>
+          <FormControl>
             <FormField
               control={form.control}
               name={'score'}
               render={({ field }) => (
-                <Input maxLength={3} className="m-1 w-14" {...field} />
+                <Input variant="list" maxLength={3} size={2} {...field} />
               )}
             />
-            {!answer && (
-              <Button size="icon" variant="ghost" type="submit">
-                <PlusIcon />
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
-      {answer && (
-        <Button
-          size="icon"
-          onClick={(e) => handleDelete(e, answer.id)}
-          variant="ghost"
-        >
-          <TrashIcon />
-        </Button>
-      )}
-    </div>
+          </FormControl>
+        </FormItem>
+        {!answer && (
+          <Button size="icon" variant="ghost" type="submit">
+            <PlusIcon />
+          </Button>
+        )}
+        {answer && (
+          <WarningDialog onClick={() => handleDelete(answer.id)}>
+            <Button size="icon" variant="ghost">
+              {deleteAnswer.isPending ? <Waiting /> : <TrashIcon />}
+            </Button>
+          </WarningDialog>
+        )}
+      </form>
+    </Form>
   );
 };
 
@@ -137,7 +131,7 @@ const Answers = ({ questionid }: { questionid: string }) => {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
+    <React.Fragment>
       {data?.map((a) => (
         <Answer
           key={a.id}
@@ -147,7 +141,7 @@ const Answers = ({ questionid }: { questionid: string }) => {
         />
       ))}
       {data && data.length < 8 && <Answer questionid={questionid} addAnswer />}
-    </div>
+    </React.Fragment>
   );
 };
 

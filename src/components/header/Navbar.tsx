@@ -1,8 +1,12 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/header/ThemeToggle';
-import { Link, useNavigate } from '@tanstack/react-router';
-import LoginHeader from '@/components/header/LoginHeader';
+import {
+  Link,
+  type LinkProps,
+  useNavigate,
+  linkOptions,
+} from '@tanstack/react-router';
 import {
   Sheet,
   SheetTrigger,
@@ -11,48 +15,71 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuLink,
-} from '@/components/ui/navigation-menu';
 import { MenuIcon } from 'lucide-react';
-import useSupabase from '@/hooks/useSupabase';
-import { useAuthStore } from '@/store';
+import { useSupabaseAuth } from '@/supabaseauth';
+import { cn } from '@/utils/utils';
+import NavLink from '@/components/NavLink';
+import { routeTree, FileRouteTypes, FileRoutesById } from '@/routeTree.gen';
 
-const LoginButton = ({ closeCallback }: { closeCallback: Function }) => {
-  const supabase = useSupabase();
-  const session = useAuthStore((state) => state.session);
-  // const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
+const links = [
+  linkOptions({
+    label: 'Home',
+    to: '/',
+  }),
+  linkOptions({
+    label: 'Editor',
+    to: '/e',
+  }),
+  linkOptions({
+    label: 'Play',
+    to: '/c',
+  }),
+];
+
+const LoginButton = ({
+  closeCallback,
+  mobile = false,
+  className = '',
+}: {
+  closeCallback?: Function;
+  mobile?: boolean;
+  className?: string;
+}) => {
+  const auth = useSupabaseAuth();
 
   const handleLogoutClick = () => {
-    supabase.auth.signOut().then(() => {
-      closeCallback();
-      navigate({ to: '/' });
-    });
+    auth.logout();
+    // supabase.auth.signOut().then(() => {
+    //   closeCallback();
+    //   navigate({ to: '/' });
+    // });
   };
 
-  if (session) {
+  if (auth.isAuthenticated) {
     return (
-      <Button
-        variant="link"
-        className="text-lg pl-0 justify-start"
-        onClick={handleLogoutClick}
+      <div
+        className={cn(
+          'flex items-center hover:bg-accent/75 px-4',
+          mobile ? 'border-b pl-2' : 'border-x',
+          className,
+        )}
+        onClick={() => {
+          handleLogoutClick();
+          closeCallback && closeCallback();
+        }}
       >
         Logout
-      </Button>
+      </div>
     );
   } else {
     return (
-      <Button
-        variant="link"
-        className="text-lg pl-0 justify-start"
-        onClick={() => closeCallback()}
-        asChild
+      <Link
+        href="/login"
+        className="flex items-center hover:underline hover:bg-accent/50 border-x"
+        onClick={() => closeCallback && closeCallback()}
       >
-        <Link href="/login">Login</Link>
-      </Button>
+        Login
+      </Link>
     );
   }
 };
@@ -65,10 +92,10 @@ const Navbar = () => {
   };
 
   return (
-    <header className="w-full p-1 flex justify-between">
+    <header className="w-full flex justify-between border-b border-b-foreground/10 items-center">
       <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
         <SheetTrigger asChild>
-          <Button size="icon" variant="ghost" className="lg:hidden">
+          <Button size="icon" variant="ghost" className="md:hidden ml-2">
             <MenuIcon />
           </Button>
         </SheetTrigger>
@@ -78,55 +105,32 @@ const Navbar = () => {
             <SheetDescription hidden>Application Menu</SheetDescription>
             <nav>
               <ul className="flex flex-col justify-start">
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link href="/">Home</Link>
-                </Button>
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link href="/e" className="">
-                    Editor
+                {links.map((link) => (
+                  <Link
+                    key={'moblink' + link.to}
+                    to={link.to}
+                    className="flex justify-start border-b py-2 pl-2 hover:bg-accent/75"
+                    activeProps={{ className: 'bg-active' }}
+                    onClick={closeSidebar}
+                  >
+                    {link.label}
                   </Link>
-                </Button>
-                <Button
-                  variant="link"
-                  className="text-lg pl-0 justify-start"
-                  onClick={closeSidebar}
-                >
-                  <Link href="/active" className="">
-                    Active Games
-                  </Link>
-                </Button>
-                <LoginButton closeCallback={closeSidebar} />
+                ))}
+                <LoginButton closeCallback={closeSidebar} mobile />
               </ul>
             </nav>
           </SheetHeader>
         </SheetContent>
       </Sheet>
-      <NavigationMenu className="hidden lg:flex">
-        <NavigationMenuList>
-          <NavigationMenuLink asChild>
-            <Button variant="link" size="lg" asChild>
-              <Link href="/">Home</Link>
-            </Button>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
-            <Button variant="link" size="default" asChild>
-              <Link href="/e">Editor</Link>
-            </Button>
-          </NavigationMenuLink>
-        </NavigationMenuList>
-      </NavigationMenu>
-      <div className="flex gap-4">
-        <div className="hidden lg:block">
-          <LoginHeader />
-        </div>
+      <div className="hidden md:flex">
+        {links.map((link) => (
+          <NavLink key={'link' + link.to} {...link}>
+            {link.label}
+          </NavLink>
+        ))}
+      </div>
+      <div className="flex">
+        <LoginButton className="hidden md:flex" />
         <ThemeToggle />
       </div>
     </header>

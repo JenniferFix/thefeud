@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { redirect } from '@tanstack/react-router';
+import { redirect, useNavigate } from '@tanstack/react-router';
 import { useGetGames } from '@/hooks/usegamequeries';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { cn } from '@/utils/utils';
 import { useCreateGameInstance } from '@/hooks/useinstancequeries';
 
 const SelectAndStart = () => {
+  const navigate = useNavigate();
   const { data, isError, isLoading, error } = useGetGames();
   const [selectedGame, setSelectedGame] = React.useState<string | null>(null);
   const createGameInstance = useCreateGameInstance();
@@ -25,10 +26,17 @@ const SelectAndStart = () => {
     if (instanceData) redirect({ to: `/c/${instanceData[0].id}` });
   }
 
-  const handleStartGame = (e: React.MouseEvent<HTMLElement>) => {
+  const handleStartGame = async (e: React.MouseEvent<HTMLElement>) => {
     if (!selectedGame) return;
     e.preventDefault();
-    createGameInstance.mutate({ gameId: selectedGame });
+    const newGame = await createGameInstance.mutateAsync({
+      gameId: selectedGame,
+    });
+    if (newGame) {
+      navigate({
+        to: `/c/${newGame[0].id}`,
+      });
+    }
   };
 
   return (

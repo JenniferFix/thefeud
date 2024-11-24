@@ -1,8 +1,21 @@
 import { TypedSupabaseClient } from '@/utils/supabase/client';
 // import type { Database } from '@/types/supabase.types';
 
-export function getUsersQuestions(client: TypedSupabaseClient) {
-  return client.from('questions').select('*');
+export function getQuestion(client: TypedSupabaseClient, questionid: string) {
+  return client
+    .from('questions')
+    .select('*')
+    .eq('id', questionid)
+    .single()
+    .throwOnError();
+}
+
+export function getUsersQuestions(client: TypedSupabaseClient, userid: string) {
+  return client
+    .from('questions')
+    .select('*')
+    .eq('user_id', userid)
+    .throwOnError();
 }
 
 export function getQuestionFromId(

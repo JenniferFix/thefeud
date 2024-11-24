@@ -56,11 +56,19 @@ export function getActiveInstances(client: TypedSupabaseClient) {
   // get the instance id's of those
   // dedupe and get the actual instances
   const prevTime = new Date();
-  prevTime.setHours(prevTime.getHours() - 2);
+  prevTime.setDate(prevTime.getDate() - 2);
   return client
     .from('game_instance')
     .select('id, created_at, userid, games(id,name)')
     .gt('created_at', prevTime.toISOString())
+    .order('created_at', { ascending: false })
+    .throwOnError();
+}
+export function getUserInstances(client: TypedSupabaseClient, userId: string) {
+  return client
+    .from('game_instance')
+    .select('id, created_at, userid, games(id,name)')
+    .order('created_at', { ascending: false })
     .throwOnError();
 }
 
