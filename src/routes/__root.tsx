@@ -19,7 +19,7 @@ function RootComponent() {
   return (
     <React.Fragment>
       <Outlet />
-      <Devtools />
+      {/* <Devtools /> */}
       <Toaster />
     </React.Fragment>
   );

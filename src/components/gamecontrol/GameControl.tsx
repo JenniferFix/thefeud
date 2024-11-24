@@ -29,49 +29,7 @@ import { GameActions } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 import useFeudEvents from '@/hooks/useFeudEvents';
 import { Outlet } from '@tanstack/react-router';
-
-const AnswerButtons = ({
-  instanceId,
-  activeTeam,
-  questionId,
-}: {
-  instanceId: string;
-  activeTeam: number | null | undefined;
-  questionId: string;
-}) => {
-  const insertEvent = useInsertEvent(instanceId);
-  const { data, isLoading, isError, error } =
-    useGetAnswersByQuestionId(questionId);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-
-  return (
-    <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full">
-      {data?.map((item) => (
-        <Button
-          key={'actionbutton' + item.id}
-          onClick={() =>
-            insertEvent.mutate({
-              instanceid: instanceId,
-              team: activeTeam,
-              answerid: item.id,
-              eventid: GameActions.CorrectAnswer,
-              points: item.score,
-            })
-          }
-        >
-          {item.answer}
-        </Button>
-      ))}
-
-      {data &&
-        Array.from({ length: 8 - data?.length }, (_e, i) => (
-          <Button key={'extrabtn' + i} disabled={true}></Button>
-        ))}
-    </div>
-  );
-};
+import { useNavigate } from '@tanstack/react-router';
 
 const GameControl = ({
   instanceId,
@@ -86,6 +44,7 @@ const GameControl = ({
   );
   const { data, isLoading, isError, error } = useGetGameQuestions(gameId);
   const supabaseClient = useSupabase();
+  const navigate = useNavigate();
   const thisGameActions = supabaseClient.channel(instanceId);
 
   const {
@@ -117,6 +76,7 @@ const GameControl = ({
       instanceid: instanceId,
       team: activeTeam,
     });
+    navigate({ to: `/c/${instanceId}` });
   };
 
   const handleSendSound = (sound: string) => {
@@ -145,31 +105,7 @@ const GameControl = ({
         <Score score={rightTeamScore} />
       </div>
       <div className="grow">
-        {/* <div> */}
-        {/*   <Select value={currentQuestion} onValueChange={handleQuestionChange}> */}
-        {/*     <SelectTrigger> */}
-        {/*       <SelectValue placeholder="Select Question" /> */}
-        {/*     </SelectTrigger> */}
-        {/*     <SelectContent> */}
-        {/*       {typedData?.questions!.map((question) => ( */}
-        {/*         <SelectItem value={question.id} key={question.id}> */}
-        {/*           {question.question} */}
-        {/*         </SelectItem> */}
-        {/*       ))} */}
-        {/*     </SelectContent> */}
-        {/*   </Select> */}
-        {/* </div> */}
         <Outlet />
-
-        {currentQuestion ? (
-          <AnswerButtons
-            questionId={currentQuestion}
-            activeTeam={activeTeam}
-            instanceId={instanceId}
-          />
-        ) : (
-          <div>Select Question</div>
-        )}
         <div>
           <Button
             onClick={() =>
