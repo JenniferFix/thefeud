@@ -39,9 +39,11 @@ const links = [
 const LoginButton = ({
   closeCallback,
   mobile = false,
+  className = '',
 }: {
   closeCallback?: Function;
   mobile?: boolean;
+  className?: string;
 }) => {
   const auth = useSupabaseAuth();
 
@@ -57,8 +59,9 @@ const LoginButton = ({
     return (
       <div
         className={cn(
-          'flex items-center hover:bg-accent/50',
+          'flex items-center hover:bg-accent/75 px-4',
           mobile ? 'border-b pl-2' : 'border-x',
+          className,
         )}
         onClick={() => {
           handleLogoutClick();
@@ -127,9 +130,7 @@ const Navbar = () => {
         ))}
       </div>
       <div className="flex">
-        <div className="hidden md:flex">
-          <LoginButton />
-        </div>
+        <LoginButton className="hidden md:flex" />
         <ThemeToggle />
       </div>
     </header>

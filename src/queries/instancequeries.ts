@@ -61,12 +61,14 @@ export function getActiveInstances(client: TypedSupabaseClient) {
     .from('game_instance')
     .select('id, created_at, userid, games(id,name)')
     .gt('created_at', prevTime.toISOString())
+    .order('created_at', { ascending: false })
     .throwOnError();
 }
 export function getUserInstances(client: TypedSupabaseClient, userId: string) {
   return client
     .from('game_instance')
     .select('id, created_at, userid, games(id,name)')
+    .order('created_at', { ascending: false })
     .throwOnError();
 }
 
