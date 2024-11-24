@@ -28,6 +28,7 @@ import { cn } from '@/utils/utils';
 import { GameActions } from '@/types';
 import useSupabase from '@/hooks/useSupabase';
 import useFeudEvents from '@/hooks/useFeudEvents';
+import { Outlet } from '@tanstack/react-router';
 
 const AnswerButtons = ({
   instanceId,
@@ -72,96 +73,6 @@ const AnswerButtons = ({
   );
 };
 
-const QuestionSelector = ({
-  instanceId,
-  gameId,
-  currentQuestion,
-}: {
-  instanceId: string;
-  gameId: string;
-  currentQuestion?: string;
-}) => {
-  const [open, setOpen] = React.useState(false);
-  const { data, isLoading, isError, error } = useGetGameQuestions(gameId);
-  const insertEvent = useInsertEvent(instanceId);
-  const [selected, setSelected] = React.useState<string>();
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleQuestionChange = () => {
-    // setCurrentQuestion(value);
-    if (!selected) return;
-    insertEvent.mutate({
-      eventid: GameActions.StartQuestion,
-      instanceid: instanceId,
-      questionid: selected,
-    });
-    handleClose();
-  };
-  return (
-    <Drawer direction="top" open={open} onClose={handleClose}>
-      <DrawerTrigger asChild>
-        <div className="p-4">
-          <Button className="w-full" onClick={handleOpen}>
-            {data?.questions?.find((q) => q.id === currentQuestion)?.question ??
-              'Select Question'}
-          </Button>
-        </div>
-      </DrawerTrigger>
-      <DrawerContent className="left-0 top-0 right-0 fixed">
-        <DrawerHeader>
-          <DrawerTitle hidden>Select Question</DrawerTitle>
-          <DrawerDescription hidden>Select question</DrawerDescription>
-        </DrawerHeader>
-        <div className="p-2 w-full h-full">
-          <div className="w-[300px] border rounded-sm my-2 w-full h-full">
-            {/* h-[200px]   */}
-            <ScrollArea className="h-full">
-              <div
-                role="listbox"
-                aria-label="Scrollable listbox of games"
-                className="h-full"
-              >
-                {data?.questions?.map((g) => (
-                  <div
-                    key={g.id}
-                    role="option"
-                    aria-selected={selected === g.id}
-                    onClick={() => setSelected(g.id)}
-                    className={cn(
-                      'cursor-pointer px-2 py-1 rounded-sm',
-                      selected === g.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-muted',
-                      currentQuestion === g.id ? 'font-bold' : '',
-                    )}
-                  >
-                    {g.question}
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-        <DrawerFooter>
-          <Button onClick={handleQuestionChange}>Start round</Button>
-          <DrawerClose asChild>
-            <Button className="w-full">Close Drawer</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
 const GameControl = ({
   instanceId,
   gameId,
@@ -177,7 +88,14 @@ const GameControl = ({
   const supabaseClient = useSupabase();
   const thisGameActions = supabaseClient.channel(instanceId);
 
-  const { isLoading: isFeudEventsLoading, currentQuestion } = useFeudEvents({
+  const {
+    isLoading: isFeudEventsLoading,
+    currentQuestion,
+    strikes,
+    leftTeamScore,
+    rightTeamScore,
+    roundScore,
+  } = useFeudEvents({
     instanceId,
     sound: false,
   });
@@ -209,14 +127,24 @@ const GameControl = ({
     });
   };
 
+  const Score = ({
+    score,
+    className,
+  }: {
+    score: number;
+    className?: string;
+  }) => {
+    return <div className={cn('px-6 py-1 text-3xl', className)}>{score}</div>;
+  };
+
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      <QuestionSelector
-        currentQuestion={currentQuestion}
-        instanceId={instanceId}
-        gameId={gameId}
-      />
-      <div>
+      <Score className="flex justify-center" score={roundScore} />
+      <div className="flex justify-between">
+        <Score score={leftTeamScore} />
+        <Score score={rightTeamScore} />
+      </div>
+      <div className="grow">
         {/* <div> */}
         {/*   <Select value={currentQuestion} onValueChange={handleQuestionChange}> */}
         {/*     <SelectTrigger> */}
@@ -231,6 +159,8 @@ const GameControl = ({
         {/*     </SelectContent> */}
         {/*   </Select> */}
         {/* </div> */}
+        <Outlet />
+
         {currentQuestion ? (
           <AnswerButtons
             questionId={currentQuestion}

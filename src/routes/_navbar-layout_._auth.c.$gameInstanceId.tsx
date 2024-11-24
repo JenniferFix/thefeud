@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router';
+import React from 'react';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
 import GameControl from '@/components/gamecontrol/GameControl';

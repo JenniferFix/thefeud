@@ -6,6 +6,7 @@ import {
   useQueryClient,
   queryOptions,
 } from '@tanstack/react-query';
+import { PostgrestError } from '@supabase/supabase-js';
 import {
   getGame,
   getGames,
@@ -17,6 +18,16 @@ import {
   deleteGame,
 } from '@/queries/gamequeries';
 import { getSupabaseBrowserClient } from '@/utils/supabase/client';
+
+type QueryError = {
+  message: string;
+  originalError: PostgrestError;
+};
+
+const handQueryError = (error: PostgrestError): QueryError => ({
+  message: error.message || 'An error occurred while fetching data',
+  originalError: error,
+});
 
 const supabase = getSupabaseBrowserClient();
 
@@ -46,7 +57,14 @@ export function useGetGameQuestions(gameId: string) {
   const client = useSupabase();
   const queryKey = ['gamequestions', gameId];
   const queryFn = async () => {
-    return getGameQuestions(client, gameId).then((result) => result?.data);
+    try {
+      const query = await getGameQuestions(client, gameId).then(
+        (result) => result?.data,
+      );
+      return query;
+    } catch (error) {
+      throw handQueryError(error as PostgrestError);
+    }
   };
   return useQuery({ queryKey, queryFn });
 }
