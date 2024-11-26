@@ -2,18 +2,8 @@
 import React from 'react';
 import { useGetGameQuestions } from '@/hooks/usegamequeries';
 import { TGameQuestions } from '@/queries/gamequeries';
-import { useGetAnswersByQuestionId } from '@/hooks/useanswerqueries';
 import { useInsertEvent } from '@/hooks/useeventqueries';
 import { Button } from '@/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Drawer,
   DrawerClose,
@@ -33,6 +23,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Strikes from '@/components/gamecontrol/Strikes';
+import QRCode from '@/components/gamecontrol/QRCode';
 
 const GameControl = ({
   instanceId,
@@ -108,7 +99,10 @@ const GameControl = ({
   };
 
   return (
-    <div className="flex flex-col justify-between min-h-screen max-w-lg mx-auto pb-2 px-2">
+    <div className="relative flex flex-col justify-between min-h-screen max-w-lg mx-auto pb-2 px-2">
+      <div className="absolute top-2 right-2">
+        <QRCode instanceId={instanceId} />
+      </div>
       <h2 className="flex justify-center text-2xl py-2 border-b">
         {instanceQueryData?.games?.name}
       </h2>
