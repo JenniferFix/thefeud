@@ -30,6 +30,9 @@ import useSupabase from '@/hooks/useSupabase';
 import useFeudEvents from '@/hooks/useFeudEvents';
 import { Outlet } from '@tanstack/react-router';
 import { useNavigate } from '@tanstack/react-router';
+import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import Strikes from '@/components/gamecontrol/Strikes';
 
 const GameControl = ({
   instanceId,
@@ -43,8 +46,15 @@ const GameControl = ({
     null,
   );
   const { data, isLoading, isError, error } = useGetGameQuestions(gameId);
+  const {
+    data: instanceQueryData,
+    isLoading: isInstanceQueryLoading,
+    isError: isInstanceQueryError,
+    error: instanceQueryError,
+  } = useSuspenseQuery(getInstanceGameQueryOptions(instanceId));
   const supabaseClient = useSupabase();
   const navigate = useNavigate();
+
   const thisGameActions = supabaseClient.channel(instanceId);
 
   const {
@@ -98,80 +108,53 @@ const GameControl = ({
   };
 
   return (
-    <div className="flex flex-col justify-between min-h-screen">
-      <Score className="flex justify-center" score={roundScore} />
-      <div className="flex justify-between">
-        <Score score={leftTeamScore} />
-        <Score score={rightTeamScore} />
+    <div className="flex flex-col justify-between min-h-screen max-w-lg mx-auto pb-2 px-2">
+      <h2 className="flex justify-center text-2xl py-2 border-b">
+        {instanceQueryData?.games?.name}
+      </h2>
+      <div className="flex flex-col gap-2 border-b py-2">
+        <Score className="flex justify-center" score={roundScore} />
+        <div className="flex justify-between align-middle">
+          <Score score={leftTeamScore} />
+          <Strikes className="self-center" strikes={strikes} />
+          <Score score={rightTeamScore} />
+        </div>
       </div>
       <div className="grow">
         <Outlet />
-        <div>
-          <Button
-            onClick={() =>
-              insertEvent.mutate({
-                team: activeTeam,
-                instanceid: instanceId,
-                eventid: GameActions.Strike,
-              })
-            }
-          >
-            Strike
-          </Button>
-        </div>
-
-        <div>
-          <div className="flex">
-            <ToggleGroup type="single" onValueChange={handleTeamToggle}>
-              <ToggleGroupItem value="1">A</ToggleGroupItem>
-              <ToggleGroupItem value="2">B</ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-          <div>
-            <Button onClick={handleTeamWin} disabled={!Boolean(activeTeam)}>
-              {activeTeam
-                ? 'Team ' + activeTeam + ' wins'
-                : 'Select winning team'}
+      </div>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <Button className="w-full">Sound Effects</Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Play Sound Effects</DrawerTitle>
+            <DrawerDescription hidden>
+              Play sound effects using buttons from here
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex flex-col mx-4 gap-2">
+            <Button onClick={() => handleSendSound('ding')}>Ding</Button>
+            <Button onClick={() => handleSendSound('strike')}>Strike</Button>
+            <Button onClick={() => handleSendSound('faceOffMusic')}>
+              Face-off Music
             </Button>
+            <Button onClick={() => handleSendSound('faceOffBuzzer')}>
+              Face-off Buzzer
+            </Button>
+            <Button onClick={() => handleSendSound('themeMusic')}>
+              Theme Music
+            </Button>
+            <Button onClick={() => handleSendSound('clap')}>Clap</Button>
           </div>
-        </div>
-      </div>
-      <div>
-        <Drawer>
-          <DrawerTrigger asChild>
-            <div className="m-4">
-              <Button className="w-full">Sound Effects</Button>
-            </div>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Play Sound Effects</DrawerTitle>
-              <DrawerDescription hidden>
-                Play sound effects using buttons from here
-              </DrawerDescription>
-            </DrawerHeader>
-            <div className="flex flex-col mx-4 gap-2">
-              <Button onClick={() => handleSendSound('ding')}>Ding</Button>
-              <Button onClick={() => handleSendSound('strike')}>Strike</Button>
-              <Button onClick={() => handleSendSound('faceOffMusic')}>
-                Face-off Music
-              </Button>
-              <Button onClick={() => handleSendSound('faceOffBuzzer')}>
-                Face-off Buzzer
-              </Button>
-              <Button onClick={() => handleSendSound('themeMusic')}>
-                Theme Music
-              </Button>
-              <Button onClick={() => handleSendSound('clap')}>Clap</Button>
-            </div>
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button>Close</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      </div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button>Close</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

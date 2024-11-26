@@ -1,4 +1,3 @@
-import { MergeDeep } from 'type-fest';
 export type Answer = {
   id: string;
   answer: string;

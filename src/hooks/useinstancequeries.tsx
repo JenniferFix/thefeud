@@ -55,7 +55,7 @@ export function useDeleteGameInstance() {
 
 export function useGetInstanceGame(instanceId: string) {
   const client = useSupabase();
-  const queryKey = ['gameInstancegame', instanceId];
+  const queryKey = ['gameinstancegame', instanceId];
   const queryFn = async () => {
     return getInstanceGame(client, instanceId).then((result) => result?.data);
   };
