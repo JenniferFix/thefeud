@@ -26,6 +26,7 @@ import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/supabaseauth';
 import { useNavigate } from '@tanstack/react-router';
 import { Waiting } from '@/components/ui/waiting';
+import useSupabase from '@/hooks/useSupabase';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -40,6 +41,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const navigate = useNavigate();
   const auth = useSupabaseAuth();
+  const supabase = useSupabase();
 
   React.useEffect(() => {
     if (auth.isLoginError) {
@@ -77,8 +79,15 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
   };
 
   const onCreateAccountSubmit = (data: FormValues) => {
-    // TODO: Implement this
     console.log('Account creation submitted with:', data);
+    const { email, password } = data;
+    supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'https://feud.jenniferfix.ca/',
+      },
+    });
   };
 
   return (
