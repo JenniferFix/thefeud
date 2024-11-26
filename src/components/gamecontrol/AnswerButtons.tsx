@@ -4,6 +4,7 @@ import { useInsertEvent } from '@/hooks/useeventqueries';
 import { GameActions } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { answersByQuestionIdQueryOptions } from '@/hooks/useanswerqueries';
+import useFeudEvents from '@/hooks/useFeudEvents';
 
 const AnswerButtons = ({
   instanceId,
@@ -12,6 +13,7 @@ const AnswerButtons = ({
   instanceId: string;
   questionId: string;
 }) => {
+  const { answered } = useFeudEvents({ instanceId });
   const insertEvent = useInsertEvent(instanceId);
   const { data, isLoading, isError, error } = useSuspenseQuery(
     answersByQuestionIdQueryOptions(questionId),
@@ -21,10 +23,11 @@ const AnswerButtons = ({
   if (isError) return <div>Error: {error?.message}</div>;
 
   return (
-    <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full">
+    <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full gap-2">
       {data?.map((item) => (
         <Button
           key={'actionbutton' + item.id}
+          disabled={answered[item.id]}
           onClick={() =>
             insertEvent.mutate({
               instanceid: instanceId,
