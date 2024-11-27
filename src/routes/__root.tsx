@@ -2,7 +2,7 @@ import * as React from 'react';
 import '@/components/globals.css';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import Devtools from '@/components/providers/Devtools';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toaster';
 import type { AuthContext } from '@/supabaseauth';
 import type { QueryClient } from '@tanstack/react-query';
 
