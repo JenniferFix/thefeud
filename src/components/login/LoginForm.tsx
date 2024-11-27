@@ -22,11 +22,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { cn } from '@/utils/utils';
-import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/supabaseauth';
 import { useNavigate } from '@tanstack/react-router';
 import { Waiting } from '@/components/ui/waiting';
 import useSupabase from '@/hooks/useSupabase';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -42,10 +42,11 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
   const navigate = useNavigate();
   const auth = useSupabaseAuth();
   const supabase = useSupabase();
+  const { toast } = useToast();
 
   React.useEffect(() => {
     if (auth.isLoginError) {
-      toast(auth.error?.message);
+      toast({ title: 'Login Error', description: auth.error?.message });
     }
   }, [auth.isLoginError, auth.error]);
 
@@ -78,16 +79,23 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
     });
   };
 
-  const onCreateAccountSubmit = (data: FormValues) => {
-    console.log('Account creation submitted with:', data);
-    const { email, password } = data;
-    supabase.auth.signUp({
+  const onCreateAccountSubmit = async (formData: FormValues) => {
+    console.log('Account creation submitted with:', formData);
+    const { email, password } = formData;
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: 'https://feud.jenniferfix.ca/',
       },
     });
+    if (data.user?.confirmation_sent_at) {
+      toast({
+        title: 'Confirmation sent',
+        description: `Confirmation email sent to: ${data.user?.email}`,
+      });
+    }
+    console.log(data, error);
   };
 
   return (
