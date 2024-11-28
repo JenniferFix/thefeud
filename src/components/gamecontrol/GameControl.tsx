@@ -24,6 +24,7 @@ import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Strikes from '@/components/gamecontrol/Strikes';
 import QRCode from '@/components/gamecontrol/QRCode';
+import { Gamepad2Icon } from 'lucide-react';
 
 const GameControl = ({
   instanceId,
@@ -101,19 +102,26 @@ const GameControl = ({
   return (
     <div className="relative flex flex-col justify-between min-h-screen max-w-lg mx-auto pb-2 px-2">
       <div className="absolute top-2 right-2">
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => navigate({ to: `/c` })}
+        >
+          <Gamepad2Icon />
+        </Button>
         <QRCode instanceId={instanceId} />
       </div>
       <h2 className="flex justify-center text-2xl py-2 border-b">
         {instanceQueryData?.games?.name}
       </h2>
-      <div className="flex flex-col gap-2 border-b py-2">
+      <aside className="flex flex-col gap-2 border-b py-2">
         <Score className="flex justify-center" score={roundScore} />
         <div className="flex justify-between align-middle">
           <Score score={leftTeamScore} />
           <Strikes className="self-center" strikes={strikes} />
           <Score score={rightTeamScore} />
         </div>
-      </div>
+      </aside>
       <div className="grow">
         <Outlet />
       </div>

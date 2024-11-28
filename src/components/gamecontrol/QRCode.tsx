@@ -1,5 +1,5 @@
 import React from 'react';
-import { QrCodeIcon } from 'lucide-react';
+import { QrCodeIcon, CopyIcon } from 'lucide-react';
 import ReactQRCode from 'react-qr-code';
 import {
   Drawer,
@@ -41,7 +41,8 @@ const QRCode = ({ instanceId }: { instanceId: string }) => {
             variant="outline"
             onClick={() => navigator.clipboard.writeText(linkValue)}
           >
-            Copy to clipboard
+            Copy to clipboard&nbsp;&nbsp;
+            <CopyIcon />
           </Button>
         </div>
       </DrawerContent>

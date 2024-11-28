@@ -9,9 +9,9 @@ export const Route = createFileRoute('/_navbar-layout')({
 
 function NavigationLayout() {
   return (
-    <div className="absolute inset-0 flex flex-col">
+    <main className="absolute inset-0 flex flex-col">
       <Navbar />
       <Outlet />
-    </div>
+    </main>
   );
 }

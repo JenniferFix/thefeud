@@ -75,7 +75,7 @@ const LoginButton = ({
     return (
       <Link
         href="/login"
-        className="flex items-center hover:underline hover:bg-accent/50 border-x"
+        className="flex items-center hover:underline hover:bg-accent/50 border-x px-4"
         onClick={() => closeCallback && closeCallback()}
       >
         Login
