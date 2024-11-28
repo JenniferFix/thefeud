@@ -5,9 +5,7 @@ import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
 import QuestionSelector from '@/components/gamecontrol/QuestionSelector';
 
 import { useGetInstanceGame } from '@/hooks/useinstancequeries';
-export const Route = createFileRoute(
-  '/_navbar-layout/_auth/c/$gameInstanceId/',
-)({
+export const Route = createFileRoute('/_auth/c/$gameInstanceId/')({
   loader: async ({ context, context: { queryClient }, params }) => {
     const instanceGameQuery = await queryClient.fetchQuery(
       getInstanceGameQueryOptions(params.gameInstanceId),
