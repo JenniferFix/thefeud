@@ -17,7 +17,7 @@ const ContinueActiveGame = () => {
   return (
     <ScrollArea>
       {data.map((i) => (
-        <div className="flex justify-between">
+        <div key={i.id} className="flex justify-between">
           <div className="grow">{i.games?.name}</div>
           <div className="flex justify-end">
             {new Date(i.created_at).toLocaleString('en-ca', {

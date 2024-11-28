@@ -80,7 +80,6 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
   };
 
   const onCreateAccountSubmit = async (formData: FormValues) => {
-    console.log('Account creation submitted with:', formData);
     const { email, password } = formData;
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -95,7 +94,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
         description: `Confirmation email sent to: ${data.user?.email}`,
       });
     }
-    console.log(data, error);
+    // console.log(data, error);
   };
 
   return (
