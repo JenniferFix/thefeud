@@ -28,7 +28,7 @@ export default function Index() {
                 <Link href="/e">Go to your editor</Link>
               </div>
               <div>Start a game</div>
-              {auth?.user?.id && <StartGame />}
+              {auth?.user?.id && <StartGame userId={auth?.user?.id!} />}
             </div>
           )}
         </div>
