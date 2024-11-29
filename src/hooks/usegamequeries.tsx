@@ -10,6 +10,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 import {
   getGame,
   getGames,
+  getUserGames,
   getGameQuestions,
   addQuestionToGame,
   removeQuestionFromGame,
@@ -52,6 +53,23 @@ export const gamesQueryOptions = queryOptions({
   queryKey: ['games'],
   queryFn: async () => getGames(supabase).then((result) => result?.data),
 });
+
+export const useGetUserGames = (userId: string) => {
+  const client = useSupabase();
+  const queryKey = ['games', userId];
+  const queryFn = async () => {
+    return getUserGames(client, userId).then((result) => result?.data);
+  };
+  return useQuery({ queryKey, queryFn });
+};
+
+export const getUserGamesQueryOptions = (userId: string) =>
+  queryOptions({
+    queryKey: ['games', userId],
+    queryFn: async () => {
+      getUserGames(supabase, userId).then((result) => result?.data);
+    },
+  });
 
 export function useGetGameQuestions(gameId: string) {
   const client = useSupabase();
