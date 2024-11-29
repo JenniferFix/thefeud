@@ -1,15 +1,26 @@
 'use client';
 import React from 'react';
 import { redirect, useNavigate } from '@tanstack/react-router';
-import { useGetGames } from '@/hooks/usegamequeries';
+import {
+  useGetGames,
+  useGetUserGames,
+  getUserGamesQueryOptions,
+} from '@/hooks/usegamequeries';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/utils';
 import { useCreateGameInstance } from '@/hooks/useinstancequeries';
+import { useSupabaseAuth } from '@/supabaseauth';
 
-const SelectAndStart = () => {
+const SelectAndStart = ({ userId }: { userId: string }) => {
+  const auth = useSupabaseAuth();
   const navigate = useNavigate();
-  const { data, isError, isLoading, error } = useGetGames();
+  // const { data, isError, isLoading, error } = useGetGames();
+  const { data, isError, isLoading, error } = useGetUserGames(userId);
+  // const { data, isError, isLoading, error } = useSuspenseQuery(
+  //   getUserGamesQueryOptions(auth?.user?.id!),
+  // );
   const [selectedGame, setSelectedGame] = React.useState<string | null>(null);
   const createGameInstance = useCreateGameInstance();
   const {
@@ -18,7 +29,7 @@ const SelectAndStart = () => {
     isError: isInstanceError,
   } = createGameInstance;
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>{error.message}</div>;
+  if (isError) return <div>{error?.message}</div>;
 
   // if the component renders and we have the id of the new game,
   // we redirect to the game controller page

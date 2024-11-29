@@ -194,6 +194,7 @@ export default function useGameEvents(props: Props) {
           event: 'INSERT',
           schema: 'public',
           table: 'game_events',
+          filter: `instanceid=eq.${props.instanceId}`,
         },
         (payload) => {
           setEvents([...events!, payload.new as TEvents]);

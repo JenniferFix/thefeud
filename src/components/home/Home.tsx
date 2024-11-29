@@ -7,6 +7,7 @@ import { useSupabaseAuth } from '@/supabaseauth';
 
 export default function Index() {
   const auth = useSupabaseAuth();
+  console.log(auth?.user?.id);
   const springProps = useSpring({
     from: { opacity: 0 },
     opacity: 1,
@@ -27,7 +28,7 @@ export default function Index() {
                 <Link href="/e">Go to your editor</Link>
               </div>
               <div>Start a game</div>
-              <StartGame />
+              {auth?.user?.id && <StartGame userId={auth?.user?.id!} />}
             </div>
           )}
         </div>

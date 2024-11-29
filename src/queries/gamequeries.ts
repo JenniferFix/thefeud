@@ -5,14 +5,17 @@ export function getGames(client: TypedSupabaseClient) {
   return client.from('games').select('*').throwOnError();
 }
 
+export function getUserGames(client: TypedSupabaseClient, userId: string) {
+  return client.from('games').select('*').eq('userid', userId).throwOnError();
+}
+
 export function getGameQuestions(client: TypedSupabaseClient, gameId: string) {
-  const returnQuery = client
+  return client
     .from('games')
     .select(`id, questions(id, question)`)
     .match({ id: gameId })
     .throwOnError()
     .single();
-  return returnQuery;
 }
 // export type QueryData<T> = T extends PromiseLike<{ data: infer U }> ? Exclude<U, null> : never
 export type TGameQuestions = QueryData<ReturnType<typeof getGameQuestions>>;

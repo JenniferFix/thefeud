@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { gamesQueryOptions } from '@/hooks/usegamequeries';
+import {
+  gamesQueryOptions,
+  getUserGamesQueryOptions,
+} from '@/hooks/usegamequeries';
 import Games from '@/components/editor/Games';
 import {
   ResizablePanel,
@@ -12,7 +15,9 @@ import { useRouterState } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_navbar-layout/_auth/e/games')({
   loader: ({ context }) => {
-    return context.queryClient.ensureQueryData(gamesQueryOptions);
+    // return context.queryClient.ensureQueryData(
+    //   getUserGamesQueryOptions(context.auth?.user?.id!),
+    // );
   },
   component: () => <EditorLayout />,
 });
