@@ -45,11 +45,11 @@ export const SupabaseAuthProvider = ({
   const [error, setError] = React.useState<AuthError | null>(null);
 
   const initializeAuth = React.useCallback(async () => {
-    const { data } = await supabase.auth.refreshSession();
+    const { data } = await supabase.auth.getSession();
     if (data.session) {
       setIsAuthenticated(Boolean(data.session));
       setSession(data.session);
-      setUser(data.user);
+      setUser(data.session.user);
     }
   }, []);
 
@@ -57,7 +57,7 @@ export const SupabaseAuthProvider = ({
     initializeAuth();
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       supabase.auth.getUser().then(({ data }) => {
         setIsAuthenticated(Boolean(session));
         setSession(session);

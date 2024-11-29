@@ -6,9 +6,7 @@ const NewGamePage = () => {
   const auth = useSupabaseAuth();
   return (
     <div className="max-w-md">
-      {auth.isAuthenticated && auth?.user?.id && (
-        <SelectAndStart userId={auth.user.id} />
-      )}
+      {auth.isAuthenticated && auth?.user?.id && <SelectAndStart />}
     </div>
   );
 };
