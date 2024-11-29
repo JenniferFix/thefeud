@@ -15,7 +15,7 @@ import { useSupabaseAuth } from '@/supabaseauth';
 
 const SelectAndStart = () => {
   const auth = useSupabaseAuth();
-  console.log(auth.user?.id);
+  // console.log(auth.user?.id);
   const navigate = useNavigate();
   // const { data, isError, isLoading, error } = useGetGames();
   const { data, isError, isLoading, error } = useGetUserGames(auth?.user?.id!);
