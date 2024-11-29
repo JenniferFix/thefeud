@@ -24,3 +24,7 @@ export const getEventsForGameInstance = (
     .order('id', { ascending: true })
     .throwOnError();
 };
+
+export const deleteEvent = (client: TypedSupabaseClient, eventId: number) => {
+  return client.from('game_events').delete().eq('id', eventId).throwOnError();
+};
