@@ -7,18 +7,21 @@ import {
   useInsertGame,
   useUpdateGame,
   useDeleteGame,
+  gamesQueryOptions,
+  useGetUserGames,
+  getUserGamesQueryOptions,
 } from '@/hooks/usegamequeries';
 import { Form, FormField, FormItem, FormControl } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { gamesQueryOptions } from '@/hooks/usegamequeries';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/utils/utils';
 import { WarningDialog } from '@/components/ui/warning';
 import { Waiting } from '@/components/ui/waiting';
+import { useSupabaseAuth } from '@/supabaseauth';
 type TGameRow = Tables<'games'>;
 
 const gameSchema = z.object({
@@ -111,8 +114,12 @@ const Game = ({ game, add }: { game?: TGameRow; add?: boolean }) => {
 };
 
 const Games = () => {
-  const gamesQuery = useSuspenseQuery(gamesQueryOptions);
-  const games = gamesQuery.data;
+  const auth = useSupabaseAuth();
+  const gameQuery = useGetUserGames(auth?.user?.id!);
+  // const gamesQuery = useSuspenseQuery(
+  //   getUserGamesQueryOptions(auth?.user?.id!),
+  // );
+  const games = gameQuery.data;
 
   return (
     <div className="flex flex-col justify-between h-full w-full gap-2 pt-3 px-2">

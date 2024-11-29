@@ -13,11 +13,11 @@ import { cn } from '@/utils/utils';
 import { useCreateGameInstance } from '@/hooks/useinstancequeries';
 import { useSupabaseAuth } from '@/supabaseauth';
 
-const SelectAndStart = () => {
+const SelectAndStart = ({ userId }: { userId: string }) => {
   const auth = useSupabaseAuth();
   const navigate = useNavigate();
   // const { data, isError, isLoading, error } = useGetGames();
-  const { data, isError, isLoading, error } = useGetUserGames(auth?.user?.id!);
+  const { data, isError, isLoading, error } = useGetUserGames(userId);
   // const { data, isError, isLoading, error } = useSuspenseQuery(
   //   getUserGamesQueryOptions(auth?.user?.id!),
   // );
