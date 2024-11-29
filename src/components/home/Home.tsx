@@ -7,7 +7,7 @@ import { useSupabaseAuth } from '@/supabaseauth';
 
 export default function Index() {
   const auth = useSupabaseAuth();
-  console.log(auth?.user?.id);
+  // console.log(auth?.user?.id);
   const springProps = useSpring({
     from: { opacity: 0 },
     opacity: 1,
