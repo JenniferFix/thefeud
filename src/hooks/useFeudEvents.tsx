@@ -22,6 +22,7 @@ type Props = {
 export default function useGameEvents(props: Props) {
   const supabaseClient = useSupabase();
   const insertEventHook = useInsertEvent(props.instanceId);
+  const deleteEventHook = useDeleteEvent(props.instanceId);
 
   const {
     data: initialData,
@@ -223,6 +224,8 @@ export default function useGameEvents(props: Props) {
       restart(time);
     };
 
+    console.log('main calculate useEffect', events);
+
     events.forEach((i) => {
       lastEventType = i.eventid;
       switch (i.eventid) {
@@ -308,8 +311,18 @@ export default function useGameEvents(props: Props) {
     });
   };
 
+  // const eventUndo = React.useMemo(() => {
+  //   const lastEvent = events?.at(-1);
+  //   if (!lastEvent || !events) return;
+  //   deleteEventHook.mutate(lastEvent.id);
+  //   setEvents(events.slice(0, -1));
+  // }, [events]);
+
   const eventUndo = () => {
-    const lastEventId = events?.at(-1);
+    const lastEvent = events?.at(-1);
+    if (!lastEvent || !events) return;
+    deleteEventHook.mutate(lastEvent.id);
+    setEvents(events.slice(0, -1));
   };
 
   return {
@@ -324,5 +337,6 @@ export default function useGameEvents(props: Props) {
     currentQuestion: currentQuestionId,
     currentQuestionText,
     insertEvent,
+    eventUndo,
   };
 }

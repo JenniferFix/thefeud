@@ -22,6 +22,7 @@ const AnswerButtons = ({
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
 
+  console.log(answered);
   return (
     <div className="grid grid-cols-2 grid-rows-4 grid-flow-col h-full gap-2">
       {data?.map((item) => (

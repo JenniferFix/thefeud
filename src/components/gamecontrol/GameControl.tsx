@@ -24,7 +24,7 @@ import { getInstanceGameQueryOptions } from '@/hooks/useinstancequeries';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Strikes from '@/components/gamecontrol/Strikes';
 import QRCode from '@/components/gamecontrol/QRCode';
-import { Gamepad2Icon } from 'lucide-react';
+import { Gamepad2Icon, UndoIcon } from 'lucide-react';
 
 const GameControl = ({
   instanceId,
@@ -56,6 +56,7 @@ const GameControl = ({
     leftTeamScore,
     rightTeamScore,
     roundScore,
+    eventUndo,
   } = useFeudEvents({
     instanceId,
     sound: false,
@@ -101,6 +102,11 @@ const GameControl = ({
 
   return (
     <div className="relative flex flex-col justify-between min-h-screen max-w-lg mx-auto pb-2 px-2">
+      <div className="absolute top-2 left-2">
+        <Button variant="ghost" size="icon" onClick={() => eventUndo()}>
+          <UndoIcon />
+        </Button>
+      </div>
       <div className="absolute top-2 right-2">
         <Button
           size="icon"
