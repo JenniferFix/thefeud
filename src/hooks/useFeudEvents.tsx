@@ -9,6 +9,8 @@ import { Tables } from '@/types/supabase.types';
 import { GameActions, IAnswered } from '@/types';
 import useSound from 'use-sound';
 import { useTimer } from 'react-timer-hook';
+import { useInsertEvent, useDeleteEvent } from '@/hooks/useeventqueries';
+import { Database } from '@/types/supabase.types';
 
 type TEvents = Tables<'game_events'>;
 
@@ -19,6 +21,7 @@ type Props = {
 
 export default function useGameEvents(props: Props) {
   const supabaseClient = useSupabase();
+  const insertEventHook = useInsertEvent(props.instanceId);
 
   const {
     data: initialData,
@@ -46,8 +49,6 @@ export default function useGameEvents(props: Props) {
   const [currentQuestionText, setCurrentQuestionText] = React.useState<
     string | undefined
   >();
-  const [ncurrentQuestion, nsetCurrentQuestion] =
-    React.useState<Tables<'game_questions'>>();
   const [answers, setAnswers] = React.useState<Tables<'answers'>[]>([]);
   const [answered, setAnswered] = React.useState<IAnswered>({});
   const [leftTeamScore, setLeftTeamScore] = React.useState(0);
@@ -295,6 +296,22 @@ export default function useGameEvents(props: Props) {
     clap,
   ]);
 
+  type InsertType = Database['public']['Tables']['game_events']['Insert'] &
+    Omit<
+      Database['public']['Tables']['game_events']['Insert'],
+      Database['public']['Tables']['game_events']['Insert']['instanceid']
+    >;
+  const insertEvent = ({ eventid }: InsertType) => {
+    insertEventHook.mutate({
+      instanceid: props.instanceId,
+      eventid,
+    });
+  };
+
+  const eventUndo = () => {
+    const lastEventId = events?.at(-1);
+  };
+
   return {
     isLoading,
     leftTeamScore,
@@ -306,5 +323,6 @@ export default function useGameEvents(props: Props) {
     answered,
     currentQuestion: currentQuestionId,
     currentQuestionText,
+    insertEvent,
   };
 }
