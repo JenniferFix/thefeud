@@ -5,6 +5,7 @@ import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SupabaseAuthProvider, useSupabaseAuth } from './supabaseauth';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { PostHogProvider } from 'posthog-js/react';
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,12 @@ const InnerApp = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="FeudTheme">
-        <RouterProvider router={router} context={{ auth }} />
+        <PostHogProvider
+          apiKey={import.meta.env.VITE_POSTHOG_KEY}
+          options={{ api_host: import.meta.env.VITE_POSTHOG_HOST }}
+        >
+          <RouterProvider router={router} context={{ auth }} />
+        </PostHogProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
