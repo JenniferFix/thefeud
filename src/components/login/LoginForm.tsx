@@ -85,7 +85,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
       email,
       password,
       options: {
-        emailRedirectTo: 'https://feud.jenniferfix.ca/',
+        emailRedirectTo: import.meta.env.VITE_HOST!,
       },
     });
     if (data.user?.confirmation_sent_at) {
